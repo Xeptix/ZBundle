@@ -1,15 +1,16 @@
 -- Receive ZTweaks' gameplay-to-Lua compatibility packets without claiming
--- clientuimodel bits. The repeated row-zero packet is the match epoch.
+-- clientuimodel bits. The Compatibility page requests one paced snapshot,
+-- whose row-zero packet is the match epoch; later packets contain changed rows only.
 local Z = CoD.ZTweaksSettings
 local R = CoD.ZTweaksCompat or {}
 CoD.ZTweaksCompat = R
 R.rows = R.rows or {}
 R.epoch = R.epoch or 0
 R.revision = R.revision or 0
-if R.transportVersion ~= "scriptNotify3" then
+if R.transportVersion ~= "scriptNotify4" then
     -- T7x can retain this Lua table while switching mod fastfiles. An old
     -- clientfield epoch must not make new notification rows appear current.
-    R.transportVersion = "scriptNotify3"
+    R.transportVersion = "scriptNotify4"
     R.epoch = 0
     R.rows = {}
     R.revision = R.revision + 1
@@ -130,7 +131,13 @@ R.reasons = {
     [127] = "The game reported a newer compatibility reason; see the ZTweaks runtime log."
 }
 R.Read = function ( name )
-    if R.epoch == 0 then return "not_reported", "" end
+    if R.epoch == 0 then
+        -- ReportGet calls this only while rendering the Compatibility page.
+        -- Ordinary map loading (including a disabled ZBundle component)
+        -- must not send even readiness requests over the network.
+        if R.StartSnapshot ~= nil then R.StartSnapshot() end
+        return "not_reported", ""
+    end
     local row = R.rows[name]
     if row == nil then return "not_reported", "" end
     return row.state, row.reason
@@ -151,6 +158,7 @@ R.AcceptPacket = function ( raw, bank )
     local localIndex = math.floor( packet / 1024 )
     if localIndex == 0 then
         if bank == 1 then return end
+        R.awaitingSnapshot = false
         if packet ~= R.epoch then
             R.epoch = packet
             R.rows = {}
@@ -185,13 +193,45 @@ R.Listen = function ( element, controller )
     if element == nil or element.ztCompatListening == true then return end
     if controller == nil or controller < 0 then return end
     element.ztCompatListening = true
+    -- A persistent T7x Lua table can outlive a match. Do not show its stale
+    -- statuses while this HUD waits for the new game's snapshot.
+    R.epoch = 0
+    R.rows = {}
+    R.revision = R.revision + 1
+    R.awaitingSnapshot = true
+    R.snapshotWanted = false
     element:subscribeToGlobalModel( controller, "PerController", "scriptNotify", function ( model )
         R.OnScriptNotify( model )
     end )
+    local attempts = 0
+    local timer
+    local request = function ()
+        if not R.awaitingSnapshot or attempts >= 30 then
+            if timer ~= nil then timer:close() end
+            return
+        end
+        if not R.snapshotWanted then return end
+        attempts = attempts + 1
+        -- This is client -> server readiness only; the server owns the
+        -- response pace and sends nothing to an unready joining player.
+        pcall( Engine.SendMenuResponse, controller, "StartMenu_Main", "zt_compat_ready" )
+    end
+    R.StartSnapshot = function ()
+        if R.snapshotWanted then return end
+        local ok, map = pcall( Engine.GetCurrentMap )
+        if not ok or map == nil or map == "" or map == "core_frontend" then return end
+        R.snapshotWanted = true
+        request()
+    end
+    local ok, created = pcall( LUI.UITimer.newElementTimer, 2000, false, request )
+    if ok and created ~= nil then
+        timer = created
+        element:addElement( timer )
+    end
 end
 
-if R.menuFactoryTransport ~= "scriptNotify3" then
-    R.menuFactoryTransport = "scriptNotify3"
+if R.menuFactoryTransport ~= "scriptNotify4" then
+    R.menuFactoryTransport = "scriptNotify4"
     R.menuFactoryHooked = true
     local previous = CoD.Menu.NewForUIEditor
     CoD.Menu.NewForUIEditor = function ( name )

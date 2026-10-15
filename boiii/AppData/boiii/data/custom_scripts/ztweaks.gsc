@@ -1,4 +1,4 @@
-// ZTWEAKS T7 v1.2
+// ZTWEAKS T7 v1.3
 // Compatibility-first Zombies tweaks. Inactive live-boundary hooks preserve stock behavior.
 
 #include scripts\shared\callbacks_shared;
@@ -817,7 +817,7 @@ zt_register_self()
 zt_version()
 {
     // ZT_VERSION_BEGIN
-    return "1.2";
+    return "1.3";
     // ZT_VERSION_END
 }
 
@@ -1032,44 +1032,101 @@ zt_report_sync_player()
     self endon( "disconnect" );
     level endon( "end_game" );
 
+    // A remote player may still be completing the map load when the server
+    // reaches round readiness. Do not queue any report commands until that
+    // player's gameplay HUD has installed the packet listener.
+    self.zt_report_requests = 0;
+    self thread zt_report_ready_listener();
     while ( !zt_game_ready() )
         wait 0.1;
+    // Leave the join/intro command channel clear. The report is diagnostic UI,
+    // not gameplay state, so a short delay is preferable to a failed join.
+    wait 5;
 
     // Row 0 carries the 10-bit match marker. Each event bank carries row
     // (6 bits), state (3), and reason (7). The second event bank preserves
     // the proven 16-bit packet width while allowing more than 63 settings.
     // Gameplay-to-Lua notification does not reserve
     // clientuimodel bits, which Shadows needs for its stock HUD and quest data.
-    // Repeat the marker with each sweep for a late gameplay HUD subscriber.
-    self LUINotifyEvent( &"ztCompatPacket", 1, 0 );
-    wait 0.1;
+    // Send one paced snapshot per HUD request, then changed rows only. The
+    // former 10 Hz full sweep never stopped and could saturate a joining
+    // client's reliable command queue, especially with other Z mods active.
+    sent = 0;
+    previous = [];
     while ( 1 )
     {
-        self LUINotifyEvent( &"ztCompatPacket", 1, level.zt.report_epoch );
-        wait 0.1;
-        for ( i = 0; i < level.zt.report_names.size; i++ )
+        if ( self.zt_report_requests != sent )
         {
-            name = level.zt.report_names[i];
-            state = 1;
-            reason = 0;
-            if ( isdefined( level.zt.features[name] ) )
+            sent = self.zt_report_requests;
+            self LUINotifyEvent( &"ztCompatPacket", 1, 0 );
+            wait 0.25;
+            self LUINotifyEvent( &"ztCompatPacket", 1, level.zt.report_epoch );
+            wait 0.25;
+            for ( i = 0; i < level.zt.report_names.size; i++ )
             {
-                state = level.zt.features[name].report_state;
-                reason = level.zt.features[name].report_reason;
+                packet = zt_report_row_packet( i );
+                self zt_report_send_row( i, packet );
+                previous[i] = packet;
+                wait 0.25;
             }
-            if ( i < 63 )
+        }
+        else if ( sent > 0 )
+        {
+            for ( i = 0; i < level.zt.report_names.size; i++ )
             {
-                packet = ( i + 1 ) * 1024 + state * 128 + reason;
-                self LUINotifyEvent( &"ztCompatPacket", 1, packet );
+                packet = zt_report_row_packet( i );
+                if ( !isdefined( previous[i] ) || previous[i] != packet )
+                {
+                    self zt_report_send_row( i, packet );
+                    previous[i] = packet;
+                    wait 0.25;
+                }
             }
-            else
+        }
+        wait 1;
+    }
+}
+
+zt_report_ready_listener()
+{
+    self endon( "disconnect" );
+    level endon( "end_game" );
+    while ( 1 )
+    {
+        self waittill( "menuresponse", menu, response );
+        if ( isdefined( response ) && response == "zt_compat_ready" )
+        {
+            now = gettime();
+            if ( !isdefined( self.zt_report_last_request ) || now - self.zt_report_last_request >= 2000 )
             {
-                packet = ( i - 62 ) * 1024 + state * 128 + reason;
-                self LUINotifyEvent( &"ztCompatPacket2", 1, packet );
+                self.zt_report_last_request = now;
+                self.zt_report_requests++;
             }
-            wait 0.1;
         }
     }
+}
+
+zt_report_row_packet( i )
+{
+    name = level.zt.report_names[i];
+    state = 1;
+    reason = 0;
+    if ( isdefined( level.zt.features[name] ) )
+    {
+        state = level.zt.features[name].report_state;
+        reason = level.zt.features[name].report_reason;
+    }
+    if ( i < 63 )
+        return ( i + 1 ) * 1024 + state * 128 + reason;
+    return ( i - 62 ) * 1024 + state * 128 + reason;
+}
+
+zt_report_send_row( i, packet )
+{
+    if ( i < 63 )
+        self LUINotifyEvent( &"ztCompatPacket", 1, packet );
+    else
+        self LUINotifyEvent( &"ztCompatPacket2", 1, packet );
 }
 
 zt_feature( name, state, reason )

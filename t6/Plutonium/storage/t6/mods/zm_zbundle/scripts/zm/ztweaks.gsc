@@ -1,4 +1,4 @@
-// ZTWEAKS T6 v1.2
+// ZTWEAKS T6 v1.3
 // Compatibility-first Zombies tweaks. Inactive live-boundary hooks preserve stock behavior.
 
 // T6 custom scripts do not inherit the stock Zombies include table. These
@@ -372,7 +372,7 @@ zt_register_self()
 zt_version()
 {
     // ZT_VERSION_BEGIN
-    return "1.2";
+    return "1.3";
     // ZT_VERSION_END
 }
 

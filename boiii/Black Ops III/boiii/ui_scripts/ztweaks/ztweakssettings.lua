@@ -499,14 +499,14 @@ Z.ReportNames = {
 	"perk_limit", "player_health", "player_speed", "random_starting_perks", "start_all_perks",
 	"point_gain", "weapon_damage", "melee_damage", "no_explosive_self_damage", "fall_damage",
 	"down_limit", "revive_time", "bleedout_time", "spawn_protection", "lose_perks_on_down", "keep_weapons_bleedout",
-	"starting_weapon", "secondary_starting_weapon", "starting_weapon_upgraded", "starting_ammo", "reserve_ammo",
+	"starting_weapon", "secondary_starting_weapon", "starting_weapon_upgraded", "starting_weapon_aat", "starting_ammo", "reserve_ammo",
 	"starting_grenade", "max_grenades", "starting_equipment", "max_equipment",
-	"zombie_health", "zombie_speed", "zombies_per_round", "round_delay", "zombie_spawn_rate",
+	"zombie_health", "zombie_damage", "zombie_speed", "zombies_per_round", "round_delay", "zombie_spawn_rate",
 	"start_power_on", "start_doors_open", "powerup_ground_time", "powerup_effect_time",
-	"powerup_drop_rate", "powerup_max_per_round", "powerup_stacking", "box_quality", "box_lock",
+	"powerup_drop_rate", "powerup_max_per_round", "powerup_stacking", "box_quality", "box_lock", "box_price_multiplier", "fire_sale_box_price", "teddy_chance",
 	"gobblegum_uses", "gobblegum_time", "gobblegum_rounds",
 	"challenge_no_perks", "challenge_no_pap", "challenge_no_box", "challenge_wall_only",
-	"challenge_starting_room", "challenge_one_box", "challenge_gun_game", "challenge_random_loadout", "challenge_random_rules"
+	"challenge_starting_room", "challenge_one_box", "challenge_gun_game", "challenge_random_loadout", "challenge_random_rules", "box_no_repeat", "health_regen_delay", "round_bonus", "max_ammo_reload", "death_points_retained", "challenge_one_weapon_slot", "powerup_drop_filters", "disable_stock_aat", "wunderfizz_price_multiplier", "challenge_rising_damage", "pap_damage_multiplier", "fast_barrier_rebuild"
 }
 
 -- The gameplay HUD listener owns the clientuimodel report cache. Lobby pages
@@ -726,7 +726,10 @@ end
 -- its loose UI is stacked with ZTweaks, so ZTweaks must never write those
 -- names or the two menus erase one another's records.
 Z.STORAGE = Enum.StorageFileType.STORAGE_ZM_LOADOUTS_OFFLINE
-Z.NUMERIC_FORMAT = 100
+-- 100/101 are the original numeric layout. 102/103 move two 1.2 rows away
+-- from the bundle enable bit; old records are decoded before the new write.
+Z.NUMERIC_FORMAT = 102
+Z.PREVIOUS_NUMERIC_FORMAT = 100
 Z.LEGACY_POSITIONAL_FORMAT = "ZT2"
 Z.LEGACY_FORMAT = "ZT1"
 Z.LEGACY_ENTRY = 5
@@ -804,7 +807,8 @@ Z.Read = function ( controller )
 	local saved = {}
 	local meta = Z.ReadMeta( controller )
 	if meta == nil then return nil, false, "read_unavailable" end
-	if meta == Z.NUMERIC_FORMAT or meta == Z.NUMERIC_FORMAT + 1 then
+	local previousFormat = meta == Z.PREVIOUS_NUMERIC_FORMAT or meta == Z.PREVIOUS_NUMERIC_FORMAT + 1
+	if previousFormat or meta == Z.NUMERIC_FORMAT or meta == Z.NUMERIC_FORMAT + 1 then
 		local slots = {}
 		for slot, rows in pairs( Z.RowsByStorageSlot ) do
 			local field = Z.ValueField( controller, rows[1] )
@@ -812,7 +816,11 @@ Z.Read = function ( controller )
 			local ok, raw = pcall( field.get, field )
 			if not ok then return nil, false, "read_unavailable" end
 			local stored = tonumber( raw )
-			if stored == nil or stored ~= math.floor( stored ) or stored < 0 or stored > 31 then
+			-- Snapshot.24 could combine the old death-points digit with the
+			-- bundle enable bit in slot 37. Its out-of-range mock value can be
+			-- read for migration; the new format never permits it.
+			local limit = previousFormat and slot == 37 and 39 or 31
+			if stored == nil or stored ~= math.floor( stored ) or stored < 0 or stored > limit then
 				return nil, false, "invalid_record"
 			end
 			local packedMax = 0
@@ -821,14 +829,26 @@ Z.Read = function ( controller )
 					packedMax = packedMax + (row.storageRadix - 1) * row.storageFactor
 				end
 			end
+			if previousFormat and slot == 37 then packedMax = 39 end
+			if previousFormat and slot == 41 then packedMax = 15 end
+			if previousFormat and slot == 49 then packedMax = 13 end
 			if packedMax > 0 and stored > packedMax then return nil, false, "invalid_record" end
 			slots[slot] = stored
 		end
 		for _, row in ipairs( Z.AllRows ) do
 			local valueIndex = 0
 			local stored = slots[row.storageSlot]
+			local factor = row.storageFactor
+			-- The previous record put Box No Repeat in slot 41's high bit.
+			-- Death Points Retained shared slot 37's enable bit, so its value
+			-- cannot be recovered unambiguously and is reset to GAME DEFAULT.
+			if previousFormat and row.dvar == "zt_box_no_repeat" then
+				stored, factor = slots[41], 8
+			elseif previousFormat and row.dvar == "zt_death_points_retained" then
+				stored = 0
+			end
 			if row.storageFactor ~= nil and row.storageRadix ~= nil then
-				valueIndex = math.floor( stored / row.storageFactor ) % row.storageRadix
+				valueIndex = math.floor( stored / factor ) % row.storageRadix
 				if row.storageLegacyIndex ~= true then valueIndex = valueIndex + 1 end
 			else
 				valueIndex = stored
@@ -840,7 +860,7 @@ Z.Read = function ( controller )
 				saved[row.dvar] = row.values[valueIndex]
 			end
 		end
-		return saved, false
+		return saved, previousFormat
 	end
 	-- A newer owner may have written a format we cannot decode. Do not turn it
 	-- into an empty current-format record merely because a setting was edited.
@@ -882,7 +902,8 @@ Z.Write = function ( controller )
 	-- completed its initial read before the marker changed.
 	local format = Z.ReadMeta( controller )
 	if format == nil then return false, "read_unavailable" end
-	if format ~= 0 and format ~= Z.NUMERIC_FORMAT and format ~= Z.NUMERIC_FORMAT + 1 then
+	if format ~= 0 and format ~= Z.PREVIOUS_NUMERIC_FORMAT and format ~= Z.PREVIOUS_NUMERIC_FORMAT + 1 and
+	   format ~= Z.NUMERIC_FORMAT and format ~= Z.NUMERIC_FORMAT + 1 then
 		return false, "unknown_format"
 	end
 	for slot, rows in pairs( Z.RowsByStorageSlot ) do
@@ -912,6 +933,7 @@ Z.Write = function ( controller )
 				stored = valueIndex
 			end
 		end
+		if stored < 0 or stored > 31 then return false, "capacity_exhausted" end
 		if not pcall( field.set, field, stored ) then return false, "write_rejected" end
 		local verified = nil
 		pcall( function () verified = tonumber( field:get() ) end )
@@ -964,7 +986,8 @@ Z.LoadAndMerge = function ( controller )
 	Z.saved = saved
 	Z.pending = {}
 	Z.loaded = true
-	Z.endGameQueued = pendingEndGame or Z.ReadMeta( controller ) == Z.NUMERIC_FORMAT + 1
+	local marker = Z.ReadMeta( controller )
+	Z.endGameQueued = pendingEndGame or marker == Z.NUMERIC_FORMAT + 1 or marker == Z.PREVIOUS_NUMERIC_FORMAT + 1
 	Z.PersistenceDiagnostics.status = "restored"
 	if migrated then Z.dirty = true end
 	return true
@@ -1203,7 +1226,8 @@ Z.UpdateCharacterProbeFrontendSnapshot = function ( controller )
 	local snapshot = "UNAVAILABLE"
 	if Z.StorageReady( controller ) then
 		local marker = Z.ReadMeta( controller )
-		if marker == Z.NUMERIC_FORMAT or marker == Z.NUMERIC_FORMAT + 1 then
+		if marker == Z.NUMERIC_FORMAT or marker == Z.NUMERIC_FORMAT + 1 or
+		   marker == Z.PREVIOUS_NUMERIC_FORMAT or marker == Z.PREVIOUS_NUMERIC_FORMAT + 1 then
 			local field = Z.ValueField( controller, { storageSlot = 2 } )
 			if field ~= nil then
 				local ok, raw = pcall( field.get, field )
@@ -1943,9 +1967,28 @@ Z.RestoreView = function ( menu, snapshot )
 	if type( list.updateScrollbars ) == "function" then list:updateScrollbars() end
 end
 
+Z.TabWindowStart = function ( count, visible, active, previous )
+	visible = math.max( 1, math.min( visible or 6, count ) )
+	local first = math.min( math.max( 1, previous or 1 ), math.max( 1, count - visible + 1 ) )
+	if active < first then first = active end
+	if active > first + visible - 1 then first = active - visible + 1 end
+	return first
+end
+
+Z.RestoreTabWindow = function ( grid, count, active, previous )
+	local first = Z.TabWindowStart( count, grid.hCount or 6, active, previous )
+	if grid.currentStartColumn ~= first then
+		grid:updateCurrentPosition( 1, first )
+		grid:updateLayout( 0 )
+	end
+	return first
+end
+
 Z.RefreshRegistry = function ( menu, controller, preferredId )
 	if menu == nil or menu.Options == nil then return end
 	local snapshot = Z.CaptureView( menu )
+	local grid = menu.Tabs and menu.Tabs.grid
+	local previousTabFirst = grid and grid.currentStartColumn or 1
 	if menu.ComponentVersions ~= nil then menu.ComponentVersions:setText( L.Text( B.ComponentVersionsText( controller ) ) ) end
 	local tabs = menu.ztCharacterOnly and { B.TabById.ztweaks_characters } or B.GetTabs( controller )
 	local active = Z.FindTab( tabs, preferredId )
@@ -1967,7 +2010,8 @@ Z.RefreshRegistry = function ( menu, controller, preferredId )
 	menu.ztTabsDataSource = menu.ztMenuName .. "TabsLive_" .. tostring( menu.ztRegistryRevision )
 	Z.BuildTabsDataSource( menu.ztTabsDataSource, tabs, active.id, controller )
 	menu.Tabs.grid:setDataSource( menu.ztTabsDataSource )
-	if menu.Tabs.grid.updateDataSource ~= nil then menu.Tabs.grid:updateDataSource() end
+	if grid.updateDataSource ~= nil then grid:updateDataSource() end
+	Z.RestoreTabWindow( grid, #tabs, Z.FindTabIndex( tabs, active.id ), previousTabFirst )
 	Z.ActivateTab( menu, controller, active.id, true )
 	Z.RestoreView( menu, snapshot )
 end

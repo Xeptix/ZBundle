@@ -4982,7 +4982,7 @@ end
 -- ZP_LOCALE_END
 
 CoD.ZPauseSettings = CoD.ZPauseSettings or {}
-CoD.ZPauseSettings.Version = "1.7"
+CoD.ZPauseSettings.Version = "1.8"
 CoD.ZPauseSettings.Pages = {
 	{
 		id = "zpause_input",

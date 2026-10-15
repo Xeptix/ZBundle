@@ -1,4 +1,4 @@
-// ZSTATS T6 v1.1
+// ZSTATS T6 v1.2
 // Passive Zombies telemetry, live HUD, round MVP feed, and game-over awards.
 
 // Every raw Plutonium GSC is linked independently, including each component
@@ -405,7 +405,7 @@ zs_api_add_value( player, id, delta )
 zs_version()
 {
     // ZS_VERSION_BEGIN
-    return "1.1";
+    return "1.2";
     // ZS_VERSION_END
 }
 

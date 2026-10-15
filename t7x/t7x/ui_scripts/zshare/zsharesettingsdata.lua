@@ -2431,7 +2431,7 @@ CoD.ZBundleSettings.Localizers.zshare = {
 -- ZS_LOCALE_END
 
 CoD.ZShareSettings = CoD.ZShareSettings or {}
-CoD.ZShareSettings.Version = "1.4"
+CoD.ZShareSettings.Version = "1.5"
 CoD.ZShareSettings.Pages = {
 	{
 		id = "zshare_trading",

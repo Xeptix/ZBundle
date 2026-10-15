@@ -1714,6 +1714,22 @@ Z.FindTabIndex = function ( tabs, id )
 	return 1
 end
 
+Z.TabWindowStart = function ( count, visible, activeIndex, startColumn )
+	visible = math.max( 1, math.min( visible or 6, count ) )
+	local first = math.max( 1, math.min( startColumn or 1, math.max( 1, count - visible + 1 ) ) )
+	if activeIndex < first then first = activeIndex end
+	if activeIndex > first + visible - 1 then first = activeIndex - visible + 1 end
+	return first
+end
+
+Z.RestoreTabWindow = function ( grid, first, activeIndex )
+	if type( grid.updateCurrentPosition ) == "function" and grid.currentStartColumn ~= first then
+		grid:updateCurrentPosition( 1, first )
+		grid:updateLayout( 0 )
+	end
+	grid:setActiveIndex( 1, activeIndex, 0, true )
+end
+
 Z.AdjacentTabIndex = function ( tabs, id, direction, controller )
 	local count = #( tabs or {} )
 	if count < 2 then return nil end
@@ -1853,9 +1869,10 @@ Z.RestoreView = function ( menu, snapshot )
 	if type( list.updateScrollbars ) == "function" then list:updateScrollbars() end
 end
 
-Z.RefreshRegistry = function ( menu, controller, preferredId )
+Z.RefreshTabs = function ( menu, controller, preferredId )
 	if menu == nil or menu.Options == nil then return end
 	local snapshot = Z.CaptureView( menu )
+	local tabStartColumn = menu.Tabs.grid.currentStartColumn or 1
 	if menu.ComponentVersions ~= nil then menu.ComponentVersions:setText( B.ComponentVersionsText( controller ) .. " / " .. Z.DisplayText( B.HostBadge( controller ) ) ) end
 	local tabs = B.GetTabs( controller )
 	local active = Z.FindTab( tabs, preferredId )
@@ -1876,10 +1893,14 @@ Z.RefreshRegistry = function ( menu, controller, preferredId )
 	menu.ztTabsDataSource = menu.ztMenuName .. "TabsLive_" .. tostring( menu.ztRegistryRevision )
 	Z.BuildTabsDataSource( menu.ztTabsDataSource, tabs, active.id, controller )
 	menu.Tabs.grid:setDataSource( menu.ztTabsDataSource )
-	if menu.Tabs.grid.updateDataSource ~= nil then menu.Tabs.grid:updateDataSource() end
+	local activeIndex = Z.FindTabIndex( tabs, active.id )
+	local first = Z.TabWindowStart( #tabs, menu.Tabs.grid.hCount or 6, activeIndex, tabStartColumn )
+	Z.RestoreTabWindow( menu.Tabs.grid, first, activeIndex )
 	Z.ActivateTab( menu, controller, active.id, true )
 	Z.RestoreView( menu, snapshot )
 end
+
+Z.RefreshRegistry = Z.RefreshTabs
 
 Z.NavigateTabDirection = function ( menu, controller, direction )
 	if menu == nil or menu.Tabs == nil or menu.Tabs.grid == nil then return false end

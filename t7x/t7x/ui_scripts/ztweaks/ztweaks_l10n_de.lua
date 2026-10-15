@@ -22,14 +22,20 @@ local function populate()
     locale["APPLIES"] = "WIRKSAM AB"
     locale["ASSAULT RIFLE"] = "STURMGEWEHR"
     locale["AUTO RESTART LEVEL"] = "KARTE AUTOM. NEUSTARTEN"
+    locale["AVOID REPEAT BOX WEAPONS"] = "WIEDERHOLTE BOX-WAFFEN VERMEIDEN"
     locale["Additional seconds before ordinary zombies begin spawning in the first round. GAME DEFAULT preserves the map's own delay; this does not remove the stock round-opening presentation or map-authored scripted waits."] = "Zusätzliche Sekunden vor den normalen Zombie-Spawns der ersten Runde. SPIELSTANDARD erhält die Kartenverzögerung. Rundenauftakt und geskriptete Wartezeiten der Karte bleiben bestehen."
     locale["Adjust the standard Mystery Box weapon pool. NO WONDER WEAPONS removes registered wonder weapons; IMPROVED raises the chance of stronger registered weapons; FULL MAP POOL bypasses map-authored weighting while preserving stock ownership and quest-safety checks."] = "Ändert den normalen Mystery-Box-Waffenpool. OHNE WUNDERWAFFEN entfernt registrierte Wunderwaffen; VERBESSERT erhöht die Chance stärkerer registrierter Waffen; GANZER KARTENPOOL umgeht Kartengewichtungen, behält aber Besitz- und Quest-Sicherheitsprüfungen."
+    locale["After a standard Max Ammo pickup refills reserves, also refill the magazines of eligible held firearms. OFF preserves stock behavior. Quest equipment, excluded weapons, custom ammo systems, and a replacement weapon acquired during pickup remain untouched."] = "Nach einem normalen Max.-Munition-Bonus werden auch die Magazine geeigneter Waffen gefüllt. AUS bewahrt das Standardverhalten. Quest-Ausrüstung, ausgeschlossene Waffen, eigene Munitionssysteme und ersetzte Waffen bleiben unverändert."
     locale["Allow each player one completed standard Mystery Box purchase. Maps without the stock box-use notification disable this rule safely."] = "Erlaubt jedem Spieler einen abgeschlossenen normalen Mystery-Box-Kauf. Karten ohne normale Box-Nutzungsbenachrichtigung deaktivieren diese Regel sicher."
+    locale["Allow selected stock-map-only tweaks. Custom-map support may be limited. OFF makes every experimental tweak inert even if its own saved option is ON; it does not relax compatibility checks or other Z mods' ownership."] = "Erlaubt ausgewählte Anpassungen nur für Standardkarten. Benutzerkarten werden möglicherweise nicht unterstützt. AUS deaktiviert alle experimentellen Anpassungen auch bei gespeicherter Aktivierung; Kompatibilitätsprüfungen und andere Z-Mods bleiben maßgeblich."
+    locale["Alternate Ammo Type applied only to compatible Pack-a-Punched starting weapons"] = "Der alternative Munitionstyp wurde nur auf kompatible Pack-a-Punch-Startwaffen angewendet"
     locale["Amount of the active tactical or placeable equipment given at spawn. GAME DEFAULT preserves stock start ammo. When Max Equipment is enabled, the lower value wins at spawn."] = "Menge der aktiven taktischen oder platzierbaren Ausrüstung beim Spawn. SPIELSTANDARD behält den normalen Startvorrat. Ist das Ausrüstungslimit aktiv, gilt beim Spawn der kleinere Wert."
     locale["Applied, degraded, unavailable, and inherited tweak status."] = "Status der Anpassungen: aktiv, eingeschränkt, nicht verfügbar oder übernommen."
+    locale["Avoid offering the same weapon on two consecutive standard Mystery Box pulls by the same player when another eligible registered weapon exists. OFF keeps stock selection. Map-authored special picks and weapon eligibility remain unchanged."] = "Vermeidet zwei gleiche Waffenangebote hintereinander für denselben Spieler an einer normalen Mystery Box, wenn eine andere zulässige Waffe verfügbar ist. AUS behält die Standardauswahl. Besondere Kartenwahlen und Waffenregeln bleiben unverändert."
     locale["BACK"] = "ZURÜCK"
     locale["BANK LIMIT"] = "BANKLIMIT"
     locale["BILLY"] = "BILLY"
+    locale["BLAST FURNACE"] = "HOCHOFEN"
     locale["BLEED-OUT TIME"] = "VERBLUTUNGSZEIT"
     locale["BO2 exposes no composable revive-time callback"] = "BO2 bietet keinen kombinierbaren Wiederbelebungszeit-Callback"
     locale["BO2 has no safe pre-dispatch seam for ignoring a repeated timed power-up; stock stacking remains in control"] = "BO2 bietet keinen sicheren Eingriff vor der Verarbeitung wiederholter zeitlicher Power-ups; die originale Stapelung bleibt zuständig"
@@ -51,6 +57,7 @@ local function populate()
     locale["CURRENT MAP"] = "AKTUELLE KARTE"
     locale["Carried lethal-grenade capacity. GAME DEFAULT leaves the weapon and map limit untouched; enabled values initialize newly granted grenades to this amount and cap later grants at it."] = "Tragbare Höchstzahl tödlicher Granaten. SPIELSTANDARD belässt Waffen- und Kartenlimits; ein aktiver Wert setzt neu erhaltene Granaten auf diese Menge und begrenzt spätere Vergaben darauf."
     locale["Carried tactical or placeable-equipment capacity. GAME DEFAULT leaves each item and map in control; enabled values initialize newly granted equipment to this amount and cap later grants at it."] = "Tragbare Menge taktischer oder platzierbarer Ausrüstung. SPIELSTANDARD überlässt die Kontrolle Gegenstand und Karte; ein aktiver Wert setzt neue Ausrüstung auf diese Menge und begrenzt spätere Vergaben darauf."
+    locale["Chance of a teddy bear on each eligible standard Mystery Box pull. GAME DEFAULT keeps the map's chance. The map's minimum pulls, no-fly-away boxes, Fire Sales, and custom chance callbacks remain protected; 0% prevents ordinary teddy-bear moves."] = "Teddybär-Chance bei jedem zulässigen Zug an einer normalen Mystery Box. SPIELSTANDARD behält die Chance der Karte. Mindestanzahl an Zügen, unbewegliche Boxen, Ausverkauf und eigene Karten-Callbacks bleiben geschützt; 0 % verhindert normale Umzüge."
     locale["Choose a favorite by cast. Supports stock maps and custom maps with a compatible adapter."] = "Favoriten je Besetzung wählen. Unterstützt Originalkarten und Custom-Karten mit kompatiblem Adapter."
     locale["Choose an independent compatible registered starting weapon loadout for each player. Explicit primary and secondary starting-weapon choices take precedence."] = "Wählt für jeden Spieler unabhängig eine kompatible registrierte Startbewaffnung. Ausdrückliche primäre und sekundäre Startwaffenwünsche haben Vorrang."
     locale["Choose how a repeated standard timed power-up affects its active timer. REFRESH restarts the configured duration, EXTEND adds another duration, and IGNORE preserves the current timer."] = "Wirkung eines erneut aufgenommenen normalen Zeitbonus auf seinen laufenden Timer. ERNEUERN startet die eingestellte Dauer neu, VERLÄNGERN addiert eine weitere Dauer, IGNORIEREN belässt den Timer."
@@ -59,21 +66,29 @@ local function populate()
     locale["Choose random values for this page? DEFAULT may be selected."] = "Zufällige Werte für diese Seite wählen? STANDARD kann ausgewählt werden."
     locale["Choose the map selected after every completed game. This works independently of Auto Restart: with Auto Restart off, ZTweaks changes the lobby selection without launching it. Random choices exclude the current map when another valid map exists."] = "Wählt die Karte nach jeder beendeten Partie. Unabhängig vom automatischen Neustart: Ist dieser aus, ändert sich nur die Lobby-Auswahl, ohne Spielstart. Zufall schließt die aktuelle Karte aus, sofern eine andere gültige Karte vorhanden ist."
     locale["Configure installed Z mod settings and gameplay tweaks."] = "Installierte Z-Mods und Spielanpassungen konfigurieren."
+    locale["DEAD WIRE"] = "TODESDRAHT"
     locale["DEFAULT"] = "STANDARD"
-    locale["DEGRADED"] = "EINGESCHRÄNKT"
-    locale["DEMPSEY"] = "DEMPSEY"
-    locale["DESCRIPTION"] = "BESCHREIBUNG"
-    locale["DISABLED"] = "DEAKTIVIERT"
-    locale["DISABLED: {value}"] = "DEAKTIVIERT: {value}"
-    locale["DOWN LIMIT"] = "LIMIT FÜRS ZUBODENGEHEN"
-    locale["Die Rise did not initialize its single stock power switch"] = "Die Rise hat seinen einzelnen originalen Stromschalter nicht initialisiert"
-    locale["Die Rise rejected its stock switch request"] = "Die Rise lehnte die Anforderung an seinen originalen Schalter ab"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["de"]
+    locale["DEGRADED"] = "EINGESCHRÄNKT"
+    locale["DEMPSEY"] = "DEMPSEY"
+    locale["DESCRIPTION"] = "BESCHREIBUNG"
+    locale["DISABLE CARPENTER DROPS"] = "ZIMMERMANN-DROPS DEAKTIVIEREN"
+    locale["DISABLE DOUBLE POINTS DROPS"] = "DOPPELPUNKTE-DROPS DEAKTIVIEREN"
+    locale["DISABLE FIRE SALE DROPS"] = "SONDERVERKAUF-DROPS DEAKTIVIEREN"
+    locale["DISABLE INSTA-KILL DROPS"] = "INSTANTKILL-DROPS DEAKTIVIEREN"
+    locale["DISABLE MAX AMMO DROPS"] = "MAX-MUNITION-DROPS DEAKTIVIEREN"
+    locale["DISABLE NUKE DROPS"] = "NUKE-DROPS DEAKTIVIEREN"
+    locale["DISABLE STOCK AATS"] = "STANDARD-AAT DEAKTIVIEREN"
+    locale["DISABLED"] = "DEAKTIVIERT"
+    locale["DISABLED: {value}"] = "DEAKTIVIERT: {value}"
+    locale["DOWN LIMIT"] = "LIMIT FÜRS ZUBODENGEHEN"
+    locale["Die Rise did not initialize its single stock power switch"] = "Die Rise hat seinen einzelnen originalen Stromschalter nicht initialisiert"
+    locale["Die Rise rejected its stock switch request"] = "Die Rise lehnte die Anforderung an seinen originalen Schalter ab"
     locale["Disable standard non-wall weapon acquisition while leaving wall buys enabled. Unsupported map-authored reward systems are reported instead of forcibly removed."] = "Deaktiviert normalen Waffenerwerb außerhalb von Wandkäufen; Wandkäufe bleiben aktiv. Nicht unterstützte Belohnungssysteme der Karte werden gemeldet statt gewaltsam entfernt."
     locale["Disable standard perk acquisition and ZTweaks starting-perk grants. Map quest rewards that cannot be safely intercepted are reported as a compatibility limitation."] = "Deaktiviert normalen Perkerwerb und ZTweaks-Startperks. Questbelohnungen der Karte, die nicht sicher abgefangen werden können, werden als Kompatibilitätseinschränkung gemeldet."
     locale["Disable the standard Mystery Box. Custom scripted weapon lotteries remain untouched unless they register the stock box capability."] = "Deaktiviert die normale Mystery Box. Eigene geskriptete Waffenlotterien bleiben unverändert, sofern sie nicht die normale Box-Funktion registrieren."
@@ -81,18 +96,26 @@ local function populate()
     locale["Double Points did not expose its stock team scalar"] = "Doppelte Punkte stellt seinen originalen Team-Multiplikator nicht bereit"
     locale["EMP GRENADE"] = "EMP-GRANATE"
     locale["EMPTY"] = "LEER"
+    locale["EXPERIMENTAL TWEAKS"] = "EXPERIMENTELLE ANPASSUNGEN"
     locale["EXPLOSIVE SELF-DAMAGE"] = "EXPLOSIVER EIGENSCHADEN"
     locale["EXTEND"] = "VERLÄNGERN"
+    locale["Enable Experimental Tweaks to edit this stock-map-only setting."] = "Experimentelle Anpassungen aktivieren, um diese Standardkarten-Einstellung zu bearbeiten."
     locale["Enable or disable each installed ZBundle component."] = "Installierte ZBundle-Komponenten einzeln aktivieren oder deaktivieren."
     locale["Enable or disable this ZBundle component."] = "Diese ZBundle-Komponente aktivieren oder deaktivieren."
     locale["End the current game?"] = "Die aktuelle Partie beenden?"
+    locale["Exclude this type from regular random drops when another eligible type exists. Scripted drops are unchanged. If all are excluded, one eligible type remains to avoid stalling the game."] = "Schließt diesen Typ von normalen Zufallsdrops aus, wenn ein anderer Typ verfügbar ist. Skriptgesteuerte Drops bleiben unverändert. Sind alle ausgeschlossen, bleibt ein verfügbarer Typ erlaubt, damit das Spiel nicht hängen bleibt."
+    locale["Extra points awarded to each active player when a standard round ends. GAME DEFAULT adds no bonus. Map-authored round rewards remain unchanged."] = "Zusätzliche Punkte für jeden aktiven Spieler am Ende einer normalen Runde. SPIELSTANDARD fügt keinen Bonus hinzu. Karteneigene Rundenbelohnungen bleiben unverändert."
     locale["FALL DAMAGE"] = "FALLSCHADEN"
+    locale["FASTER BARRIER REBUILD"] = "SCHNELLERER BARRIKADENAUFBAU"
     locale["FILTER"] = "FILTER"
     locale["FILTER CHANGED"] = "GEÄNDERTE FILTERN"
     locale["FINN"] = "FINN"
+    locale["FIRE SALE BOX PRICE"] = "BOXPREIS IM AUSVERKAUF"
+    locale["FIRE WORKS"] = "FEUERWERK"
     locale["FLOYD"] = "FLOYD"
     locale["FORCED"] = "ERZWUNGEN"
     locale["FRAG"] = "SPLITTERGRANATE"
+    locale["FREE"] = "KOSTENLOS"
     locale["FULL"] = "VOLL"
     locale["FULL MAP POOL"] = "GESAMTER KARTENPOOL"
     locale["GAME DEFAULT"] = "SPIELSTANDARD"
@@ -104,20 +127,29 @@ local function populate()
     locale["GOBBLEGUM USES"] = "GOBBLEGUM-NUTZUNGEN"
     locale["GUN GAME"] = "WAFFENSPIEL"
     locale["Gameplay rules, loadouts, pacing, world, and challenge settings."] = "Spielregeln, Ausrüstung, Tempo, Welt und Herausforderungen."
+    locale["Give the Pack-a-Punched starting weapon slots selected above a stock Alternate Ammo Type. RANDOM chooses one registered stock AAT per spawn. MAP DEFAULT adds no AAT. Unsupported weapons and maps remain unchanged."] = "Gibt den oben gewählten Pack-a-Punch-Startwaffen einen originalen alternativen Munitionstyp (AAT). ZUFÄLLIG wählt bei jedem Spawn einen registrierten AAT. KARTENSTANDARD fügt keinen AAT hinzu. Nicht unterstützte Waffen und Karten bleiben unverändert."
     locale["GobbleGum activation, time, and round limits."] = "Nutzungs-, Zeit- und Rundenlimits für GobbleGum."
     locale["Grant every perk registered by the current map at spawn. OFF is inert. When enabled, this takes precedence over Random Starting Perks."] = "Gewährt beim Spawn alle registrierten Extras der Karte. AUS greift nicht ein. Aktiviert hat dies Vorrang vor zufälligen Start-Extras."
     locale["HEADSHOTS ONLY"] = "NUR KOPFSCHÜSSE"
+    locale["HEALTH REGEN DELAY"] = "GESUNDHEITSREGEN-VERZÖGERUNG"
     locale["HOST"] = "HOST"
     locale["HOST / PER PLAYER"] = "HOST / PRO SPIELER"
     locale["HOST / SHARED"] = "HOST / GEMEINSAM"
     locale["HOST CONTROLLED"] = "VOM HOST GESTEUERT"
     locale["HOST VALUE"] = "HOST-WERT"
     locale["HOST VALUE UNAVAILABLE"] = "HOST-WERT NICHT VERFÜGBAR"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["de"]
     locale["Host status unknown; this host-controlled setting is locked."] = "Host-Status unbekannt; diese Host-Einstellung ist gesperrt."
     locale["IGNORE"] = "IGNORIEREN"
     locale["IMPROVED"] = "VERBESSERT"
     locale["INHERIT"] = "ÜBERNOMMEN"
     locale["INSTANT"] = "SOFORT"
+    locale["Increase ordinary player weapon and melee damage against standard zombies each round after round 1. The selected percentage is added per round, up to 500% of normal damage. OFF preserves the map's damage. Quest actors, friendly NPCs, and map-owned damage callbacks remain protected."] = "Erhöht ab Runde 2 pro Runde den normalen Waffen- und Nahkampfschaden gegen Zombies. Der gewählte Prozentsatz kommt je Runde hinzu, höchstens bis 500 % des normalen Schadens. AUS erhält den Kartenschaden. Questfiguren, Verbündete und karteneigene Schadensregeln bleiben geschützt."
     locale["Insta-Kill did not expose its stock team state"] = "Sofort töten stellt seinen originalen Team-Zustand nicht bereit"
     locale["JACK VINCENT"] = "JACK VINCENT"
     locale["JESSICA"] = "JESSICA"
@@ -130,26 +162,23 @@ local function populate()
     locale["LOCKED: {value}"] = "GESPERRT: {value}"
     locale["LOSE PERKS ON DOWN"] = "EXTRAS BEIM FALLEN VERLIEREN"
     locale["Lethal grenade type given at spawn. MAP DEFAULT preserves the map's choice. A selected type is used only when that map has registered a compatible grenade."] = "Beim Spawn erhaltene tödliche Granatenart. KARTENSTANDARD behält die Kartenauswahl. Die gewählte Art wird nur genutzt, wenn die Karte eine kompatible Granate registriert hat."
+    locale["Limit normal weapon pickups to one primary slot through the stock weapon-limit callback. ZTweaks will not grant a secondary starting weapon. Map-owned weapon limits and scripted quest inventory remain in control."] = "Begrenzt normale Waffenaufnahmen über die Standardregel auf einen Primärwaffenplatz. ZTweaks vergibt keine zweite Startwaffe. Karteneigene Limits und Quest-Inventar bleiben unter Kartenkontrolle."
     locale["Locked to {value}"] = "Auf {value} festgelegt"
     locale["MAP DEFAULT"] = "KARTENSTANDARD"
     locale["MARLTON"] = "MARLTON"
     locale["MATCH"] = "PARTIE"
+    locale["MAX AMMO RELOADS MAGAZINES"] = "MAXIMALE MUNITION LÄDT MAGAZINE"
     locale["MAX EQUIPMENT"] = "MAX. AUSRÜSTUNG"
     locale["MAX GRENADES"] = "MAX. GRANATEN"
     locale["MAX RESERVE AMMO"] = "MAX. RESERVEMUNITION"
     locale["MELEE DAMAGE"] = "NAHKAMPFSCHADEN"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["de"]
     locale["MINE"] = "MINE"
     locale["MISTY"] = "MISTY"
     locale["MOB OF THE DEAD"] = "MOB OF THE DEAD"
     locale["MODS"] = "MODS"
     locale["MONKEY BOMB"] = "AFFENBOMBE"
     locale["MYSTERY BOX LOCK"] = "MYSTERY BOX FIXIEREN"
+    locale["MYSTERY BOX PRICE"] = "MYSTERY-BOX-PREIS"
     locale["MYSTERY BOX QUALITY"] = "QUALITÄT DER MYSTERY BOX"
     locale["Match flow, starting conditions, and global rules."] = "Spielablauf, Startbedingungen und allgemeine Regeln."
     locale["Maximum ordinary co-op downs before stock bleeds the player out instead of allowing another revive. UNLIMITED keeps stock co-op's unlimited downs. Solo auto-revive, special-role and non-composable map routes stay stock and report unavailable."] = "Maximale normale Koop-Niederschläge, bevor das Spiel den Spieler ausbluten lässt statt einer weiteren Wiederbelebung. UNBEGRENZT behält den Koop-Standard. Solo-Selbstwiederbelebung, Sonderrollen und nicht kombinierbare Kartenpfade bleiben original und werden als nicht verfügbar gemeldet."
@@ -159,10 +188,12 @@ local function populate()
     locale["Mob did not initialize its Afterlife perk-box waiter"] = "Mob hat die Wartefunktion für Extra-Kästen im Jenseits nicht initialisiert"
     locale["Mob final-showdown health remains map-owned"] = "Die Gesundheit im Mob-Finalkampf bleibt kartengesteuert"
     locale["Multiplier for stock regular score-threshold power-up drops. Higher values reach each drop threshold sooner. GAME DEFAULT preserves the map threshold; max-per-round, random kill drops, and scripted drops remain untouched."] = "Multiplikator für normale punkteschwellenbasierte Bonus-Drops. Höhere Werte erreichen die Schwelle früher. SPIELSTANDARD behält die Kartenschwelle; Rundenmaximum, zufällige Kill-Drops und Skript-Drops bleiben unverändert."
+    locale["Mystery Box relocation is disabled"] = "Mystery-Box-Umzüge sind deaktiviert"
     locale["NERO"] = "NERO"
     locale["NEXT BLEED-OUT"] = "NÄCHSTES VERBLUTEN"
     locale["NEXT DOWN"] = "NÄCHSTES ZUBODENGEHEN"
     locale["NEXT DROP"] = "NÄCHSTER DROP"
+    locale["NEXT FIRE SALE"] = "NÄCHSTER AUSVERKAUF"
     locale["NEXT GAME OVER"] = "NÄCHSTES SPIELENDE"
     locale["NEXT GUM"] = "NÄCHSTES GOBBLEGUM"
     locale["NEXT MAP"] = "NÄCHSTE KARTE"
@@ -177,6 +208,12 @@ local function populate()
     locale["NO PACK-A-PUNCH"] = "KEIN PACK-A-PUNCH"
     locale["NO PERKS"] = "KEINE EXTRAS"
     locale["NO SELF-DAMAGE"] = "KEIN EIGENSCHADEN"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["de"]
     locale["NO SETTINGS"] = "KEINE EINSTELLUNGEN"
     locale["NO WONDER WEAPONS"] = "KEINE WUNDERWAFFEN"
     locale["NONE"] = "KEINE"
@@ -189,6 +226,7 @@ local function populate()
     locale["Number of random perks granted independently to each player when they spawn. NONE is inert. Perks are chosen without duplicates from those registered by the current map; if fewer are available, every available perk is granted."] = "Zahl zufälliger Extras, die jeder Spieler beim Spawn unabhängig erhält. KEINE greift nicht ein. Auswahl ohne Duplikate aus den registrierten Extras der Karte; bei geringerer Verfügbarkeit werden alle gewährt."
     locale["OFF"] = "AUS"
     locale["ON"] = "AN"
+    locale["ONE WEAPON SLOT"] = "NUR EIN WAFFENPLATZ"
     locale["ONE-BOX CHALLENGE"] = "EINMAL-BOX-HERAUSFORDERUNG"
     locale["ORIGINS"] = "ORIGINS"
     locale["OVERRIDDEN"] = "ÜBERSCHRIEBEN"
@@ -200,28 +238,29 @@ local function populate()
     locale["Origins did not publish its generator perk consumers"] = "Origins stellt seine generatorgespeisten Extra-Verbraucher nicht bereit"
     locale["Origins exposes no initialized generator-consumer registry"] = "Origins bietet kein initialisiertes Generator-Verbraucherverzeichnis"
     locale["Override unavailable"] = "Erzwungener Wert nicht verfügbar"
+    locale["PACK-A-PUNCH DAMAGE"] = "PACK-A-PUNCH-SCHADEN"
     locale["PERK LIMIT"] = "EXTRA-LIMIT"
+    locale["PERK PRICE"] = "EXTRA-PREIS"
     locale["PERSONAL"] = "PERSÖNLICH"
     locale["PISTOL"] = "PISTOLE"
     locale["PLAYER"] = "SPIELER"
     locale["PLAYER HEALTH"] = "SPIELERGESUNDHEIT"
     locale["PLAYER SPEED"] = "SPIELERTEMPO"
     locale["POINT GAIN"] = "PUNKTEGEWINN"
+    locale["POINTS RETAINED AFTER DEATH"] = "PUNKTE NACH DEM TOD BEHALTEN"
     locale["POWER-UP DROP CAP"] = "BONUS-DROPLIMIT"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["de"]
+    locale["POWER-UP DROP FILTERS"] = "POWER-UP-DROPFILTER"
     locale["POWER-UP DROP RATE"] = "BONUS-DROPRATE"
     locale["POWER-UP EFFECT TIME"] = "BONUS-WIRKUNGSDAUER"
     locale["POWER-UP GROUND TIME"] = "BONUS-LIEGEZEIT"
     locale["POWER-UP STACKING"] = "BONUS-STAPELUNG"
     locale["PRIMARY"] = "PRIMÄR"
     locale["PRIMIS"] = "PRIMIS"
+    locale["Percentage of direct damage dealt to players by ordinary zombies. GAME DEFAULT preserves map damage; bosses, quest actors, traps, and environmental damage remain map-controlled."] = "Prozent des direkten Schadens, den gewöhnliche Zombies Spielern zufügen. SPIELSTANDARD behält den Kartenschaden bei; Bosse, Quest-Akteure, Fallen und Umgebungsschaden bleiben unter Kartenkontrolle."
     locale["Percentage of each activation-limited GobbleGum's stock number of uses. Values round to at least one use. GAME DEFAULT preserves every gum's registered limit."] = "Prozent der normalen Nutzungszahl jedes aktivierungsbegrenzten GobbleGums. Werte werden auf mindestens eine Nutzung gerundet. SPIELSTANDARD behält jedes registrierte Gum-Limit."
     locale["Percentage of each round-limited GobbleGum's stock round count. Values round to at least one round. Event-limited gums are not changed."] = "Prozent der normalen Rundenzahl jedes rundenbegrenzten GobbleGums. Werte werden auf mindestens eine Runde gerundet. Ereignisbegrenzte Gums bleiben unverändert."
+    locale["Percentage of each standard Mystery Box location's map-authored normal price. GAME DEFAULT preserves each location's own price. FREE affects ordinary box purchases but does not change the Fire Sale price."] = "Prozentsatz des normalen Kartenpreises jeder Standard-Mystery-Box. SPIELSTANDARD erhält jeden Preis. KOSTENLOS gilt nur für normale Käufe, nicht für den Ausverkauf."
+    locale["Percentage of each standard purchasable trap's map-authored price. GAME DEFAULT leaves the trap alone. Custom trap purchase callbacks and later map price changes remain map-controlled; maps without standard purchase traps are unaffected."] = "Prozentsatz des Kartenpreises jeder kaufbaren Standardfalle. SPIELSTANDARD ändert nichts. Eigene Kaufabläufe und spätere Preisänderungen bleiben kartengesteuert; Karten ohne Standardfallen bleiben unberührt."
     locale["Percentage of each time-limited GobbleGum's stock duration in seconds. Values round to at least one second. GAME DEFAULT preserves every gum's registered duration."] = "Prozent der normalen Dauer jedes zeitbegrenzten GobbleGums in Sekunden. Werte werden auf mindestens eine Sekunde gerundet. SPIELSTANDARD behält jede registrierte Gum-Dauer."
     locale["Percentage of each timed power-up's map-selected effect duration. This includes team, global, and player-only timed effects registered through the stock power-up system. GAME DEFAULT preserves every map-authored duration."] = "Prozent der von der Karte festgelegten Dauer jedes zeitbegrenzten Bonus. Umfasst Team-, globale und persönliche Effekte im normalen Bonus-System. SPIELSTANDARD behält sämtliche Kartendauern."
     locale["Percentage of normal player health. GAME DEFAULT leaves the map in control. Perks continue to scale from the modified base health."] = "Prozent der normalen Spielergesundheit. SPIELSTANDARD überlässt der Karte die Kontrolle. Extras skalieren weiterhin anhand der geänderten Basisgesundheit."
@@ -230,13 +269,22 @@ local function populate()
     locale["Percentage of normal player weapon damage dealt to zombies. Melee uses its own setting. GAME DEFAULT preserves the stock and custom-map damage path."] = "Prozent des normalen Waffenschadens gegen Zombies. Nahkampf hat eine eigene Einstellung. SPIELSTANDARD erhält die Schadensverarbeitung des Spiels und eigener Karten."
     locale["Percentage of normal positive score awards, including zombie damage, kills, headshots, and standard repairs. GAME DEFAULT leaves every map-authored award unchanged; point costs are never scaled."] = "Prozent normaler positiver Punktgewinne für Zombieschaden, Abschüsse, Kopftreffer und Standardreparaturen. SPIELSTANDARD erhält alle Kartenbelohnungen; Punktekosten werden nie skaliert."
     locale["Percentage of normal starting ammo for the player's starting weapons. GAME DEFAULT preserves stock ammo; EMPTY leaves the weapon with no reserve or loaded rounds."] = "Prozent der normalen Startmunition für die Startwaffen. SPIELSTANDARD behält die normale Munition; LEER lässt weder geladene Patronen noch Reservemunition."
+    locale["Percentage of points kept at the next standard spectator respawn, after any stock minimum-respawn score is applied. The rest is lost. GAME DEFAULT preserves the map's death penalty; custom death-score rules remain map-owned."] = "Prozentsatz der Punkte beim nächsten normalen Zuschauer-Wiedereinstieg, nachdem ein Mindestwert des Spiels angewendet wurde. Der Rest geht verloren. SPIELSTANDARD behält die Kartenstrafe; eigene Regeln bleiben kartengesteuert."
     locale["Percentage of the map's normal last-stand bleed-out duration. GAME DEFAULT preserves the map's timer."] = "Prozent der normalen Ausblutungszeit der Karte nach einem Niederschlag. SPIELSTANDARD erhält den Kartentimer."
     locale["Percentage of the map's normal revive interaction time. GAME DEFAULT preserves map, perk, and equipment modifiers."] = "Prozent der normalen Wiederbelebungszeit der Karte. SPIELSTANDARD erhält Modifikatoren von Karte, Extras und Ausrüstung."
     locale["Percentage of the map's normal standard-zombie spawn cadence. Higher values shorten the delay between ordinary spawns. GAME DEFAULT is inert; special, objective, and scripted spawners remain map-controlled."] = "Prozent der normalen Spawnrate gewöhnlicher Zombies. Höhere Werte verkürzen die Zeit zwischen normalen Spawns. SPIELSTANDARD ist wirkungslos; Spezial-, Ziel- und Skript-Spawner bleiben unter Kartenkontrolle."
     locale["Percentage of the map's normal zombie speed curve. GAME DEFAULT is inert. RANDOM independently chooses one listed percentage when each match initializes. Standard round zombies are scaled; map-owned special enemies remain untouched."] = "Prozent der normalen Zombie-Geschwindigkeitskurve. SPIELSTANDARD ist wirkungslos. ZUFALL wählt bei jedem Spielstart unabhängig einen aufgelisteten Prozentwert. Normale Rundenzombies werden skaliert; Spezialgegner der Karte bleiben unverändert."
     locale["Percentage of the map's normal zombie-health curve. GAME DEFAULT leaves both starting health and round-to-round growth untouched. RANDOM independently chooses one listed percentage when each match initializes."] = "Prozent der normalen Zombie-Gesundheitskurve der Karte. SPIELSTANDARD lässt Anfangsgesundheit und Wachstum pro Runde unverändert. ZUFALL wählt bei jedem Spielstart unabhängig einen aufgelisteten Prozentwert."
     locale["Percentage of the standard zombie count calculated for each round. GAME DEFAULT is inert. Scripted special rounds and objective spawns remain map-controlled."] = "Prozent der normalen, pro Runde berechneten Zombieanzahl. SPIELSTANDARD ist wirkungslos. Geskriptete Spezialrunden und zielbezogene Spawns bleiben unter Kartenkontrolle."
+    locale["Percentage of the stock delay before health regeneration begins after damage. GAME DEFAULT preserves the map's delay. This does not change the regeneration rate or map-owned healing systems."] = "Prozent der normalen Verzögerung bis zur Gesundheitsregeneration nach Schaden. SPIELSTANDARD behält die Kartenverzögerung. Regenerationsrate und karteninterne Heilung bleiben unverändert."
     locale["Player stats, perks, and movement."] = "Spielerwerte, Extras und Bewegung."
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["de"]
+    locale["Point cost of standard Mystery Boxes while Fire Sale is active. GAME DEFAULT preserves the stock or map-authored sale price. Normal box prices and map-authored nonstandard weapon lotteries remain untouched."] = "Punktekosten der Standard-Mystery-Box während des Ausverkaufs. SPIELSTANDARD erhält den Spiel- oder Kartenpreis. Normale Boxpreise und eigene Waffenlotterien der Karte bleiben unverändert."
     locale["Points given to each player when a new match begins. GAME DEFAULT preserves the map's normal behavior, including BO3's stock starting-round calculation of 500 points per selected round."] = "Startpunkte jedes Spielers. SPIELSTANDARD erhält das Kartenverhalten, einschließlich BO3s Berechnung von 500 Punkten je gewählter Startrunde."
     locale["Power, doors, power-ups, and map-owned systems."] = "Strom, Türen, Boni und karteneigene Systeme."
     locale["Preferred Mob of the Dead character, solo or co-op. Host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses this cast."] = "Wunschcharakter auf Mob of the Dead, solo oder im Koop. Der Host hat Vorrang; unter anderen Spielern mit gleichem Wunsch entscheidet das Los. ZUFALL behält die Spielauswahl, sofern sie nicht vergeben wird. Keine offizielle T7-Karte nutzt diese Gruppe."
@@ -246,6 +294,7 @@ local function populate()
     locale["Preferred character on The Giant, Der Eisendrache, Zetsubou, Gorod Krovi or Revelations, solo or co-op. Origins is separate. Host wins ties; tied non-hosts draw randomly. Required co-op story roles are preserved."] = "Wunschcharakter auf The Giant, Der Eisendrache, Zetsubou, Gorod Krovi oder Revelations, solo oder im Koop. Origins ist separat. Der Host hat Vorrang; andere Gleichstände werden ausgelost. Erforderliche Koop-Storyrollen bleiben erhalten."
     locale["Preferred character on TranZit, Die Rise, or Buried. Solo and co-op: host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses Victis."] = "Wunschcharakter auf TranZit, Die Rise oder Buried. Solo und Koop: Der Host hat Vorrang; unter anderen Spielern mit gleichem Wunsch entscheidet das Los. ZUFALL behält die Spielauswahl, sofern sie nicht vergeben wird. Keine offizielle T7-Karte nutzt Victis."
     locale["Prevent a player's own grenades, launchers, and other standard explosives from damaging that player. OFF leaves the stock damage callback untouched."] = "Verhindert Selbstschaden durch eigene Granaten, Werfer und andere normale Sprengmittel. AUS lässt den ursprünglichen Schadens-Callback unverändert."
+    locale["Prevent stock Alternate Ammo Types on compatible upgraded weapons, including Pack-a-Punch rerolls. Existing map exemptions remain in force. Custom AAT systems outside the stock registry stay map-owned. OFF preserves stock behavior."] = "Verhindert Standard-AATs bei geeigneten verbesserten Waffen, auch bei Pack-a-Punch-Neuwürfen. Ausnahmen der Karte bleiben bestehen. Eigene AAT-Systeme bleiben kartenverwaltet. AUS bewahrt das Standardverhalten."
     locale["Prevent the standard Mystery Box from randomly relocating after normal purchases. Explicit scripted or quest-owned box moves remain map-controlled. OFF preserves every map-authored relocation rule."] = "Verhindert zufällige Ortswechsel der normalen Mystery Box nach gewöhnlichen Käufen. Ausdrückliche Skript- oder Questbewegungen bleiben unter Kartenkontrolle. AUS behält alle Ortswechselregeln der Karte."
     locale["Progress each player through a compatible registered weapon sequence using zombie kills. The challenge disables itself if the map cannot supply a safe progression list."] = "Lässt jeden Spieler durch Zombie-Kills eine kompatible registrierte Waffenfolge durchlaufen. Die Herausforderung deaktiviert sich, wenn die Karte keine sichere Fortschrittsliste liefert."
     locale["Put every ZTweaks setting back to its default?"] = "Alle ZTweaks-Einstellungen zurücksetzen?"
@@ -274,16 +323,13 @@ local function populate()
     locale["RESET TO DEFAULTS"] = "STANDARDWERTE WIEDERHERSTELLEN"
     locale["REVIVE TIME"] = "WIEDERBELEBUNGSZEIT"
     locale["RICHTOFEN"] = "RICHTOFEN"
+    locale["RISING PLAYER DAMAGE"] = "STEIGENDER SPIELERSCHADEN"
+    locale["ROUND BONUS"] = "RUNDENBONUS"
     locale["ROUND DELAY"] = "RUNDENPAUSE"
     locale["RUSSMAN"] = "RUSSMAN"
     locale["Randomize this tab after confirmation. GAME DEFAULT remains possible."] = "Diesen Reiter nach Bestätigung zufällig einstellen. Spielstandard bleibt möglich."
+    locale["Reduce the pause between standard barrier-board repairs. Requires Experimental Tweaks. Available only on recognized stock maps with the stock blocker system; custom-map support may be limited. A map-authored repair delay always wins."] = "Verkürzt die Pause zwischen Standard-Barrikadenreparaturen. Erfordert Experimentelle Anpassungen. Nur auf erkannten Standardkarten mit dem Stock-Blockersystem verfügbar; Benutzerkarten werden möglicherweise nicht unterstützt. Eine von der Karte festgelegte Verzögerung hat Vorrang."
     locale["Require headshots for standard zombie kills using the stock Zombies rule. OFF is inert and leaves the map's own game setting unchanged."] = "Normale Zombies können nach der originalen Zombies-Regel nur durch Kopftreffer getötet werden. AUS greift nicht ein und lässt die Karteneinstellung unverändert."
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["de"]
     locale["Reset all character preferences only."] = "Nur alle Charakterpräferenzen zurücksetzen."
     locale["Reset every setting in this menu to its default?"] = "Alle Einstellungen in diesem Menü zurücksetzen?"
     locale["Restart the current level after the normal game-over results have been shown. DEFAULT is OFF."] = "Startet den aktuellen Level nach der normalen Ergebnisanzeige neu. Standardmäßig aus."
@@ -302,6 +348,12 @@ local function populate()
     locale["SHADOWS OF EVIL"] = "SHADOWS OF EVIL"
     locale["SHOTGUN"] = "SCHROTFLINTE"
     locale["SMG"] = "MASCHINENPISTOLE"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["de"]
     locale["SNIPER RIFLE"] = "SCHARFSCHÜTZENGEWEHR"
     locale["SPAWN PROTECTION"] = "SPAWN-SCHUTZ"
     locale["START WITH ALL PERKS"] = "MIT ALLEN EXTRAS STARTEN"
@@ -316,11 +368,15 @@ local function populate()
     locale["STARTING ROOM ONLY"] = "NUR STARTBEREICH"
     locale["STARTING ROUND"] = "STARTRUNDE"
     locale["STARTING WEAPON"] = "STARTWAFFE"
-    locale["STARTING WEAPON UPGRADED"] = "STARTWAFFE VERBESSERT"
+    locale["STARTING WEAPON AAT"] = "STARTWAFFEN-AAT"
+    locale["STARTING WEAPON PACK-A-PUNCHED"] = "STARTWAFFE VERBESSERT"
     locale["STATUS"] = "STATUS"
     locale["STUHLINGER"] = "STUHLINGER"
+    locale["Scale ordinary hits from registered Pack-a-Punched weapons against standard zombies. GAME DEFAULT preserves normal damage. Custom upgrades and map-owned damage callbacks remain unchanged."] = "Skaliert normale Treffer registrierter Pack-a-Punch-Waffen gegen gewöhnliche Zombies. SPIELSTANDARD behält den normalen Schaden bei. Eigene Upgrades und Schadensroutinen der Karte bleiben unverändert."
     locale["Scale standard fall damage or turn it off. GAME DEFAULT delegates to the map; custom scripted hazards are not reclassified as falls."] = "Skaliert normalen Fallschaden oder schaltet ihn ab. SPIELSTANDARD überlässt ihn der Karte; eigene geskriptete Gefahren werden nicht als Stürze umgedeutet."
     locale["Scale the native reserve ammo granted to selected or inherited starting weapons while retaining each weapon's own magazine and ammo type. Values above an asset's hard capacity safely clamp and report degraded compatibility. GAME DEFAULT preserves stock ammo."] = "Skaliert die normale Reservemunition gewählter oder übernommener Startwaffen; Magazin und Munitionstyp bleiben erhalten. Werte über der festen Waffenkapazität werden sicher begrenzt und als eingeschränkt kompatibel gemeldet. SPIELSTANDARD behält die normale Munition."
+    locale["Scale the price of standard powered perk machines. GAME DEFAULT leaves prices unchanged. Custom perk prices and later map changes remain map-owned. BO2 has no safe equivalent."] = "Skaliert den Preis normaler, eingeschalteter Extra-Automaten. SPIELSTANDARD ändert nichts. Eigene Preise und spätere Kartenänderungen bleiben kartengesteuert. BO2 hat keine sichere Entsprechung."
+    locale["Scale the standard Wunderfizz price, including its purchase hint and stock refund. GAME DEFAULT leaves the map's price unchanged. If a map later takes over the price, its value wins. BO2 has no verified equivalent."] = "Skaliert den Standard-Wunderfizz-Preis samt Kaufhinweis und normaler Erstattung. SPIELSTANDARD erhält den Kartenpreis. Ändert die Karte ihn später, gilt ihr Preis. Kein bestätigtes BO2-Pendant."
     locale["Seconds a normal dropped power-up remains collectible before its stock flashing phase begins. GAME DEFAULT uses 15 seconds. Map-authored custom lifetimes, infinite quest drops, and BO3 Temporal Gift remain authoritative."] = "Sekunden, die ein normaler fallengelassener Bonus vor seiner üblichen Blinkphase aufnehmbar bleibt. SPIELSTANDARD nutzt 15 Sekunden. Eigene Kartenlaufzeiten, unbegrenzte Quest-Drops und BO3 Temporal Gift behalten Vorrang."
     locale["Seconds between a completed round and the next round. GAME DEFAULT preserves the map's delay. INSTANT removes only the standard between-round wait; round-change HUD and map-authored scripted waits remain intact."] = "Sekunden zwischen einer beendeten Runde und der nächsten. SPIELSTANDARD behält die Kartenverzögerung. SOFORT entfernt nur die normale Rundenpause; Rundenwechsel-HUD und geskriptete Wartezeiten der Karte bleiben erhalten."
     locale["Seconds of damage immunity after a player spawns or respawns. GAME DEFAULT adds no ZTweaks protection and leaves map-authored protection alone."] = "Sekunden ohne Schaden nach Spawn oder Respawn. SPIELSTANDARD fügt keinen ZTweaks-Schutz hinzu und lässt den Kartenschutz unverändert."
@@ -336,6 +392,10 @@ local function populate()
     locale["Spawn with the selected ZTweaks starting weapon slots Pack-a-Punched when the map registers a safe upgraded variant. MAP DEFAULT leaves both slots unmodified."] = "Startet mit Pack-a-Punch-Versionen der gewählten ZTweaks-Startwaffen, wenn die Karte eine sichere verbesserte Variante registriert. KARTENSTANDARD lässt beide Plätze unverändert."
     locale["Starting weapons, grenades, equipment, and carrying limits."] = "Startwaffen, Granaten, Ausrüstung und Tragelimits."
     locale["TAKEO"] = "TAKEO"
+    locale["TEDDY-BEAR CHANCE"] = "TEDDYBÄR-CHANCE"
+    locale["THUNDER WALL"] = "DONNERWAND"
+    locale["TRAP PRICE"] = "FALLENPREIS"
+    locale["TURNED"] = "UMGEDREHT"
     locale["TYPE"] = "TYP"
     locale["Tactical or placeable equipment given at spawn. MAP DEFAULT preserves the map choice. Unsupported items fail closed instead of substituting a different type."] = "Taktische oder platzierbare Ausrüstung beim Spawn. KARTENSTANDARD behält die Kartenauswahl. Nicht unterstützte Gegenstände werden sicher nicht vergeben, statt durch einen anderen Typ ersetzt zu werden."
     locale["The game reported a newer compatibility reason; see the ZTweaks runtime log."] = "Das Spiel meldete einen neueren Kompatibilitätsgrund; siehe ZTweaks-Laufzeitprotokoll."
@@ -348,21 +408,23 @@ local function populate()
     locale["ULTIMIS"] = "ULTIMIS"
     locale["UNAVAILABLE"] = "NICHT VERFÜGBAR"
     locale["UNKNOWN"] = "UNBEKANNT"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["de"]
     locale["UNLIMITED"] = "UNBEGRENZT"
     locale["VICTIS"] = "VICTIS"
     locale["WALL WEAPONS ONLY"] = "NUR WANDWAFFEN"
     locale["WEAPON DAMAGE"] = "WAFFENSCHADEN"
     locale["WEASEL"] = "WEASEL"
     locale["WORLD"] = "WELT"
+    locale["WUNDERFIZZ PRICE"] = "WUNDERFIZZ-PREIS"
     locale["Weapon class that replaces the map's primary starting weapon. MAP DEFAULT preserves the map choice. If the selected class is unavailable, ZTweaks safely keeps the map default."] = "Waffenklasse als Ersatz für die primäre Startwaffe der Karte. KARTENSTANDARD behält die Kartenauswahl. Ist die Klasse nicht verfügbar, bleibt sicher die Standardwaffe der Karte erhalten."
     locale["ZBUNDLE SETTINGS"] = "ZBUNDLE-EINSTELLUNGEN"
     locale["ZBUNDLE SETTINGS - {owner}"] = "ZBUNDLE-EINSTELLUNGEN - {owner}"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["de"]
+    locale["ZOMBIE DAMAGE"] = "ZOMBIESCHADEN"
     locale["ZOMBIE HEALTH"] = "ZOMBIEGESUNDHEIT"
     locale["ZOMBIE SPAWN RATE"] = "ZOMBIE-SPAWNRATE"
     locale["ZOMBIE SPEED"] = "ZOMBIETEMPO"
@@ -389,9 +451,12 @@ local function populate()
     locale["composed with the map's live bleed-out duration"] = "Mit der aktuellen Verblutungsdauer der Karte kombiniert"
     locale["composed with the map's spawn movement scale"] = "Mit dem Bewegungstempo beim Spawn der Karte kombiniert"
     locale["custom map exposes no authoritative base player-health variable"] = "Die benutzerdefinierte Karte stellt keinen maßgeblichen Wert für die Basisgesundheit bereit"
+    locale["custom or changed perk purchases remain map-owned"] = "Eigene oder geänderte Extra-Käufe bleiben kartengesteuert"
+    locale["custom or changed trap purchases remain map-owned"] = "Eigene oder geänderte Fallenkäufe bleiben kartengesteuert"
     locale["custom/counter/quest blocker owners were preserved; no ordinary blocker was safe to claim"] = "Benutzerdefinierte, zähler- und questgesteuerte Hindernisse beibehalten; kein normales Hindernis war sicher übernehmbar"
     locale["first-round spawning began before the tweak could be applied"] = "Die Gegner der ersten Runde erschienen, bevor die Anpassung angewendet werden konnte"
     locale["generic inventory restoration would duplicate map quest weapons"] = "Eine allgemeine Inventarwiederherstellung würde Questwaffen der Karte duplizieren"
+    locale["global stock AAT disable takes precedence"] = "die globale Deaktivierung der Standard-AATs hat Vorrang"
     locale["ignored an active duplicate at the pickup boundary"] = "Bereits aktives Duplikat bei der Aufnahme ignoriert"
     locale["independent safe box firearm selected for each player"] = "Für jeden Spieler unabhängig eine sichere Kisten-Schusswaffe gewählt"
     locale["map and perk revive-time callbacks are composed before scaling"] = "Wiederbelebungszeit-Callbacks von Karte und Extras werden vor der Skalierung kombiniert"
@@ -399,6 +464,8 @@ local function populate()
     locale["map did not expose standard Zombies match variables"] = "Die Karte stellt keine normalen Zombies-Spielvariablen bereit"
     locale["map did not expose the standard round zombie total"] = "Die Karte bietet keine normale Zombie-Anzahl pro Runde"
     locale["map did not initialize round logic before the door-capability timeout"] = "Die Rundenlogik war beim Zeitlimit der Türprüfung noch nicht initialisiert"
+    locale["map did not initialize the stock Alternate Ammo Type system"] = "Die Karte hat das originale System für alternative Munitionstypen nicht initialisiert"
+    locale["map did not register any supported Alternate Ammo Types"] = "Die Karte hat keinen unterstützten alternativen Munitionstyp registriert"
     locale["map does not enable standard score-threshold power-up drops"] = "Die Karte aktiviert keine normalen punkteschwellenbasierten Power-up-Drops"
     locale["map exposes no active player for stock blocker callbacks"] = "Die Karte stellt keinen aktiven Spieler für die normalen Hindernis-Callbacks bereit"
     locale["map exposes no authoritative starting-weapon replacement seam"] = "Die Karte bietet keinen maßgeblichen Eingriffspunkt zum Ersetzen der Startwaffe"
@@ -414,9 +481,12 @@ local function populate()
     locale["map exposes no registered weapon pool"] = "Die Karte stellt keinen registrierten Waffenpool bereit"
     locale["map exposes no safe standard purchasable doors"] = "Die Karte bietet keine sicher steuerbaren normalen Kauftüren"
     locale["map exposes no safely owned timed effect storage"] = "Die Karte bietet keinen sicher zuordenbaren Speicher für zeitlich begrenzte Effekte"
+    locale["map exposes no standard Wunderfizz machine or price"] = "die Karte bietet keine Standard-Wunderfizz-Maschine oder deren Preis"
     locale["map exposes no standard between-round delay"] = "Die Karte stellt keine normale Pause zwischen Runden bereit"
     locale["map exposes no standard between-round delay callback"] = "Die Karte bietet keinen normalen Callback für die Pause zwischen Runden"
+    locale["map exposes no standard death-point penalty"] = "Die Karte bietet keine normale Todespunktstrafe"
     locale["map exposes no standard game-start delay"] = "Die Karte stellt keine normale Verzögerung vor Spielbeginn bereit"
+    locale["map exposes no standard health-regeneration delay"] = "Die Karte bietet keine normale Verzögerung der Gesundheitsregeneration"
     locale["map exposes no standard zombie spawn cadence"] = "Die Karte stellt keinen normalen Zombie-Spawntakt bereit"
 end
 populate()
@@ -428,6 +498,8 @@ local function populate()
     locale["map exposes no standard zombie-health curve"] = "Die Karte stellt keine normale Kurve für die Zombie-Gesundheit bereit"
     locale["map exposes no standard zombie-speed curve"] = "Die Karte stellt keine normale Kurve für die Zombie-Geschwindigkeit bereit"
     locale["map exposes no stock-compatible perk machines"] = "Die Karte bietet keine mit dem Originalsystem kompatiblen Extra-Automaten"
+    locale["map has no standard perk machines"] = "Die Karte hat keine normalen Extra-Automaten"
+    locale["map has no standard purchase traps"] = "Die Karte hat keine kaufbaren Standardfallen"
     locale["map has not published a compatible BO2 bank capability"] = "Die Karte bietet keine kompatible BO2-Bankfunktion"
     locale["map has not published a finalized stock GobbleGum registry"] = "Das originale GobbleGum-Verzeichnis der Karte ist noch nicht vollständig"
     locale["map has not published a perk-limit capability"] = "Die Karte bietet keine Funktion für das Extra-Limit"
@@ -441,6 +513,11 @@ local function populate()
     locale["map has not published an actor-damage callback"] = "Die Karte bietet keinen Schadens-Callback für Akteure"
     locale["map mode did not publish its stock startup power state"] = "Der Kartenmodus stellt seinen originalen Start-Stromzustand nicht bereit"
     locale["map mode starts with power already enabled"] = "Dieser Kartenmodus startet bereits mit Strom"
+    locale["map owns Mystery Box teddy-bear chance"] = "die Karte steuert bereits die Teddybär-Chance der Mystery Box"
+    locale["map owns a nonstandard death-point penalty"] = "Die Karte steuert eine eigene Todespunktstrafe"
+    locale["map owns its perk purchase hints or prices"] = "Die Karte steuert Extra-Kaufhinweise oder -preise selbst"
+    locale["map owns its trap purchase callbacks or prices"] = "Die Karte steuert Fallenkäufe oder -preise selbst"
+    locale["map owns the primary-weapon limit"] = "Die Karte steuert das Primärwaffenlimit"
     locale["map published an invalid bank denomination"] = "Die Karte hat eine ungültige Bankeinheit bereitgestellt"
     locale["map registered no activation-limited GobbleGums"] = "Keine GobbleGums mit begrenzten Aktivierungen registriert"
     locale["map registered no compatible carried weapons"] = "Keine kompatiblen tragbaren Waffen registriert"
@@ -448,9 +525,14 @@ local function populate()
     locale["map registered no round-limited GobbleGums"] = "Keine GobbleGums mit begrenzter Rundenzahl registriert"
     locale["map registered no time-limited GobbleGums"] = "Keine zeitlich begrenzten GobbleGums registriert"
     locale["map rejected its standard door-open requests"] = "Die Karte lehnte normale Türöffnungsanforderungen ab"
+    locale["map replaced Mystery Box teddy-bear chance"] = "die Karte hat die Teddybär-Chance der Mystery Box ersetzt"
+    locale["map replaced a Mystery Box price; that location remains map-owned"] = "die Karte hat einen Mystery-Box-Preis ersetzt; dieser Ort bleibt kartenverwaltet"
+    locale["map replaced the Wunderfizz price; its value remains map-owned"] = "die Karte hat den Wunderfizz-Preis ersetzt; ihr Wert bleibt kartenverwaltet"
+    locale["map replaced the primary-weapon limit"] = "Die Karte hat das Primärwaffenlimit ersetzt"
     locale["map replaces stock power-up pickup dispatch; classic Double Points/Insta-Kill remain map-owned"] = "Die Karte ersetzt die originale Power-up-Aufnahme; Doppelte Punkte/Sofort töten bleiben kartengesteuert"
     locale["map starts with power already enabled"] = "Die Karte startet bereits mit Strom"
     locale["map supplies a custom Insta-Kill lifecycle and remains authoritative"] = "Die Karte behält die Kontrolle über ihren eigenen Sofort-töten-Ablauf"
+    locale["map uses fixed-price legacy Mystery Box hints"] = "die Karte nutzt alte Mystery-Box-Hinweise mit festen Preisen"
     locale["map's published power consumers rejected activation"] = "Die bereitgestellten Stromverbraucher der Karte lehnten die Aktivierung ab"
     locale["map's registered power consumers were already enabled"] = "Die registrierten Stromverbraucher der Karte waren bereits aktiviert"
     locale["map's starting loadout already fills every primary slot"] = "Die Startausrüstung der Karte belegt bereits alle Primärwaffenplätze"
@@ -461,6 +543,8 @@ local function populate()
     locale["map-owned Insta-Kill override preserved"] = "Karteneigene Sofort-töten-Anpassung beibehalten"
     locale["map-owned or multi-FX timed lifecycle preserved"] = "Karteneigener oder Mehrfacheffekt-Zeitablauf beibehalten"
     locale["no second registered weapon matches the selected class"] = "Keine zweite registrierte Waffe passt zur gewählten Klasse"
+    locale["no selected Pack-a-Punched starting weapon supports Alternate Ammo Types"] = "Keine gewählte Pack-a-Punch-Startwaffe unterstützt alternative Munitionstypen"
+    locale["one-weapon-slot challenge takes precedence"] = "Die Ein-Waffenplatz-Herausforderung hat Vorrang"
     locale["opened common traversal blockers; custom, counter, airlock, and quest-owned blockers were preserved"] = "Normale Wegsperren geöffnet; benutzerdefinierte, zähler-, schleusen- und questgesteuerte Hindernisse beibehalten"
     locale["opened every initialized ordinary door, linked barrier, debris group and Moon buy airlock"] = "Alle initialisierten normalen Türen, verknüpften Barrieren, Trümmergruppen und kaufbaren Moon-Schleusen geöffnet"
     locale["opened initialized ordinary traversal blockers; custom, counter, cycling-airlock and quest owners were preserved"] = "Initialisierte normale Wegsperren geöffnet; benutzerdefinierte, zähler-, zyklische Schleusen- und Queststeuerung beibehalten"
@@ -474,6 +558,12 @@ local function populate()
     locale["powered all six stock traversal stairs and published perk/door transformers; quest outputs 20/21/23 remain map-owned"] = "Alle sechs originalen Treppen und bereitgestellten Extra-/Türtransformatoren versorgt; Quest-Ausgänge 20/21/23 bleiben kartengesteuert"
     locale["powered generator perk consumers; captures, Mystery Boxes, and Pack-a-Punch remain map-owned"] = "Generatorgespeiste Extras versorgt; Eroberungen, Wunderkisten und Pack-a-Punch bleiben kartengesteuert"
     locale["powered perk shock boxes; other Afterlife panels and quest state remain map-owned"] = "Extra-Stromkästen versorgt; andere Jenseits-Schalter und Questzustände bleiben kartengesteuert"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["de"]
     locale["powered published perk/door transformers; other Beast and quest interactions remain map-owned"] = "Bereitgestellte Extra-/Türtransformatoren versorgt; andere Bestien- und Questaktionen bleiben kartengesteuert"
     locale["powered registered consumers; the buildable switch, reactor, Avogadro, gates, bus, morse code, and quest flags remain map-owned"] = "Registrierte Verbraucher versorgt; baubarer Schalter, Reaktor, Avogadro, Tore, Bus, Morsecode und Questzustände bleiben kartengesteuert"
     locale["powered registered global consumers; custom switches, local power, and quest state remain map-owned"] = "Registrierte globale Verbraucher versorgt; eigene Schalter, lokaler Strom und Questzustände bleiben kartengesteuert"
@@ -481,19 +571,16 @@ local function populate()
     locale["powered the stock global consumers and Verruckt trap controls"] = "Originale globale Verbraucher und Verruckt-Fallensteuerungen versorgt"
     locale["powered the stock global consumers, Pack-a-Punch and Giant traversal links"] = "Originale globale Verbraucher, Pack-a-Punch und Giant-Verbindungswege versorgt"
     locale["race-team Double Points has additional map-owned state and remains stock"] = "Doppelte Punkte für Rennteams hat zusätzlichen karteneigenen Zustand und bleibt unverändert"
+    locale["recognized stock map required"] = "Erkannte Standardkarte erforderlich"
+    locale["registered upgrades only; custom upgrade systems remain map-owned"] = "Nur registrierte Upgrades; eigene Upgrade-Systeme bleiben unter Kontrolle der Karte"
     locale["round logic began before the tweak could be applied"] = "Die Rundenlogik begann, bevor die Anpassung angewendet werden konnte"
     locale["scaled from BO2's stock base and composed with perk/map health bonuses"] = "Von BO2s originaler Basis skaliert und mit Gesundheitsboni von Extras/Karte kombiniert"
     locale["scaled the stock baseline before map special-round thresholds"] = "Originale Basis vor den Spezialrunden-Schwellen der Karte skaliert"
+    locale["selected Alternate Ammo Type is not registered by this map"] = "Der gewählte alternative Munitionstyp ist auf dieser Karte nicht registriert"
     locale["selected NO ADDITIONAL RULE for this match"] = "KEINE ZUSATZREGEL für diese Partie gewählt"
     locale["selected NO MYSTERY BOX for this match"] = "KEINE WUNDERKISTE für diese Partie gewählt"
     locale["selected NO PERKS for this match"] = "KEINE EXTRAS für diese Partie gewählt"
     locale["selected RANDOM LOADOUT for this match"] = "ZUFÄLLIGE AUSRÜSTUNG für diese Partie gewählt"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["de"]
     locale["selected WALL WEAPONS ONLY for this match"] = "NUR WANDWAFFEN für diese Partie gewählt"
     locale["selected equipment is not registered by this map"] = "Die gewählte Ausrüstung ist auf dieser Karte nicht registriert"
     locale["selected grenade is not registered by this map"] = "Die gewählte Granate ist auf dieser Karte nicht registriert"
@@ -502,6 +589,8 @@ local function populate()
     locale["standard Mystery Boxes disabled; scripted quest rewards remain map-owned"] = "Normale Wunderkisten deaktiviert; geskriptete Questbelohnungen bleiben kartengesteuert"
     locale["standard door capability disappeared during map initialization"] = "Die normale Türfunktion verschwand während der Karteninitialisierung"
     locale["standard purchases and ZTweaks grants are blocked; scripted quest grants remain map-owned"] = "Normale Käufe und ZTweaks-Vergaben blockiert; geskriptete Questvergaben bleiben kartengesteuert"
+    locale["stock barriers without map-authored delays only"] = "Nur Standardbarrikaden ohne karteneigene Verzögerung"
+    locale["stock blocker system has no unowned repair delay"] = "Das Standard-Blockersystem bietet keine unbelegte Reparaturverzögerung"
     locale["stock classic co-op already permits unlimited ordinary downs"] = "Der originale klassische Koop erlaubt bereits unbegrenzt normales Niederschlagen"
     locale["stock earned score and box refunds are scaled; direct map score restoration remains map-owned"] = "Originale Punktgewinne und Kistenerstattungen skaliert; direkte Punktewiederherstellung bleibt kartengesteuert"
     locale["stock earned score is scaled; direct map score restoration remains map-owned"] = "Originale Punktgewinne skaliert; direkte Punktewiederherstellung bleibt kartengesteuert"

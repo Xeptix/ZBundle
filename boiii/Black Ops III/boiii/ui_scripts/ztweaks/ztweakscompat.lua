@@ -6,10 +6,10 @@ CoD.ZTweaksCompat = R
 R.rows = R.rows or {}
 R.epoch = R.epoch or 0
 R.revision = R.revision or 0
-if R.transportVersion ~= "scriptNotify2" then
+if R.transportVersion ~= "scriptNotify3" then
     -- T7x can retain this Lua table while switching mod fastfiles. An old
     -- clientfield epoch must not make new notification rows appear current.
-    R.transportVersion = "scriptNotify2"
+    R.transportVersion = "scriptNotify3"
     R.epoch = 0
     R.rows = {}
     R.revision = R.revision + 1
@@ -118,6 +118,15 @@ R.reasons = {
     [100] = "weapon assets still own the absolute engine ammo ceiling",
     [101] = "Zetsubou exposes no initialized main-power consumer",
     [102] = "Zetsubou's stock main-power consumer rejected activation",
+    [103] = "custom or changed perk purchases remain map-owned",
+    [104] = "map owns its perk purchase hints or prices",
+    [105] = "map has no standard perk machines",
+    [106] = "map exposes no standard health-regeneration delay",
+    [107] = "map exposes no standard death-point penalty",
+    [108] = "map owns a nonstandard death-point penalty",
+    [109] = "map owns the primary-weapon limit",
+    [110] = "map replaced the primary-weapon limit",
+    [111] = "one-weapon-slot challenge takes precedence",
     [127] = "The game reported a newer compatibility reason; see the ZTweaks runtime log."
 }
 R.Read = function ( name )
@@ -126,11 +135,12 @@ R.Read = function ( name )
     if row == nil then return "not_reported", "" end
     return row.state, row.reason
 end
-R.AcceptPacket = function ( raw )
+R.AcceptPacket = function ( raw, bank )
     if raw == nil then return end
     local packet = tonumber( raw ) or 0
     if packet < 0 then packet = packet + 65536 end
     if packet == 0 then
+        if bank == 1 then return end
         if R.epoch ~= 0 then
             R.epoch = 0
             R.rows = {}
@@ -138,8 +148,9 @@ R.AcceptPacket = function ( raw )
         end
         return
     end
-    local index = math.floor( packet / 1024 )
-    if index == 0 then
+    local localIndex = math.floor( packet / 1024 )
+    if localIndex == 0 then
+        if bank == 1 then return end
         if packet ~= R.epoch then
             R.epoch = packet
             R.rows = {}
@@ -150,6 +161,7 @@ R.AcceptPacket = function ( raw )
     if R.epoch == 0 then return end
     local stateCode = math.floor( packet / 128 ) % 8
     local reasonCode = packet % 128
+    local index = localIndex + (bank == 1 and 63 or 0)
     local name = Z.ReportNames[index]
     local state = R.states[stateCode]
     if name == nil or state == nil then return end
@@ -162,10 +174,11 @@ R.AcceptPacket = function ( raw )
 end
 
 R.OnScriptNotify = function ( model )
-    if Engine.GetModelValue( model ) ~= "ztCompatPacket" then return end
+    local event = Engine.GetModelValue( model )
+    if event ~= "ztCompatPacket" and event ~= "ztCompatPacket2" then return end
     local data = CoD.GetScriptNotifyData( model )
     if data == nil then return end
-    R.AcceptPacket( data[1] )
+    R.AcceptPacket( data[1], event == "ztCompatPacket2" and 1 or 0 )
 end
 
 R.Listen = function ( element, controller )
@@ -177,8 +190,8 @@ R.Listen = function ( element, controller )
     end )
 end
 
-if R.menuFactoryTransport ~= "scriptNotify2" then
-    R.menuFactoryTransport = "scriptNotify2"
+if R.menuFactoryTransport ~= "scriptNotify3" then
+    R.menuFactoryTransport = "scriptNotify3"
     R.menuFactoryHooked = true
     local previous = CoD.Menu.NewForUIEditor
     CoD.Menu.NewForUIEditor = function ( name )

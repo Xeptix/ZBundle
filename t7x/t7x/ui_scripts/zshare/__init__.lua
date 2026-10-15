@@ -2813,6 +2813,30 @@ Z.RestoreView = function ( menu, snapshot )
 	end
 end
 
+-- The tab strip's window: the start column it had, kept wherever the active
+-- category is still inside it, moved just enough to show it otherwise.
+Z.TabWindowStart = function ( count, visible, activeIndex, startColumn )
+	local first = math.max( 1, math.min( startColumn or 1, math.max( 1, count - visible + 1 ) ) )
+	if activeIndex < first then
+		first = activeIndex
+	elseif activeIndex > first + visible - 1 then
+		first = activeIndex - visible + 1
+	end
+	return first
+end
+
+Z.RestoreTabWindow = function ( menu, activeIndex, startColumn )
+	local grid = menu ~= nil and menu.Tabs ~= nil and menu.Tabs.grid or nil
+	if grid == nil or type( grid.updateCurrentPosition ) ~= "function" then
+		return
+	end
+	local first = Z.TabWindowStart( #( menu.zsTabs or {} ), grid.hCount or 6, activeIndex, startColumn )
+	grid:updateCurrentPosition( grid.currentStartRow or 1, first )
+	if type( grid.updateLayout ) == "function" then
+		grid:updateLayout( 0 )
+	end
+end
+
 Z.RefreshTabs = function ( menu, controller, preferredId )
 	if menu == nil or menu.Tabs == nil or menu.zsMenuName == nil then
 		return
@@ -2854,10 +2878,17 @@ Z.RefreshTabs = function ( menu, controller, preferredId )
 	menu.zsRegistryRevision = ( menu.zsRegistryRevision or 0 ) + 1
 	menu.zsTabSource = menu.zsMenuName .. "TabsLive_" .. tostring( menu.zsRegistryRevision )
 	Z.BuildTabs( menu.zsTabSource, tabs, active.id, controller )
+	-- The strip's window survives the rebuild. setDataSource clears the grid's
+	-- layout and puts its start column back to 1, so the active category came
+	-- back at whatever edge kept it in view -- one in the third cell jumped to
+	-- the sixth when a setting changed (Xep, 14 October 2026). The window the
+	-- player was looking at goes back, clamped so the active category is in it.
+	local startColumn = menu.Tabs.grid.currentStartColumn or 1
 	menu.Tabs.grid:setDataSource( menu.zsTabSource )
 	if menu.Tabs.grid.updateDataSource ~= nil then
 		menu.Tabs.grid:updateDataSource()
 	end
+	Z.RestoreTabWindow( menu, Z.FindTabIndex( tabs, active.id ) or 1, startColumn )
 	Z.ShowTab( menu, controller, active.id, true )
 	Z.UpdateTabNavigation( menu, active.id, controller )
 	Z.RestoreView( menu, snapshot )

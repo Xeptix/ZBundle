@@ -22,14 +22,20 @@ local function populate()
     locale["APPLIES"] = "生效時機"
     locale["ASSAULT RIFLE"] = "突擊步槍"
     locale["AUTO RESTART LEVEL"] = "自動重開地圖"
+    locale["AVOID REPEAT BOX WEAPONS"] = "避免神秘箱連續重複武器"
     locale["Additional seconds before ordinary zombies begin spawning in the first round. GAME DEFAULT preserves the map's own delay; this does not remove the stock round-opening presentation or map-authored scripted waits."] = "第一回合普通殭屍開始生成前的額外等待秒數。遊戲預設保留地圖本身的延遲；此項不會移除原版回合開場演出或地圖腳本的等待。"
     locale["Adjust the standard Mystery Box weapon pool. NO WONDER WEAPONS removes registered wonder weapons; IMPROVED raises the chance of stronger registered weapons; FULL MAP POOL bypasses map-authored weighting while preserving stock ownership and quest-safety checks."] = "調整原生神秘箱的武器池。無奇蹟武器移除已註冊的奇蹟武器；改善提高更強的已註冊武器的機率；完整地圖武器池略過地圖權重，但保留原生持有檢查及任務安全檢查。"
+    locale["After a standard Max Ammo pickup refills reserves, also refill the magazines of eligible held firearms. OFF preserves stock behavior. Quest equipment, excluded weapons, custom ammo systems, and a replacement weapon acquired during pickup remain untouched."] = "拾取普通彈藥全滿後，也裝滿符合條件的持有槍械彈匣。關閉時維持原版行為。任務裝備、排除的武器、自訂彈藥系統及拾取期間替換的武器不受影響。"
     locale["Allow each player one completed standard Mystery Box purchase. Maps without the stock box-use notification disable this rule safely."] = "每名玩家僅能完成一次標準神秘箱購買。缺少原生箱子使用通知的地圖會安全停用此規則。"
+    locale["Allow selected stock-map-only tweaks. Custom-map support may be limited. OFF makes every experimental tweak inert even if its own saved option is ON; it does not relax compatibility checks or other Z mods' ownership."] = "允許部分僅適用於原版地圖的調整。自訂地圖支援可能有限。關閉時，即使某項實驗設定已儲存為開啟，也不會生效；相容性檢查和其他 Z Mod 的控制權保持不變。"
+    locale["Alternate Ammo Type applied only to compatible Pack-a-Punched starting weapons"] = "替代彈藥類型僅套用於相容的 Pack-a-Punch 初始武器"
     locale["Amount of the active tactical or placeable equipment given at spawn. GAME DEFAULT preserves stock start ammo. When Max Equipment is enabled, the lower value wins at spawn."] = "出生時獲得的目前戰術或可放置裝備數量。遊戲預設保留原始初始數量。若啟用了裝備上限，出生時取兩者中較小的值。"
     locale["Applied, degraded, unavailable, and inherited tweak status."] = "顯示調整的已生效、部分生效、無法使用及沿用狀態。"
+    locale["Avoid offering the same weapon on two consecutive standard Mystery Box pulls by the same player when another eligible registered weapon exists. OFF keeps stock selection. Map-authored special picks and weapon eligibility remain unchanged."] = "若存在其他符合條件的已登錄武器，避免同一玩家連續兩次從標準神秘箱獲得相同的武器選項。關閉時保留原版選擇。地圖特殊選擇及武器資格規則不變。"
     locale["BACK"] = "返回"
     locale["BANK LIMIT"] = "銀行上限"
     locale["BILLY"] = "比利"
+    locale["BLAST FURNACE"] = "爆炸熔爐"
     locale["BLEED-OUT TIME"] = "倒地存活時間"
     locale["BO2 exposes no composable revive-time callback"] = "BO2 未提供可組合的救援時間回呼"
     locale["BO2 has no safe pre-dispatch seam for ignoring a repeated timed power-up; stock stacking remains in control"] = "BO2 無法在分派前安全忽略重複的限時強化；疊加仍由原版控制"
@@ -51,6 +57,7 @@ local function populate()
     locale["CURRENT MAP"] = "目前地圖"
     locale["Carried lethal-grenade capacity. GAME DEFAULT leaves the weapon and map limit untouched; enabled values initialize newly granted grenades to this amount and cap later grants at it."] = "可攜帶的致命手榴彈容量。遊戲預設不改變武器及地圖上限；啟用的數值會作為新獲得手榴彈的初始數量，並限制後續補充的上限。"
     locale["Carried tactical or placeable-equipment capacity. GAME DEFAULT leaves each item and map in control; enabled values initialize newly granted equipment to this amount and cap later grants at it."] = "可攜帶的戰術或可放置裝備容量。遊戲預設由各物品及地圖控制；啟用的數值會作為新獲得裝備的初始數量，並限制後續補充的上限。"
+    locale["Chance of a teddy bear on each eligible standard Mystery Box pull. GAME DEFAULT keeps the map's chance. The map's minimum pulls, no-fly-away boxes, Fire Sales, and custom chance callbacks remain protected; 0% prevents ordinary teddy-bear moves."] = "每次符合條件的標準神秘箱抽取出現泰迪熊的機率。遊戲預設保留地圖原有機率。最少抽取次數、不可移動箱子、特賣及自訂機率回呼不受影響；0% 阻止一般箱子搬遷。"
     locale["Choose a favorite by cast. Supports stock maps and custom maps with a compatible adapter."] = "為每組角色選擇偏好。支援官方地圖及具備相容轉接功能的自訂地圖。"
     locale["Choose an independent compatible registered starting weapon loadout for each player. Explicit primary and secondary starting-weapon choices take precedence."] = "為每名玩家獨立選擇相容且已註冊的初始武器配置。明確選擇的初始主武器和副武器優先。"
     locale["Choose how a repeated standard timed power-up affects its active timer. REFRESH restarts the configured duration, EXTEND adds another duration, and IGNORE preserves the current timer."] = "選擇重複拾取原生限時強化道具時如何影響目前計時。重新計時會重啟設定時長，延長再加一段時長，忽略保留目前計時。"
@@ -59,21 +66,29 @@ local function populate()
     locale["Choose random values for this page? DEFAULT may be selected."] = "為此頁選擇隨機值？也可能選中預設值。"
     locale["Choose the map selected after every completed game. This works independently of Auto Restart: with Auto Restart off, ZTweaks changes the lobby selection without launching it. Random choices exclude the current map when another valid map exists."] = "選擇每局結束後的地圖。此項獨立於自動重開：自動重開關閉時，只變更大廳的地圖選擇，不啟動遊戲。若有其他有效地圖，隨機選擇會排除目前地圖。"
     locale["Configure installed Z mod settings and gameplay tweaks."] = "設定已安裝的 Z 系列模組與遊戲調整。"
+    locale["DEAD WIRE"] = "死亡電線"
     locale["DEFAULT"] = "預設"
-    locale["DEGRADED"] = "部分生效"
-    locale["DEMPSEY"] = "鄧普西"
-    locale["DESCRIPTION"] = "說明"
-    locale["DISABLED"] = "已停用"
-    locale["DISABLED: {value}"] = "已停用：{value}"
-    locale["DOWN LIMIT"] = "倒地次數上限"
-    locale["Die Rise did not initialize its single stock power switch"] = "Die Rise 未初始化其唯一原版電源開關"
-    locale["Die Rise rejected its stock switch request"] = "Die Rise 拒絕了原版開關請求"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["zh-TW"]
+    locale["DEGRADED"] = "部分生效"
+    locale["DEMPSEY"] = "鄧普西"
+    locale["DESCRIPTION"] = "說明"
+    locale["DISABLE CARPENTER DROPS"] = "停用木匠掉落"
+    locale["DISABLE DOUBLE POINTS DROPS"] = "停用雙倍點數掉落"
+    locale["DISABLE FIRE SALE DROPS"] = "停用特賣掉落"
+    locale["DISABLE INSTA-KILL DROPS"] = "停用秒殺掉落"
+    locale["DISABLE MAX AMMO DROPS"] = "停用彈藥全滿掉落"
+    locale["DISABLE NUKE DROPS"] = "停用核彈掉落"
+    locale["DISABLE STOCK AATS"] = "停用原版替代彈藥"
+    locale["DISABLED"] = "已停用"
+    locale["DISABLED: {value}"] = "已停用：{value}"
+    locale["DOWN LIMIT"] = "倒地次數上限"
+    locale["Die Rise did not initialize its single stock power switch"] = "Die Rise 未初始化其唯一原版電源開關"
+    locale["Die Rise rejected its stock switch request"] = "Die Rise 拒絕了原版開關請求"
     locale["Disable standard non-wall weapon acquisition while leaving wall buys enabled. Unsupported map-authored reward systems are reported instead of forcibly removed."] = "停用牆購以外的標準武器取得，保留牆購。不支援的地圖自訂獎勵系統會回報，而不會被強制移除。"
     locale["Disable standard perk acquisition and ZTweaks starting-perk grants. Map quest rewards that cannot be safely intercepted are reported as a compatibility limitation."] = "停用標準技能取得及 ZTweaks 初始技能發放。無法安全攔截的地圖任務獎勵會回報為相容性限制。"
     locale["Disable the standard Mystery Box. Custom scripted weapon lotteries remain untouched unless they register the stock box capability."] = "停用標準神秘箱。自訂腳本武器抽獎保持不變，除非註冊了原生箱子功能。"
@@ -81,18 +96,26 @@ local function populate()
     locale["Double Points did not expose its stock team scalar"] = "雙倍積分未提供原版團隊倍率"
     locale["EMP GRENADE"] = "電磁脈衝手榴彈"
     locale["EMPTY"] = "空"
+    locale["EXPERIMENTAL TWEAKS"] = "實驗性調整"
     locale["EXPLOSIVE SELF-DAMAGE"] = "自身爆炸傷害"
     locale["EXTEND"] = "延長時間"
+    locale["Enable Experimental Tweaks to edit this stock-map-only setting."] = "開啟實驗性調整後才能編輯這項僅適用於原版地圖的設定。"
     locale["Enable or disable each installed ZBundle component."] = "啟用或停用每個已安裝的 ZBundle 元件。"
     locale["Enable or disable this ZBundle component."] = "啟用或停用此 ZBundle 元件。"
     locale["End the current game?"] = "結束目前遊戲？"
+    locale["Exclude this type from regular random drops when another eligible type exists. Scripted drops are unchanged. If all are excluded, one eligible type remains to avoid stalling the game."] = "有其他可掉落類型時，將此類型從一般隨機掉落中排除。腳本控制的掉落不變。若排除全部類型，仍保留一種可掉落類型，避免遊戲卡住。"
+    locale["Extra points awarded to each active player when a standard round ends. GAME DEFAULT adds no bonus. Map-authored round rewards remain unchanged."] = "標準回合結束時向每位仍在遊戲中的玩家發放額外點數。遊戲預設不增加獎勵。地圖自帶的回合獎勵保持不變。"
     locale["FALL DAMAGE"] = "墜落傷害"
+    locale["FASTER BARRIER REBUILD"] = "加快障礙物修復"
     locale["FILTER"] = "篩選"
     locale["FILTER CHANGED"] = "僅顯示已變更"
     locale["FINN"] = "芬恩"
+    locale["FIRE SALE BOX PRICE"] = "特賣期間神秘箱價格"
+    locale["FIRE WORKS"] = "煙火"
     locale["FLOYD"] = "弗洛伊德"
     locale["FORCED"] = "強制值"
     locale["FRAG"] = "破片手榴彈"
+    locale["FREE"] = "免費"
     locale["FULL"] = "全滿"
     locale["FULL MAP POOL"] = "地圖完整武器池"
     locale["GAME DEFAULT"] = "遊戲預設"
@@ -104,20 +127,29 @@ local function populate()
     locale["GOBBLEGUM USES"] = "泡泡糖使用次數"
     locale["GUN GAME"] = "武器進階"
     locale["Gameplay rules, loadouts, pacing, world, and challenge settings."] = "遊戲規則、裝備、節奏、世界及挑戰設定。"
+    locale["Give the Pack-a-Punched starting weapon slots selected above a stock Alternate Ammo Type. RANDOM chooses one registered stock AAT per spawn. MAP DEFAULT adds no AAT. Unsupported weapons and maps remain unchanged."] = "為上方選中的 Pack-a-Punch 初始武器新增原版替代彈藥類型（AAT）。隨機會在每次出生時選擇一種已註冊的原版 AAT。地圖預設不新增 AAT。不支援的武器和地圖保持不變。"
     locale["GobbleGum activation, time, and round limits."] = "泡泡糖使用次數、持續時間與回合上限。"
     locale["Grant every perk registered by the current map at spawn. OFF is inert. When enabled, this takes precedence over Random Starting Perks."] = "出生時給予目前地圖註冊的全部技能。關閉時不進行干預。啟用時優先於隨機起始技能。"
     locale["HEADSHOTS ONLY"] = "僅限爆頭"
+    locale["HEALTH REGEN DELAY"] = "生命恢復延遲"
     locale["HOST"] = "主機"
     locale["HOST / PER PLAYER"] = "主機 / 每位玩家"
     locale["HOST / SHARED"] = "主機 / 共用"
     locale["HOST CONTROLLED"] = "由主機控制"
     locale["HOST VALUE"] = "主機設定值"
     locale["HOST VALUE UNAVAILABLE"] = "無法取得主機設定值"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["zh-TW"]
     locale["Host status unknown; this host-controlled setting is locked."] = "主機身分未知；此項由主機控制的設定已鎖定。"
     locale["IGNORE"] = "忽略"
     locale["IMPROVED"] = "強化"
     locale["INHERIT"] = "沿用地圖設定"
     locale["INSTANT"] = "立即"
+    locale["Increase ordinary player weapon and melee damage against standard zombies each round after round 1. The selected percentage is added per round, up to 500% of normal damage. OFF preserves the map's damage. Quest actors, friendly NPCs, and map-owned damage callbacks remain protected."] = "從第2回合起，每回合提高玩家對一般殭屍的武器及近戰傷害。每回合增加所選百分比，最高為正常傷害的500%。關閉時保留地圖原有傷害。任務角色、友方NPC和地圖自有傷害規則不受影響。"
     locale["Insta-Kill did not expose its stock team state"] = "一擊必殺未提供原版團隊狀態"
     locale["JACK VINCENT"] = "傑克·文森特"
     locale["JESSICA"] = "潔西卡"
@@ -130,26 +162,23 @@ local function populate()
     locale["LOCKED: {value}"] = "已鎖定：{value}"
     locale["LOSE PERKS ON DOWN"] = "倒地失去技能"
     locale["Lethal grenade type given at spawn. MAP DEFAULT preserves the map's choice. A selected type is used only when that map has registered a compatible grenade."] = "出生時獲得的致命手榴彈類型。地圖預設會保留地圖的選擇。僅當地圖註冊了相容手榴彈時，才使用所選類型。"
+    locale["Limit normal weapon pickups to one primary slot through the stock weapon-limit callback. ZTweaks will not grant a secondary starting weapon. Map-owned weapon limits and scripted quest inventory remain in control."] = "透過遊戲原有武器數量規則，將一般武器拾取限制為一個主武器欄。ZTweaks 不會發放第二把初始武器。地圖自訂限制和任務裝備仍由地圖控制。"
     locale["Locked to {value}"] = "已鎖定為 {value}"
     locale["MAP DEFAULT"] = "地圖預設"
     locale["MARLTON"] = "馬爾頓"
     locale["MATCH"] = "對局"
+    locale["MAX AMMO RELOADS MAGAZINES"] = "彈藥全滿時裝滿彈匣"
     locale["MAX EQUIPMENT"] = "裝備數量上限"
     locale["MAX GRENADES"] = "手榴彈數量上限"
     locale["MAX RESERVE AMMO"] = "備用彈藥上限"
     locale["MELEE DAMAGE"] = "近戰傷害"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["zh-TW"]
     locale["MINE"] = "地雷"
     locale["MISTY"] = "米絲蒂"
     locale["MOB OF THE DEAD"] = "MOB OF THE DEAD"
     locale["MODS"] = "模組"
     locale["MONKEY BOMB"] = "猴子炸彈"
     locale["MYSTERY BOX LOCK"] = "鎖定神秘箱位置"
+    locale["MYSTERY BOX PRICE"] = "神秘箱價格"
     locale["MYSTERY BOX QUALITY"] = "神秘箱武器品質"
     locale["Match flow, starting conditions, and global rules."] = "對局流程、初始條件與全域規則。"
     locale["Maximum ordinary co-op downs before stock bleeds the player out instead of allowing another revive. UNLIMITED keeps stock co-op's unlimited downs. Solo auto-revive, special-role and non-composable map routes stay stock and report unavailable."] = "合作模式下允許的普通倒地次數，超過後由原版流程使玩家流血死亡，而非允許再次救起。無限制保留原版不限倒地次數的規則。單人自救、特殊角色及無法相容的地圖流程保持原樣並回報不可用。"
@@ -159,10 +188,12 @@ local function populate()
     locale["Mob did not initialize its Afterlife perk-box waiter"] = "Mob 未初始化靈魂模式技能電箱等待流程"
     locale["Mob final-showdown health remains map-owned"] = "Mob 最終對決生命值仍由地圖控制"
     locale["Multiplier for stock regular score-threshold power-up drops. Higher values reach each drop threshold sooner. GAME DEFAULT preserves the map threshold; max-per-round, random kill drops, and scripted drops remain untouched."] = "原生常規積分門檻強化道具掉落的倍率。數值越高，越早達到掉落門檻。遊戲預設保留地圖門檻；每輪上限、隨機擊殺掉落及腳本掉落不變。"
+    locale["Mystery Box relocation is disabled"] = "神秘箱搬遷已停用"
     locale["NERO"] = "尼祿"
     locale["NEXT BLEED-OUT"] = "下次失血死亡"
     locale["NEXT DOWN"] = "下次倒地"
     locale["NEXT DROP"] = "下次掉落"
+    locale["NEXT FIRE SALE"] = "下次特賣"
     locale["NEXT GAME OVER"] = "下次遊戲結束"
     locale["NEXT GUM"] = "下一顆泡泡糖"
     locale["NEXT MAP"] = "下一張地圖"
@@ -177,6 +208,12 @@ local function populate()
     locale["NO PACK-A-PUNCH"] = "停用武器升級機"
     locale["NO PERKS"] = "停用技能飲料"
     locale["NO SELF-DAMAGE"] = "無自身傷害"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["zh-TW"]
     locale["NO SETTINGS"] = "無設定項目"
     locale["NO WONDER WEAPONS"] = "無奇蹟武器"
     locale["NONE"] = "無"
@@ -189,6 +226,7 @@ local function populate()
     locale["Number of random perks granted independently to each player when they spawn. NONE is inert. Perks are chosen without duplicates from those registered by the current map; if fewer are available, every available perk is granted."] = "玩家出生時分別隨機獲得的技能數量。無不會進行干預。從目前地圖註冊的技能中不重複抽取；不足指定數量時給予所有可用技能。"
     locale["OFF"] = "關閉"
     locale["ON"] = "開啟"
+    locale["ONE WEAPON SLOT"] = "僅一個武器欄位"
     locale["ONE-BOX CHALLENGE"] = "一次神秘箱挑戰"
     locale["ORIGINS"] = "ORIGINS"
     locale["OVERRIDDEN"] = "已覆寫"
@@ -200,28 +238,29 @@ local function populate()
     locale["Origins did not publish its generator perk consumers"] = "Origins 未提供發電機供電的技能設備"
     locale["Origins exposes no initialized generator-consumer registry"] = "Origins 未提供已初始化的發電機供電設備登錄表"
     locale["Override unavailable"] = "強制值無法使用"
+    locale["PACK-A-PUNCH DAMAGE"] = "強化武器傷害"
     locale["PERK LIMIT"] = "技能飲料上限"
+    locale["PERK PRICE"] = "技能價格"
     locale["PERSONAL"] = "個人"
     locale["PISTOL"] = "手槍"
     locale["PLAYER"] = "玩家"
     locale["PLAYER HEALTH"] = "玩家生命值"
     locale["PLAYER SPEED"] = "玩家速度"
     locale["POINT GAIN"] = "點數獲取倍率"
+    locale["POINTS RETAINED AFTER DEATH"] = "死亡後保留的點數"
     locale["POWER-UP DROP CAP"] = "道具掉落上限"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["zh-TW"]
+    locale["POWER-UP DROP FILTERS"] = "強化道具掉落篩選"
     locale["POWER-UP DROP RATE"] = "道具掉落頻率"
     locale["POWER-UP EFFECT TIME"] = "道具效果時長"
     locale["POWER-UP GROUND TIME"] = "道具掉落保留時間"
     locale["POWER-UP STACKING"] = "重複道具效果"
     locale["PRIMARY"] = "主武器"
     locale["PRIMIS"] = "PRIMIS"
+    locale["Percentage of direct damage dealt to players by ordinary zombies. GAME DEFAULT preserves map damage; bosses, quest actors, traps, and environmental damage remain map-controlled."] = "普通殭屍對玩家造成的直接傷害百分比。遊戲預設保留地圖傷害；首領、任務角色、陷阱及環境傷害仍由地圖控制。"
     locale["Percentage of each activation-limited GobbleGum's stock number of uses. Values round to at least one use. GAME DEFAULT preserves every gum's registered limit."] = "每種次數限制 GobbleGum 的原生使用次數百分比。結果取整且至少為一次。遊戲預設保留每種泡泡糖的已註冊上限。"
     locale["Percentage of each round-limited GobbleGum's stock round count. Values round to at least one round. Event-limited gums are not changed."] = "每種輪次限制 GobbleGum 的原生輪數百分比。結果取整且至少為一輪。不改變按事件限制的泡泡糖。"
+    locale["Percentage of each standard Mystery Box location's map-authored normal price. GAME DEFAULT preserves each location's own price. FREE affects ordinary box purchases but does not change the Fire Sale price."] = "依地圖為每個標準神秘箱設定的正常價格計算百分比。遊戲預設保留各自價格。免費只影響一般購買，不改變特賣價格。"
+    locale["Percentage of each standard purchasable trap's map-authored price. GAME DEFAULT leaves the trap alone. Custom trap purchase callbacks and later map price changes remain map-controlled; maps without standard purchase traps are unaffected."] = "依地圖為每個可購買的標準陷阱設定的價格計算百分比。遊戲預設不作更改。自訂購買流程和後續價格變動仍由地圖控制；沒有標準陷阱的地圖不受影響。"
     locale["Percentage of each time-limited GobbleGum's stock duration in seconds. Values round to at least one second. GAME DEFAULT preserves every gum's registered duration."] = "每種限時 GobbleGum 的原生持續秒數百分比。結果取整且至少為一秒。遊戲預設保留每種泡泡糖的已註冊持續時間。"
     locale["Percentage of each timed power-up's map-selected effect duration. This includes team, global, and player-only timed effects registered through the stock power-up system. GAME DEFAULT preserves every map-authored duration."] = "每種限時強化道具的地圖設定持續時間的百分比。包括透過原生強化道具系統註冊的團隊、全域及個人限時效果。遊戲預設保留地圖的所有持續時間。"
     locale["Percentage of normal player health. GAME DEFAULT leaves the map in control. Perks continue to scale from the modified base health."] = "玩家正常生命值的百分比。遊戲預設由地圖控制。技能仍以修改後的基礎生命值計算。"
@@ -230,13 +269,22 @@ local function populate()
     locale["Percentage of normal player weapon damage dealt to zombies. Melee uses its own setting. GAME DEFAULT preserves the stock and custom-map damage path."] = "玩家武器對殭屍造成的正常傷害百分比。近戰使用獨立設定。遊戲預設保留原版及自訂地圖的傷害處理。"
     locale["Percentage of normal positive score awards, including zombie damage, kills, headshots, and standard repairs. GAME DEFAULT leaves every map-authored award unchanged; point costs are never scaled."] = "正常獲得點數的百分比，包括傷害殭屍、擊殺、爆頭及標準修復。遊戲預設保留地圖的全部點數獎勵；消耗點數永不縮放。"
     locale["Percentage of normal starting ammo for the player's starting weapons. GAME DEFAULT preserves stock ammo; EMPTY leaves the weapon with no reserve or loaded rounds."] = "初始武器彈藥占正常初始彈藥的百分比。遊戲預設保留原始彈藥；空會同時清除已裝填和備用彈藥。"
+    locale["Percentage of points kept at the next standard spectator respawn, after any stock minimum-respawn score is applied. The rest is lost. GAME DEFAULT preserves the map's death penalty; custom death-score rules remain map-owned."] = "從觀戰狀態下次正常重生時，在遊戲最低重生點數生效後保留的比例。其餘點數會失去。遊戲預設保留地圖死亡懲罰；自訂規則仍由地圖控制。"
     locale["Percentage of the map's normal last-stand bleed-out duration. GAME DEFAULT preserves the map's timer."] = "地圖正常倒地後流血致死時間的百分比。遊戲預設保留地圖的計時器。"
     locale["Percentage of the map's normal revive interaction time. GAME DEFAULT preserves map, perk, and equipment modifiers."] = "地圖正常救援互動時間的百分比。遊戲預設保留地圖、技能及裝備的修正。"
     locale["Percentage of the map's normal standard-zombie spawn cadence. Higher values shorten the delay between ordinary spawns. GAME DEFAULT is inert; special, objective, and scripted spawners remain map-controlled."] = "地圖正常普通殭屍生成頻率的百分比。數值越高，普通生成間隔越短。遊戲預設不干預；特殊、目標及腳本生成仍由地圖控制。"
     locale["Percentage of the map's normal zombie speed curve. GAME DEFAULT is inert. RANDOM independently chooses one listed percentage when each match initializes. Standard round zombies are scaled; map-owned special enemies remain untouched."] = "地圖正常殭屍速度曲線的百分比。遊戲預設不干預。隨機選項在每局初始化時獨立選擇清單中的一個百分比。僅調整普通輪次殭屍；地圖特殊敵人不變。"
     locale["Percentage of the map's normal zombie-health curve. GAME DEFAULT leaves both starting health and round-to-round growth untouched. RANDOM independently chooses one listed percentage when each match initializes."] = "地圖正常殭屍生命曲線的百分比。遊戲預設不改變初始生命及每輪成長。隨機選項在每局初始化時，獨立選擇清單中的一個百分比。"
     locale["Percentage of the standard zombie count calculated for each round. GAME DEFAULT is inert. Scripted special rounds and objective spawns remain map-controlled."] = "每輪計算的標準殭屍數量的百分比。遊戲預設不干預。腳本特殊輪次及目標相關生成仍由地圖控制。"
+    locale["Percentage of the stock delay before health regeneration begins after damage. GAME DEFAULT preserves the map's delay. This does not change the regeneration rate or map-owned healing systems."] = "受傷後開始恢復生命的標準延遲百分比。遊戲預設保留地圖延遲。不會改變恢復速度或地圖自有的治療系統。"
     locale["Player stats, perks, and movement."] = "玩家屬性、技能與移動。"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["zh-TW"]
+    locale["Point cost of standard Mystery Boxes while Fire Sale is active. GAME DEFAULT preserves the stock or map-authored sale price. Normal box prices and map-authored nonstandard weapon lotteries remain untouched."] = "特賣期間標準神秘箱的點數價格。遊戲預設保留原版或地圖設定的特賣價格。一般箱子價格及地圖自訂武器抽獎不變。"
     locale["Points given to each player when a new match begins. GAME DEFAULT preserves the map's normal behavior, including BO3's stock starting-round calculation of 500 points per selected round."] = "新對局開始時給予每位玩家的點數。遊戲預設會保留地圖原有規則，包括 BO3 的起始回合數乘以 500 的計算方式。"
     locale["Power, doors, power-ups, and map-owned systems."] = "電力、門、強化道具與地圖自身系統。"
     locale["Preferred Mob of the Dead character, solo or co-op. Host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses this cast."] = "Mob of the Dead 的偏好角色，支援單人和合作。相同偏好優先給房主，其他玩家之間隨機決定。隨機選項保留遊戲原選角色，除非該角色分配給了偏好者。T7 官方地圖沒有這組角色。"
@@ -246,6 +294,7 @@ local function populate()
     locale["Preferred character on The Giant, Der Eisendrache, Zetsubou, Gorod Krovi or Revelations, solo or co-op. Origins is separate. Host wins ties; tied non-hosts draw randomly. Required co-op story roles are preserved."] = "The Giant、Der Eisendrache、Zetsubou、Gorod Krovi 或 Revelations 的偏好角色，支援單人和合作。Origins 單獨設定。相同偏好優先給房主，其他玩家之間隨機決定。合作劇情必需的角色職責會保留。"
     locale["Preferred character on TranZit, Die Rise, or Buried. Solo and co-op: host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses Victis."] = "在 TranZit、Die Rise 或 Buried 中偏好的角色。支援單人和合作：相同偏好優先給房主，其他玩家之間隨機決定。隨機選項保留遊戲原選角色，除非該角色分配給了偏好者。T7 官方地圖沒有 Victis。"
     locale["Prevent a player's own grenades, launchers, and other standard explosives from damaging that player. OFF leaves the stock damage callback untouched."] = "防止玩家被自己的手榴彈、發射器及其他標準爆炸物傷害。關閉時保留原版傷害回呼。"
+    locale["Prevent stock Alternate Ammo Types on compatible upgraded weapons, including Pack-a-Punch rerolls. Existing map exemptions remain in force. Custom AAT systems outside the stock registry stay map-owned. OFF preserves stock behavior."] = "阻止相容的升級武器獲得原版替代彈藥，包括再次使用強化機時。保留地圖已有的豁免。自訂系統仍由地圖控制。關閉時維持原版行為。"
     locale["Prevent the standard Mystery Box from randomly relocating after normal purchases. Explicit scripted or quest-owned box moves remain map-controlled. OFF preserves every map-authored relocation rule."] = "阻止原生神秘箱在普通購買後隨機換位。明確的腳本或任務換位仍由地圖控制。關閉時保留地圖的所有換位規則。"
     locale["Progress each player through a compatible registered weapon sequence using zombie kills. The challenge disables itself if the map cannot supply a safe progression list."] = "透過擊殺殭屍，讓各玩家沿相容的已註冊武器序列推進。若地圖無法提供安全的進階清單，挑戰會自行停用。"
     locale["Put every ZTweaks setting back to its default?"] = "將 ZTweaks 所有設定恢復為預設值？"
@@ -274,16 +323,13 @@ local function populate()
     locale["RESET TO DEFAULTS"] = "恢復預設值"
     locale["REVIVE TIME"] = "救援時間"
     locale["RICHTOFEN"] = "里希特霍芬"
+    locale["RISING PLAYER DAMAGE"] = "玩家傷害遞增"
+    locale["ROUND BONUS"] = "回合獎勵"
     locale["ROUND DELAY"] = "回合間隔"
     locale["RUSSMAN"] = "拉斯曼"
     locale["Randomize this tab after confirmation. GAME DEFAULT remains possible."] = "確認後隨機設定此頁。也可能選中遊戲預設值。"
+    locale["Reduce the pause between standard barrier-board repairs. Requires Experimental Tweaks. Available only on recognized stock maps with the stock blocker system; custom-map support may be limited. A map-authored repair delay always wins."] = "縮短一般障礙物修復之間的停頓。需要開啟實驗性調整。僅適用於使用原版障礙物系統的已識別原版地圖；自訂地圖支援可能有限。地圖自訂的修復延遲始終優先。"
     locale["Require headshots for standard zombie kills using the stock Zombies rule. OFF is inert and leaves the map's own game setting unchanged."] = "使用原版殭屍規則，要求爆頭才能擊殺普通殭屍。關閉時不進行干預，保留地圖本身設定。"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["zh-TW"]
     locale["Reset all character preferences only."] = "僅重設所有角色偏好。"
     locale["Reset every setting in this menu to its default?"] = "將此選單所有設定恢復為預設值？"
     locale["Restart the current level after the normal game-over results have been shown. DEFAULT is OFF."] = "正常顯示遊戲結束結果後，重新開始目前地圖。預設關閉。"
@@ -302,6 +348,12 @@ local function populate()
     locale["SHADOWS OF EVIL"] = "SHADOWS OF EVIL"
     locale["SHOTGUN"] = "霰彈槍"
     locale["SMG"] = "衝鋒槍"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["zh-TW"]
     locale["SNIPER RIFLE"] = "狙擊步槍"
     locale["SPAWN PROTECTION"] = "出生保護"
     locale["START WITH ALL PERKS"] = "開局獲得全部技能"
@@ -316,11 +368,15 @@ local function populate()
     locale["STARTING ROOM ONLY"] = "僅限起始區域"
     locale["STARTING ROUND"] = "起始回合"
     locale["STARTING WEAPON"] = "初始武器"
-    locale["STARTING WEAPON UPGRADED"] = "初始武器升級"
+    locale["STARTING WEAPON AAT"] = "初始武器 AAT"
+    locale["STARTING WEAPON PACK-A-PUNCHED"] = "初始武器升級"
     locale["STATUS"] = "狀態"
     locale["STUHLINGER"] = "施圖林格"
+    locale["Scale ordinary hits from registered Pack-a-Punched weapons against standard zombies. GAME DEFAULT preserves normal damage. Custom upgrades and map-owned damage callbacks remain unchanged."] = "調整已註冊強化武器對普通殭屍的常規傷害。遊戲預設保留正常傷害。自訂強化與地圖自身的傷害處理不變。"
     locale["Scale standard fall damage or turn it off. GAME DEFAULT delegates to the map; custom scripted hazards are not reclassified as falls."] = "縮放或關閉標準墜落傷害。遊戲預設交由地圖控制；自訂腳本危險不會被重新歸類為墜落。"
     locale["Scale the native reserve ammo granted to selected or inherited starting weapons while retaining each weapon's own magazine and ammo type. Values above an asset's hard capacity safely clamp and report degraded compatibility. GAME DEFAULT preserves stock ammo."] = "按比例調整所選或繼承的初始武器的原生備用彈藥，保留各武器的彈匣和彈藥類型。超過資源硬性容量的數值會安全限制在上限，並回報相容性受限。遊戲預設保留原始彈藥。"
+    locale["Scale the price of standard powered perk machines. GAME DEFAULT leaves prices unchanged. Custom perk prices and later map changes remain map-owned. BO2 has no safe equivalent."] = "調整已通電的標準技能機器價格。遊戲預設不作變更。自訂價格及地圖之後的變更仍由地圖控制。BO2 沒有安全的同等功能。"
+    locale["Scale the standard Wunderfizz price, including its purchase hint and stock refund. GAME DEFAULT leaves the map's price unchanged. If a map later takes over the price, its value wins. BO2 has no verified equivalent."] = "調整原版奇蹟汽水機的價格、購買提示和正常退款。遊戲預設保留地圖價格。若地圖之後更改價格，以地圖的值為準。BO2沒有已驗證的對應功能。"
     locale["Seconds a normal dropped power-up remains collectible before its stock flashing phase begins. GAME DEFAULT uses 15 seconds. Map-authored custom lifetimes, infinite quest drops, and BO3 Temporal Gift remain authoritative."] = "普通掉落強化道具在開始原生閃爍階段前可拾取的秒數。遊戲預設為 15 秒。地圖自訂存留時間、永久任務掉落及 BO3 Temporal Gift 仍優先控制。"
     locale["Seconds between a completed round and the next round. GAME DEFAULT preserves the map's delay. INSTANT removes only the standard between-round wait; round-change HUD and map-authored scripted waits remain intact."] = "一輪結束到下一輪開始的秒數。遊戲預設保留地圖的延遲。即時僅移除標準輪間等待；輪次切換 HUD 和地圖腳本等待保持不變。"
     locale["Seconds of damage immunity after a player spawns or respawns. GAME DEFAULT adds no ZTweaks protection and leaves map-authored protection alone."] = "玩家出生或重生後的傷害免疫秒數。遊戲預設不新增 ZTweaks 保護，也不修改地圖本身的保護。"
@@ -336,6 +392,10 @@ local function populate()
     locale["Spawn with the selected ZTweaks starting weapon slots Pack-a-Punched when the map registers a safe upgraded variant. MAP DEFAULT leaves both slots unmodified."] = "當地圖註冊了安全的升級版本時，以 Pack-a-Punch 升級後的 ZTweaks 所選初始武器出生。地圖預設不修改兩個武器欄位。"
     locale["Starting weapons, grenades, equipment, and carrying limits."] = "初始武器、手榴彈、裝備與攜帶上限。"
     locale["TAKEO"] = "武雄"
+    locale["TEDDY-BEAR CHANCE"] = "泰迪熊出現機率"
+    locale["THUNDER WALL"] = "雷牆"
+    locale["TRAP PRICE"] = "陷阱價格"
+    locale["TURNED"] = "策反"
     locale["TYPE"] = "類型"
     locale["Tactical or placeable equipment given at spawn. MAP DEFAULT preserves the map choice. Unsupported items fail closed instead of substituting a different type."] = "出生時獲得的戰術或可放置裝備。地圖預設保留地圖的選擇。不支援的物品會停止發放，而不會用其他類型替代。"
     locale["The game reported a newer compatibility reason; see the ZTweaks runtime log."] = "遊戲回報了較新版本的相容性原因；請查看 ZTweaks 執行日誌。"
@@ -348,21 +408,23 @@ local function populate()
     locale["ULTIMIS"] = "ULTIMIS"
     locale["UNAVAILABLE"] = "無法使用"
     locale["UNKNOWN"] = "未知"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["zh-TW"]
     locale["UNLIMITED"] = "無限"
     locale["VICTIS"] = "VICTIS"
     locale["WALL WEAPONS ONLY"] = "僅限牆上武器"
     locale["WEAPON DAMAGE"] = "武器傷害"
     locale["WEASEL"] = "黃鼠狼"
     locale["WORLD"] = "世界"
+    locale["WUNDERFIZZ PRICE"] = "奇蹟汽水機價格"
     locale["Weapon class that replaces the map's primary starting weapon. MAP DEFAULT preserves the map choice. If the selected class is unavailable, ZTweaks safely keeps the map default."] = "取代地圖初始主武器的武器類別。地圖預設會保留地圖的選擇。所選類別不可用時，ZTweaks 會安全地保留地圖預設武器。"
     locale["ZBUNDLE SETTINGS"] = "ZBUNDLE 設定"
     locale["ZBUNDLE SETTINGS - {owner}"] = "ZBUNDLE 設定 - {owner}"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["zh-TW"]
+    locale["ZOMBIE DAMAGE"] = "殭屍傷害"
     locale["ZOMBIE HEALTH"] = "殭屍生命值"
     locale["ZOMBIE SPAWN RATE"] = "殭屍生成速率"
     locale["ZOMBIE SPEED"] = "殭屍速度"
@@ -389,9 +451,12 @@ local function populate()
     locale["composed with the map's live bleed-out duration"] = "已與地圖目前倒地失血時間組合"
     locale["composed with the map's spawn movement scale"] = "已與地圖出生時移動倍率組合"
     locale["custom map exposes no authoritative base player-health variable"] = "自訂地圖未提供具有決定權的玩家基礎生命值變數"
+    locale["custom or changed perk purchases remain map-owned"] = "自訂或已變更的技能購買仍由地圖控制"
+    locale["custom or changed trap purchases remain map-owned"] = "自訂或已變更的陷阱購買仍由地圖控制"
     locale["custom/counter/quest blocker owners were preserved; no ordinary blocker was safe to claim"] = "保留自訂、計數器及任務障礙物的管理權；沒有可安全接管的普通障礙物"
     locale["first-round spawning began before the tweak could be applied"] = "調整生效前第一回合已開始生成敵人"
     locale["generic inventory restoration would duplicate map quest weapons"] = "通用背包還原會複製地圖任務武器"
+    locale["global stock AAT disable takes precedence"] = "全域停用原版替代彈藥的設定優先"
     locale["ignored an active duplicate at the pickup boundary"] = "已在拾取時忽略仍生效的重複強化"
     locale["independent safe box firearm selected for each player"] = "已為每名玩家獨立選擇安全的神秘箱槍械"
     locale["map and perk revive-time callbacks are composed before scaling"] = "先組合地圖及技能的救援時間回呼，再套用倍率"
@@ -399,6 +464,8 @@ local function populate()
     locale["map did not expose standard Zombies match variables"] = "地圖未提供標準殭屍對局變數"
     locale["map did not expose the standard round zombie total"] = "地圖未提供標準回合殭屍總數"
     locale["map did not initialize round logic before the door-capability timeout"] = "門功能偵測逾時前地圖未初始化回合邏輯"
+    locale["map did not initialize the stock Alternate Ammo Type system"] = "地圖未初始化原版替代彈藥類型系統"
+    locale["map did not register any supported Alternate Ammo Types"] = "地圖未註冊任何支援的替代彈藥類型"
     locale["map does not enable standard score-threshold power-up drops"] = "地圖未啟用依分數門檻掉落的標準強化"
     locale["map exposes no active player for stock blocker callbacks"] = "地圖未提供原版障礙物回呼所需的活躍玩家"
     locale["map exposes no authoritative starting-weapon replacement seam"] = "地圖未提供具有決定權的初始武器替換介面"
@@ -414,9 +481,12 @@ local function populate()
     locale["map exposes no registered weapon pool"] = "地圖未提供已註冊武器池"
     locale["map exposes no safe standard purchasable doors"] = "地圖未提供可安全操作的標準付費門"
     locale["map exposes no safely owned timed effect storage"] = "地圖未提供可安全確定歸屬的限時效果儲存"
+    locale["map exposes no standard Wunderfizz machine or price"] = "地圖未提供原版奇蹟汽水機或其價格"
     locale["map exposes no standard between-round delay"] = "地圖未提供標準回合間隔"
     locale["map exposes no standard between-round delay callback"] = "地圖未提供標準回合間隔回呼"
+    locale["map exposes no standard death-point penalty"] = "地圖未提供標準死亡扣分規則"
     locale["map exposes no standard game-start delay"] = "地圖未提供標準開局延遲"
+    locale["map exposes no standard health-regeneration delay"] = "地圖未提供標準生命恢復延遲"
     locale["map exposes no standard zombie spawn cadence"] = "地圖未提供標準殭屍生成間隔"
 end
 populate()
@@ -428,6 +498,8 @@ local function populate()
     locale["map exposes no standard zombie-health curve"] = "地圖未提供標準殭屍生命值曲線"
     locale["map exposes no standard zombie-speed curve"] = "地圖未提供標準殭屍速度曲線"
     locale["map exposes no stock-compatible perk machines"] = "地圖未提供相容原版系統的技能機器"
+    locale["map has no standard perk machines"] = "地圖沒有標準技能機器"
+    locale["map has no standard purchase traps"] = "地圖沒有可購買的標準陷阱"
     locale["map has not published a compatible BO2 bank capability"] = "地圖尚未提供相容 BO2 的銀行功能"
     locale["map has not published a finalized stock GobbleGum registry"] = "地圖尚未提供完整的原版泡泡糖登錄表"
     locale["map has not published a perk-limit capability"] = "地圖尚未提供技能數量上限功能"
@@ -441,6 +513,11 @@ local function populate()
     locale["map has not published an actor-damage callback"] = "地圖尚未提供實體傷害回呼"
     locale["map mode did not publish its stock startup power state"] = "地圖模式未提供原版初始供電狀態"
     locale["map mode starts with power already enabled"] = "地圖模式開局時已通電"
+    locale["map owns Mystery Box teddy-bear chance"] = "地圖已控制神秘箱的泰迪熊機率"
+    locale["map owns a nonstandard death-point penalty"] = "地圖自行控制非標準死亡扣分規則"
+    locale["map owns its perk purchase hints or prices"] = "地圖自行控制技能購買提示或價格"
+    locale["map owns its trap purchase callbacks or prices"] = "地圖自行控制陷阱購買流程或價格"
+    locale["map owns the primary-weapon limit"] = "地圖控制主武器數量上限"
     locale["map published an invalid bank denomination"] = "地圖提供的銀行存取單位無效"
     locale["map registered no activation-limited GobbleGums"] = "地圖未註冊限制使用次數的泡泡糖"
     locale["map registered no compatible carried weapons"] = "地圖未註冊相容的可攜帶武器"
@@ -448,9 +525,14 @@ local function populate()
     locale["map registered no round-limited GobbleGums"] = "地圖未註冊限制回合數的泡泡糖"
     locale["map registered no time-limited GobbleGums"] = "地圖未註冊限制持續時間的泡泡糖"
     locale["map rejected its standard door-open requests"] = "地圖拒絕了標準開門請求"
+    locale["map replaced Mystery Box teddy-bear chance"] = "地圖取代了神秘箱的泰迪熊機率"
+    locale["map replaced a Mystery Box price; that location remains map-owned"] = "地圖更改了一個神秘箱的價格；該位置仍由地圖控制"
+    locale["map replaced the Wunderfizz price; its value remains map-owned"] = "地圖更改了奇蹟汽水機價格；該值仍由地圖控制"
+    locale["map replaced the primary-weapon limit"] = "地圖取代了主武器數量上限規則"
     locale["map replaces stock power-up pickup dispatch; classic Double Points/Insta-Kill remain map-owned"] = "地圖替換了原版強化拾取分派；經典雙倍積分及一擊必殺仍由地圖控制"
     locale["map starts with power already enabled"] = "地圖開局時已通電"
     locale["map supplies a custom Insta-Kill lifecycle and remains authoritative"] = "地圖提供自訂一擊必殺生命週期，仍以地圖為準"
+    locale["map uses fixed-price legacy Mystery Box hints"] = "地圖使用固定價格的舊版神秘箱提示"
     locale["map's published power consumers rejected activation"] = "地圖公開的供電設備拒絕了啟用"
     locale["map's registered power consumers were already enabled"] = "地圖已註冊的供電設備已經啟用"
     locale["map's starting loadout already fills every primary slot"] = "地圖初始裝備已占滿所有主武器欄位"
@@ -461,6 +543,8 @@ local function populate()
     locale["map-owned Insta-Kill override preserved"] = "保留地圖的一擊必殺覆寫設定"
     locale["map-owned or multi-FX timed lifecycle preserved"] = "保留地圖管理或多效果的限時生命週期"
     locale["no second registered weapon matches the selected class"] = "沒有第二把已註冊武器符合所選類別"
+    locale["no selected Pack-a-Punched starting weapon supports Alternate Ammo Types"] = "所選 Pack-a-Punch 初始武器均不支援替代彈藥類型"
+    locale["one-weapon-slot challenge takes precedence"] = "單武器欄位挑戰優先"
     locale["opened common traversal blockers; custom, counter, airlock, and quest-owned blockers were preserved"] = "已開啟通用通行障礙物；保留自訂、計數器、氣閘及任務障礙物"
     locale["opened every initialized ordinary door, linked barrier, debris group and Moon buy airlock"] = "已開啟所有已初始化的普通門、關聯屏障、雜物組及 Moon 付費氣閘"
     locale["opened initialized ordinary traversal blockers; custom, counter, cycling-airlock and quest owners were preserved"] = "已開啟已初始化的普通通行障礙物；保留自訂、計數器、循環氣閘及任務管理權"
@@ -474,6 +558,12 @@ local function populate()
     locale["powered all six stock traversal stairs and published perk/door transformers; quest outputs 20/21/23 remain map-owned"] = "已為全部六處原版通行樓梯及公開的技能、門變壓器供電；任務輸出 20/21/23 仍由地圖管理"
     locale["powered generator perk consumers; captures, Mystery Boxes, and Pack-a-Punch remain map-owned"] = "已為發電機技能設備供電；占領、神秘箱及武器強化仍由地圖管理"
     locale["powered perk shock boxes; other Afterlife panels and quest state remain map-owned"] = "已為技能電箱供電；其他靈魂模式面板及任務狀態仍由地圖管理"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["zh-TW"]
     locale["powered published perk/door transformers; other Beast and quest interactions remain map-owned"] = "已為公開的技能及門變壓器供電；其他野獸模式及任務互動仍由地圖管理"
     locale["powered registered consumers; the buildable switch, reactor, Avogadro, gates, bus, morse code, and quest flags remain map-owned"] = "已為註冊設備供電；可組裝開關、反應爐、阿伏伽德羅、閘門、巴士、摩斯電碼及任務標記仍由地圖管理"
     locale["powered registered global consumers; custom switches, local power, and quest state remain map-owned"] = "已為註冊全域設備供電；自訂開關、局部電源及任務狀態仍由地圖管理"
@@ -481,19 +571,16 @@ local function populate()
     locale["powered the stock global consumers and Verruckt trap controls"] = "已為原版全域設備及 Verruckt 陷阱控制供電"
     locale["powered the stock global consumers, Pack-a-Punch and Giant traversal links"] = "已為原版全域設備、武器強化機及 Giant 通行連接供電"
     locale["race-team Double Points has additional map-owned state and remains stock"] = "競速團隊雙倍積分含額外地圖狀態，保留原版行為"
+    locale["recognized stock map required"] = "需要已識別的原版地圖"
+    locale["registered upgrades only; custom upgrade systems remain map-owned"] = "僅限已註冊強化；自訂強化系統仍由地圖控制"
     locale["round logic began before the tweak could be applied"] = "調整生效前回合邏輯已啟動"
     locale["scaled from BO2's stock base and composed with perk/map health bonuses"] = "以 BO2 原版基礎值縮放，並組合技能及地圖生命值加成"
     locale["scaled the stock baseline before map special-round thresholds"] = "已在地圖特殊回合門檻處理前縮放原版基準"
+    locale["selected Alternate Ammo Type is not registered by this map"] = "所選替代彈藥類型未由此地圖註冊"
     locale["selected NO ADDITIONAL RULE for this match"] = "本局已選擇無額外規則"
     locale["selected NO MYSTERY BOX for this match"] = "本局已選擇無神秘箱"
     locale["selected NO PERKS for this match"] = "本局已選擇無技能"
     locale["selected RANDOM LOADOUT for this match"] = "本局已選擇隨機裝備"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["zh-TW"]
     locale["selected WALL WEAPONS ONLY for this match"] = "本局已選擇僅牆上武器"
     locale["selected equipment is not registered by this map"] = "此地圖未註冊所選裝備"
     locale["selected grenade is not registered by this map"] = "此地圖未註冊所選手榴彈"
@@ -502,6 +589,8 @@ local function populate()
     locale["standard Mystery Boxes disabled; scripted quest rewards remain map-owned"] = "已停用標準神秘箱；腳本任務獎勵仍由地圖管理"
     locale["standard door capability disappeared during map initialization"] = "地圖初始化過程中標準門功能消失"
     locale["standard purchases and ZTweaks grants are blocked; scripted quest grants remain map-owned"] = "已攔截標準購買及 ZTweaks 發放；腳本任務發放仍由地圖管理"
+    locale["stock barriers without map-authored delays only"] = "僅適用於地圖未指定延遲的原版障礙物"
+    locale["stock blocker system has no unowned repair delay"] = "原版系統沒有可用的修復延遲"
     locale["stock classic co-op already permits unlimited ordinary downs"] = "原版經典合作模式已允許無限普通倒地次數"
     locale["stock earned score and box refunds are scaled; direct map score restoration remains map-owned"] = "已縮放原版獲得分數及神秘箱退款；直接還原分數仍由地圖管理"
     locale["stock earned score is scaled; direct map score restoration remains map-owned"] = "已縮放原版獲得分數；直接還原分數仍由地圖管理"

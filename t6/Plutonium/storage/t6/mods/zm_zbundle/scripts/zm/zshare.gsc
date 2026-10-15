@@ -1,6 +1,6 @@
 /*
 ======================================================================
-    ZSHARE v1.4  --  Weapon sharing for Black Ops II Zombies
+    ZSHARE v1.5  --  Weapon sharing for Black Ops II Zombies
     Plutonium T6
 
     by Xep
@@ -4014,7 +4014,7 @@ zs_game_ready()
 zs_version()
 {
     // ZS_VERSION_BEGIN
-    return "1.4";
+    return "1.5";
     // ZS_VERSION_END
 }
 

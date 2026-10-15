@@ -22,14 +22,20 @@ local function populate()
     locale["APPLIES"] = "적용 시점"
     locale["ASSAULT RIFLE"] = "돌격소총"
     locale["AUTO RESTART LEVEL"] = "레벨 자동 재시작"
+    locale["AVOID REPEAT BOX WEAPONS"] = "박스 무기 연속 중복 방지"
     locale["Additional seconds before ordinary zombies begin spawning in the first round. GAME DEFAULT preserves the map's own delay; this does not remove the stock round-opening presentation or map-authored scripted waits."] = "첫 라운드에서 일반 좀비가 스폰되기 전에 추가로 기다리는 시간(초)입니다. 게임 기본값은 맵 자체의 지연을 유지합니다. 기본 라운드 시작 연출이나 맵이 정한 스크립트 대기는 없애지 않습니다."
     locale["Adjust the standard Mystery Box weapon pool. NO WONDER WEAPONS removes registered wonder weapons; IMPROVED raises the chance of stronger registered weapons; FULL MAP POOL bypasses map-authored weighting while preserving stock ownership and quest-safety checks."] = "기본 미스터리 박스의 무기 풀을 조정합니다. 원더 웨폰 없음은 등록된 원더 웨폰을 제외하고, 향상은 등록된 강력한 무기의 확률을 높이며, 맵 전체 풀은 맵이 정한 가중치를 무시하되 기본 보유 및 퀘스트 안전 검사는 유지합니다."
+    locale["After a standard Max Ammo pickup refills reserves, also refill the magazines of eligible held firearms. OFF preserves stock behavior. Quest equipment, excluded weapons, custom ammo systems, and a replacement weapon acquired during pickup remain untouched."] = "일반 탄약 최대 보너스를 얻으면 대상 총기의 탄창도 채웁니다. 끄면 기본 동작을 유지합니다. 퀘스트 장비, 제외된 무기, 사용자 지정 탄약 체계, 획득 중 교체한 무기는 건드리지 않습니다."
     locale["Allow each player one completed standard Mystery Box purchase. Maps without the stock box-use notification disable this rule safely."] = "각 플레이어는 기본 미스터리 박스 구매를 한 번만 완료할 수 있습니다. 기본 박스 사용 알림이 없는 맵에서는 이 규칙이 안전하게 비활성화됩니다."
+    locale["Allow selected stock-map-only tweaks. Custom-map support may be limited. OFF makes every experimental tweak inert even if its own saved option is ON; it does not relax compatibility checks or other Z mods' ownership."] = "일부 기본 맵 전용 조정을 허용합니다. 사용자 지정 맵 지원은 제한될 수 있습니다. 끄면 개별 설정이 켜진 상태로 저장되어 있어도 모든 실험적 조정이 비활성화됩니다. 호환성 검사와 다른 Z 모드의 소유권은 유지됩니다."
+    locale["Alternate Ammo Type applied only to compatible Pack-a-Punched starting weapons"] = "대체 탄약 유형은 호환되는 Pack-a-Punch 시작 무기에만 적용되었습니다"
     locale["Amount of the active tactical or placeable equipment given at spawn. GAME DEFAULT preserves stock start ammo. When Max Equipment is enabled, the lower value wins at spawn."] = "스폰 시 지급하는 현재 전술 장비 또는 설치형 장비의 수량입니다. 게임 기본값은 기본 시작 수량을 유지합니다. 최대 장비가 켜져 있으면 스폰 시 더 낮은 값이 적용됩니다."
     locale["Applied, degraded, unavailable, and inherited tweak status."] = "조정 항목의 적용, 부분 적용, 사용 불가, 맵 설정 상태를 표시합니다."
+    locale["Avoid offering the same weapon on two consecutive standard Mystery Box pulls by the same player when another eligible registered weapon exists. OFF keeps stock selection. Map-authored special picks and weapon eligibility remain unchanged."] = "같은 플레이어가 기본 미스터리 박스에서 두 번 연속 같은 무기를 제안받지 않도록 합니다. 다른 적격 등록 무기가 있을 때만 적용됩니다. 끄면 기본 선택을 유지하며 맵 고유 선택과 무기 조건은 바뀌지 않습니다."
     locale["BACK"] = "뒤로"
     locale["BANK LIMIT"] = "은행 한도"
     locale["BILLY"] = "빌리"
+    locale["BLAST FURNACE"] = "블래스트 퍼니스"
     locale["BLEED-OUT TIME"] = "출혈사 시간"
     locale["BO2 exposes no composable revive-time callback"] = "BO2에는 함께 사용할 수 있는 소생 시간 콜백이 없음"
     locale["BO2 has no safe pre-dispatch seam for ignoring a repeated timed power-up; stock stacking remains in control"] = "BO2에는 반복된 시간제 파워업을 처리 전에 안전하게 무시할 지점이 없어 기본 중첩 처리가 그대로 유지됨"
@@ -51,6 +57,7 @@ local function populate()
     locale["CURRENT MAP"] = "현재 맵"
     locale["Carried lethal-grenade capacity. GAME DEFAULT leaves the weapon and map limit untouched; enabled values initialize newly granted grenades to this amount and cap later grants at it."] = "휴대할 수 있는 살상 수류탄 수입니다. 게임 기본값은 무기와 맵의 한도를 그대로 둡니다. 값을 설정하면 새로 지급되는 수류탄이 이 수량으로 시작하고 이후 지급도 이 수량을 넘지 않습니다."
     locale["Carried tactical or placeable-equipment capacity. GAME DEFAULT leaves each item and map in control; enabled values initialize newly granted equipment to this amount and cap later grants at it."] = "휴대할 수 있는 전술 장비 또는 설치형 장비 수입니다. 게임 기본값은 각 아이템과 맵의 설정을 따릅니다. 값을 설정하면 새로 지급되는 장비가 이 수량으로 시작하고 이후 지급도 이 수량을 넘지 않습니다."
+    locale["Chance of a teddy bear on each eligible standard Mystery Box pull. GAME DEFAULT keeps the map's chance. The map's minimum pulls, no-fly-away boxes, Fire Sales, and custom chance callbacks remain protected; 0% prevents ordinary teddy-bear moves."] = "기본 미스터리 박스의 조건을 충족한 사용마다 테디베어가 나올 확률입니다. 게임 기본값은 맵의 확률을 유지합니다. 최소 사용 횟수, 이동하지 않는 박스, 세일, 맵 고유 확률 콜백은 보호됩니다. 0%는 일반적인 박스 이동을 막습니다."
     locale["Choose a favorite by cast. Supports stock maps and custom maps with a compatible adapter."] = "캐스트별로 선호 캐릭터를 고릅니다. 기본 맵과 호환 어댑터가 있는 커스텀 맵을 지원합니다."
     locale["Choose an independent compatible registered starting weapon loadout for each player. Explicit primary and secondary starting-weapon choices take precedence."] = "각 플레이어에게 호환되는 등록된 시작 무기 구성을 개별적으로 고릅니다. 명시적으로 지정한 주 시작 무기와 보조 시작 무기 선택이 우선합니다."
     locale["Choose how a repeated standard timed power-up affects its active timer. REFRESH restarts the configured duration, EXTEND adds another duration, and IGNORE preserves the current timer."] = "기본 시간제 파워업을 다시 얻었을 때 진행 중인 타이머에 미치는 영향을 고릅니다. 갱신은 설정된 지속 시간을 처음부터 다시 시작하고, 연장은 지속 시간을 한 번 더 더하며, 무시는 현재 타이머를 유지합니다."
@@ -59,21 +66,29 @@ local function populate()
     locale["Choose random values for this page? DEFAULT may be selected."] = "이 페이지의 값을 무작위로 정할까요? 기본값이 선택될 수도 있습니다."
     locale["Choose the map selected after every completed game. This works independently of Auto Restart: with Auto Restart off, ZTweaks changes the lobby selection without launching it. Random choices exclude the current map when another valid map exists."] = "게임이 끝날 때마다 선택될 맵을 정합니다. 자동 재시작과 별개로 작동합니다. 자동 재시작이 꺼져 있으면 ZTweaks는 로비 선택만 바꾸고 시작하지 않습니다. 다른 유효한 맵이 있으면 무작위 선택에서 현재 맵은 제외됩니다."
     locale["Configure installed Z mod settings and gameplay tweaks."] = "설치된 Z 모드 설정과 게임플레이 조정을 구성합니다."
+    locale["DEAD WIRE"] = "데드 와이어"
     locale["DEFAULT"] = "기본값"
-    locale["DEGRADED"] = "부분 적용"
-    locale["DEMPSEY"] = "뎀프시"
-    locale["DESCRIPTION"] = "설명"
-    locale["DISABLED"] = "비활성화됨"
-    locale["DISABLED: {value}"] = "비활성화됨: {value}"
-    locale["DOWN LIMIT"] = "다운 횟수 제한"
-    locale["Die Rise did not initialize its single stock power switch"] = "Die Rise에서 기본 전원 스위치 1개가 초기화되지 않음"
-    locale["Die Rise rejected its stock switch request"] = "Die Rise가 기본 스위치 요청을 거부함"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["ko"]
+    locale["DEGRADED"] = "부분 적용"
+    locale["DEMPSEY"] = "뎀프시"
+    locale["DESCRIPTION"] = "설명"
+    locale["DISABLE CARPENTER DROPS"] = "목수 드롭 끄기"
+    locale["DISABLE DOUBLE POINTS DROPS"] = "두 배 점수 드롭 끄기"
+    locale["DISABLE FIRE SALE DROPS"] = "할인 행사 드롭 끄기"
+    locale["DISABLE INSTA-KILL DROPS"] = "즉사 드롭 끄기"
+    locale["DISABLE MAX AMMO DROPS"] = "탄약 최대 드롭 끄기"
+    locale["DISABLE NUKE DROPS"] = "핵폭탄 드롭 끄기"
+    locale["DISABLE STOCK AATS"] = "기본 대체 탄약 끄기"
+    locale["DISABLED"] = "비활성화됨"
+    locale["DISABLED: {value}"] = "비활성화됨: {value}"
+    locale["DOWN LIMIT"] = "다운 횟수 제한"
+    locale["Die Rise did not initialize its single stock power switch"] = "Die Rise에서 기본 전원 스위치 1개가 초기화되지 않음"
+    locale["Die Rise rejected its stock switch request"] = "Die Rise가 기본 스위치 요청을 거부함"
     locale["Disable standard non-wall weapon acquisition while leaving wall buys enabled. Unsupported map-authored reward systems are reported instead of forcibly removed."] = "벽 무기 구매는 그대로 두고 그 외의 기본 무기 획득을 비활성화합니다. 지원하지 않는 맵 자체 보상 시스템은 강제로 제거하지 않고 보고합니다."
     locale["Disable standard perk acquisition and ZTweaks starting-perk grants. Map quest rewards that cannot be safely intercepted are reported as a compatibility limitation."] = "기본 퍼크 획득과 ZTweaks 시작 퍼크 지급을 비활성화합니다. 안전하게 가로챌 수 없는 맵 퀘스트 보상은 호환성 제한으로 보고합니다."
     locale["Disable the standard Mystery Box. Custom scripted weapon lotteries remain untouched unless they register the stock box capability."] = "기본 미스터리 박스를 비활성화합니다. 커스텀 스크립트 무기 추첨은 기본 박스 기능을 등록하지 않는 한 변경하지 않습니다."
@@ -81,18 +96,26 @@ local function populate()
     locale["Double Points did not expose its stock team scalar"] = "더블 포인트가 기본 팀 배율을 제공하지 않음"
     locale["EMP GRENADE"] = "EMP 수류탄"
     locale["EMPTY"] = "비어 있음"
+    locale["EXPERIMENTAL TWEAKS"] = "실험적 조정"
     locale["EXPLOSIVE SELF-DAMAGE"] = "폭발물 자해 피해"
     locale["EXTEND"] = "연장"
+    locale["Enable Experimental Tweaks to edit this stock-map-only setting."] = "기본 맵 전용 설정을 수정하려면 실험적 조정을 켜세요."
     locale["Enable or disable each installed ZBundle component."] = "설치된 각 ZBundle 구성 요소를 켜거나 끕니다."
     locale["Enable or disable this ZBundle component."] = "이 ZBundle 구성 요소를 켜거나 끕니다."
     locale["End the current game?"] = "현재 게임을 종료할까요?"
+    locale["Exclude this type from regular random drops when another eligible type exists. Scripted drops are unchanged. If all are excluded, one eligible type remains to avoid stalling the game."] = "다른 드롭 가능한 종류가 있으면 이 종류를 일반 무작위 드롭에서 제외합니다. 스크립트 드롭은 그대로입니다. 모두 제외해도 게임이 멈추지 않도록 드롭 가능한 한 종류는 남깁니다."
+    locale["Extra points awarded to each active player when a standard round ends. GAME DEFAULT adds no bonus. Map-authored round rewards remain unchanged."] = "일반 라운드가 끝나면 플레이 중인 각 플레이어에게 추가 점수를 줍니다. 게임 기본값은 보너스를 추가하지 않습니다. 맵 고유의 라운드 보상은 그대로 유지합니다."
     locale["FALL DAMAGE"] = "낙하 피해"
+    locale["FASTER BARRIER REBUILD"] = "바리케이드 수리 속도 증가"
     locale["FILTER"] = "필터"
     locale["FILTER CHANGED"] = "변경된 항목만"
     locale["FINN"] = "핀"
+    locale["FIRE SALE BOX PRICE"] = "세일 중 박스 가격"
+    locale["FIRE WORKS"] = "파이어 웍스"
     locale["FLOYD"] = "플로이드"
     locale["FORCED"] = "강제값"
     locale["FRAG"] = "세열 수류탄"
+    locale["FREE"] = "무료"
     locale["FULL"] = "최대"
     locale["FULL MAP POOL"] = "맵 전체 풀"
     locale["GAME DEFAULT"] = "게임 기본값"
@@ -104,20 +127,29 @@ local function populate()
     locale["GOBBLEGUM USES"] = "고블검 사용 횟수"
     locale["GUN GAME"] = "건 게임"
     locale["Gameplay rules, loadouts, pacing, world, and challenge settings."] = "게임 규칙, 장비 구성, 진행 속도, 월드, 챌린지 설정입니다."
+    locale["Give the Pack-a-Punched starting weapon slots selected above a stock Alternate Ammo Type. RANDOM chooses one registered stock AAT per spawn. MAP DEFAULT adds no AAT. Unsupported weapons and maps remain unchanged."] = "위에서 선택한 Pack-a-Punch 시작 무기에 기본 대체 탄약 유형(AAT)을 부여합니다. 무작위는 스폰할 때마다 등록된 기본 AAT 하나를 고릅니다. 맵 기본값은 AAT를 추가하지 않습니다. 지원하지 않는 무기와 맵은 변경하지 않습니다."
     locale["GobbleGum activation, time, and round limits."] = "고블검 사용 횟수, 시간, 라운드 제한입니다."
     locale["Grant every perk registered by the current map at spawn. OFF is inert. When enabled, this takes precedence over Random Starting Perks."] = "스폰 시 현재 맵에 등록된 모든 퍼크를 지급합니다. 꺼짐은 아무 영향이 없습니다. 켜면 무작위 시작 퍼크보다 우선합니다."
     locale["HEADSHOTS ONLY"] = "헤드샷만"
+    locale["HEALTH REGEN DELAY"] = "체력 재생 지연"
     locale["HOST"] = "호스트"
     locale["HOST / PER PLAYER"] = "호스트 / 플레이어별"
     locale["HOST / SHARED"] = "호스트 / 공용"
     locale["HOST CONTROLLED"] = "호스트가 관리"
     locale["HOST VALUE"] = "호스트 값"
     locale["HOST VALUE UNAVAILABLE"] = "호스트 값을 가져올 수 없음"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ko"]
     locale["Host status unknown; this host-controlled setting is locked."] = "호스트 상태를 알 수 없어 호스트가 관리하는 이 설정이 잠겼습니다."
     locale["IGNORE"] = "무시"
     locale["IMPROVED"] = "향상"
     locale["INHERIT"] = "맵 설정"
     locale["INSTANT"] = "즉시"
+    locale["Increase ordinary player weapon and melee damage against standard zombies each round after round 1. The selected percentage is added per round, up to 500% of normal damage. OFF preserves the map's damage. Quest actors, friendly NPCs, and map-owned damage callbacks remain protected."] = "2라운드부터 매 라운드 일반 좀비에 대한 무기 및 근접 피해가 증가합니다. 선택한 비율이 라운드마다 더해지며 일반 피해의 500%를 넘지 않습니다. 꺼짐은 맵 기본 피해를 유지합니다. 퀘스트 대상, 아군 NPC 및 맵 고유 피해 규칙은 보호됩니다."
     locale["Insta-Kill did not expose its stock team state"] = "인스타킬이 기본 팀 상태를 제공하지 않음"
     locale["JACK VINCENT"] = "잭 빈센트"
     locale["JESSICA"] = "제시카"
@@ -130,26 +162,23 @@ local function populate()
     locale["LOCKED: {value}"] = "잠김: {value}"
     locale["LOSE PERKS ON DOWN"] = "다운 시 퍼크 상실"
     locale["Lethal grenade type given at spawn. MAP DEFAULT preserves the map's choice. A selected type is used only when that map has registered a compatible grenade."] = "스폰 시 지급하는 살상 수류탄 종류입니다. 맵 기본값은 맵의 선택을 유지합니다. 선택한 종류는 해당 맵에 호환 수류탄이 등록된 경우에만 사용됩니다."
+    locale["Limit normal weapon pickups to one primary slot through the stock weapon-limit callback. ZTweaks will not grant a secondary starting weapon. Map-owned weapon limits and scripted quest inventory remain in control."] = "기본 무기 제한 규칙으로 일반 무기 획득을 주 무기 슬롯 하나로 제한합니다. ZTweaks는 두 번째 시작 무기를 지급하지 않습니다. 맵의 자체 제한과 퀘스트 장비는 맵이 관리합니다."
     locale["Locked to {value}"] = "{value}(으)로 고정"
     locale["MAP DEFAULT"] = "맵 기본값"
     locale["MARLTON"] = "말튼"
     locale["MATCH"] = "매치"
+    locale["MAX AMMO RELOADS MAGAZINES"] = "탄약 최대 획득 시 탄창 재장전"
     locale["MAX EQUIPMENT"] = "최대 장비"
     locale["MAX GRENADES"] = "최대 수류탄"
     locale["MAX RESERVE AMMO"] = "최대 예비 탄약"
     locale["MELEE DAMAGE"] = "근접 피해"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["ko"]
     locale["MINE"] = "지뢰"
     locale["MISTY"] = "미스티"
     locale["MOB OF THE DEAD"] = "MOB OF THE DEAD"
     locale["MODS"] = "모드"
     locale["MONKEY BOMB"] = "원숭이 폭탄"
     locale["MYSTERY BOX LOCK"] = "미스터리 박스 고정"
+    locale["MYSTERY BOX PRICE"] = "미스터리 박스 가격"
     locale["MYSTERY BOX QUALITY"] = "미스터리 박스 품질"
     locale["Match flow, starting conditions, and global rules."] = "매치 진행, 시작 조건, 전체 규칙입니다."
     locale["Maximum ordinary co-op downs before stock bleeds the player out instead of allowing another revive. UNLIMITED keeps stock co-op's unlimited downs. Solo auto-revive, special-role and non-composable map routes stay stock and report unavailable."] = "협동전에서 일반 다운을 허용하는 최대 횟수입니다. 이를 넘으면 다시 소생할 수 없고 기본 처리에 따라 출혈사합니다. 무제한은 협동전 기본의 무제한 다운을 유지합니다. 솔로 자동 소생, 특수 역할, 함께 사용할 수 없는 맵 처리는 기본 그대로 두고 사용 불가로 보고합니다."
@@ -159,10 +188,12 @@ local function populate()
     locale["Mob did not initialize its Afterlife perk-box waiter"] = "Mob의 애프터라이프 퍼크 박스 대기 처리가 초기화되지 않음"
     locale["Mob final-showdown health remains map-owned"] = "Mob 최종 결전의 체력은 맵이 관리함"
     locale["Multiplier for stock regular score-threshold power-up drops. Higher values reach each drop threshold sooner. GAME DEFAULT preserves the map threshold; max-per-round, random kill drops, and scripted drops remain untouched."] = "기본 일반 점수 기준 파워업 드롭의 배율입니다. 값이 높을수록 각 드롭 기준에 더 빨리 도달합니다. 게임 기본값은 맵의 기준을 유지하며, 라운드당 최대치, 무작위 처치 드롭, 스크립트 드롭은 변경하지 않습니다."
+    locale["Mystery Box relocation is disabled"] = "미스터리 박스 이동이 꺼져 있습니다"
     locale["NERO"] = "네로"
     locale["NEXT BLEED-OUT"] = "다음 출혈사"
     locale["NEXT DOWN"] = "다음 다운"
     locale["NEXT DROP"] = "다음 드롭"
+    locale["NEXT FIRE SALE"] = "다음 세일"
     locale["NEXT GAME OVER"] = "다음 게임 오버"
     locale["NEXT GUM"] = "다음 고블검"
     locale["NEXT MAP"] = "다음 맵"
@@ -177,6 +208,12 @@ local function populate()
     locale["NO PACK-A-PUNCH"] = "PACK-A-PUNCH 없음"
     locale["NO PERKS"] = "퍼크 없음"
     locale["NO SELF-DAMAGE"] = "자해 피해 없음"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ko"]
     locale["NO SETTINGS"] = "설정 없음"
     locale["NO WONDER WEAPONS"] = "원더 웨폰 없음"
     locale["NONE"] = "없음"
@@ -189,6 +226,7 @@ local function populate()
     locale["Number of random perks granted independently to each player when they spawn. NONE is inert. Perks are chosen without duplicates from those registered by the current map; if fewer are available, every available perk is granted."] = "스폰할 때 각 플레이어에게 개별적으로 지급하는 무작위 퍼크 수입니다. 없음은 아무 영향이 없습니다. 퍼크는 현재 맵에 등록된 퍼크 중에서 중복 없이 고르며, 사용 가능한 퍼크가 더 적으면 모두 지급합니다."
     locale["OFF"] = "꺼짐"
     locale["ON"] = "켜짐"
+    locale["ONE WEAPON SLOT"] = "무기 슬롯 하나"
     locale["ONE-BOX CHALLENGE"] = "박스 1회 챌린지"
     locale["ORIGINS"] = "ORIGINS"
     locale["OVERRIDDEN"] = "덮어씀"
@@ -200,28 +238,29 @@ local function populate()
     locale["Origins did not publish its generator perk consumers"] = "Origins가 발전기 퍼크 공급 대상을 공개하지 않음"
     locale["Origins exposes no initialized generator-consumer registry"] = "Origins에 초기화된 발전기 공급 대상 등록 정보가 없음"
     locale["Override unavailable"] = "재정의를 사용할 수 없음"
+    locale["PACK-A-PUNCH DAMAGE"] = "팩어펀치 무기 피해"
     locale["PERK LIMIT"] = "퍼크 한도"
+    locale["PERK PRICE"] = "특전 가격"
     locale["PERSONAL"] = "개인"
     locale["PISTOL"] = "권총"
     locale["PLAYER"] = "플레이어"
     locale["PLAYER HEALTH"] = "플레이어 체력"
     locale["PLAYER SPEED"] = "플레이어 속도"
     locale["POINT GAIN"] = "포인트 획득량"
+    locale["POINTS RETAINED AFTER DEATH"] = "사망 후 유지 점수"
     locale["POWER-UP DROP CAP"] = "파워업 드롭 한도"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["ko"]
+    locale["POWER-UP DROP FILTERS"] = "파워업 드롭 필터"
     locale["POWER-UP DROP RATE"] = "파워업 드롭률"
     locale["POWER-UP EFFECT TIME"] = "파워업 효과 시간"
     locale["POWER-UP GROUND TIME"] = "파워업 바닥 유지 시간"
     locale["POWER-UP STACKING"] = "파워업 중첩"
     locale["PRIMARY"] = "주 무기"
     locale["PRIMIS"] = "PRIMIS"
+    locale["Percentage of direct damage dealt to players by ordinary zombies. GAME DEFAULT preserves map damage; bosses, quest actors, traps, and environmental damage remain map-controlled."] = "일반 좀비가 플레이어에게 주는 직접 피해의 비율입니다. 게임 기본값은 맵의 피해를 유지하며, 보스, 퀘스트 액터, 함정, 환경 피해는 맵이 관리합니다."
     locale["Percentage of each activation-limited GobbleGum's stock number of uses. Values round to at least one use. GAME DEFAULT preserves every gum's registered limit."] = "사용 횟수가 제한된 각 고블검의 기본 사용 횟수에 대한 비율입니다. 최소 1회로 반올림됩니다. 게임 기본값은 각 고블검의 등록된 한도를 유지합니다."
     locale["Percentage of each round-limited GobbleGum's stock round count. Values round to at least one round. Event-limited gums are not changed."] = "라운드가 제한된 각 고블검의 기본 라운드 수에 대한 비율입니다. 최소 1라운드로 반올림됩니다. 이벤트로 제한되는 고블검은 변경하지 않습니다."
+    locale["Percentage of each standard Mystery Box location's map-authored normal price. GAME DEFAULT preserves each location's own price. FREE affects ordinary box purchases but does not change the Fire Sale price."] = "맵에서 정한 각 기본 미스터리 박스의 일반 가격에 적용할 비율입니다. 게임 기본값은 원래 가격을 유지합니다. 무료는 일반 구매에만 적용되며 세일 가격은 바꾸지 않습니다."
+    locale["Percentage of each standard purchasable trap's map-authored price. GAME DEFAULT leaves the trap alone. Custom trap purchase callbacks and later map price changes remain map-controlled; maps without standard purchase traps are unaffected."] = "구매 가능한 기본 함정의 맵 설정 가격에 적용할 비율입니다. 게임 기본값은 변경하지 않습니다. 사용자 지정 구매와 이후 가격 변경은 맵이 관리하며, 기본 함정이 없는 맵은 영향을 받지 않습니다."
     locale["Percentage of each time-limited GobbleGum's stock duration in seconds. Values round to at least one second. GAME DEFAULT preserves every gum's registered duration."] = "시간이 제한된 각 고블검의 기본 지속 시간(초)에 대한 비율입니다. 최소 1초로 반올림됩니다. 게임 기본값은 각 고블검의 등록된 지속 시간을 유지합니다."
     locale["Percentage of each timed power-up's map-selected effect duration. This includes team, global, and player-only timed effects registered through the stock power-up system. GAME DEFAULT preserves every map-authored duration."] = "각 시간제 파워업의 맵 지정 효과 지속 시간에 대한 비율입니다. 기본 파워업 시스템에 등록된 팀, 전체, 플레이어 전용 시간제 효과를 포함합니다. 게임 기본값은 맵이 정한 지속 시간을 모두 유지합니다."
     locale["Percentage of normal player health. GAME DEFAULT leaves the map in control. Perks continue to scale from the modified base health."] = "일반 플레이어 체력에 대한 비율입니다. 게임 기본값은 맵에 맡깁니다. 퍼크 효과는 변경된 기본 체력을 기준으로 계속 적용됩니다."
@@ -230,13 +269,22 @@ local function populate()
     locale["Percentage of normal player weapon damage dealt to zombies. Melee uses its own setting. GAME DEFAULT preserves the stock and custom-map damage path."] = "플레이어가 좀비에게 주는 일반 무기 피해에 대한 비율입니다. 근접 공격은 별도 설정을 사용합니다. 게임 기본값은 기본 맵과 커스텀 맵의 피해 처리를 유지합니다."
     locale["Percentage of normal positive score awards, including zombie damage, kills, headshots, and standard repairs. GAME DEFAULT leaves every map-authored award unchanged; point costs are never scaled."] = "좀비 피해, 처치, 헤드샷, 기본 수리를 포함한 일반 포인트 보상에 대한 비율입니다. 게임 기본값은 맵이 정한 보상을 모두 그대로 둡니다. 포인트 비용에는 배율이 적용되지 않습니다."
     locale["Percentage of normal starting ammo for the player's starting weapons. GAME DEFAULT preserves stock ammo; EMPTY leaves the weapon with no reserve or loaded rounds."] = "플레이어 시작 무기의 일반 시작 탄약에 대한 비율입니다. 게임 기본값은 기본 탄약을 유지하고, 비어 있음은 예비 탄약과 장전된 탄약 없이 무기를 지급합니다."
+    locale["Percentage of points kept at the next standard spectator respawn, after any stock minimum-respawn score is applied. The rest is lost. GAME DEFAULT preserves the map's death penalty; custom death-score rules remain map-owned."] = "관전 상태에서 다음 일반 부활 시 게임의 최소 부활 점수가 적용된 뒤 유지하는 비율입니다. 나머지는 잃습니다. 게임 기본값은 맵의 사망 벌칙을 유지하고 독자적인 규칙은 맵이 관리합니다."
     locale["Percentage of the map's normal last-stand bleed-out duration. GAME DEFAULT preserves the map's timer."] = "맵의 일반 다운 상태 출혈사 시간에 대한 비율입니다. 게임 기본값은 맵의 타이머를 유지합니다."
     locale["Percentage of the map's normal revive interaction time. GAME DEFAULT preserves map, perk, and equipment modifiers."] = "맵의 일반 소생 시간에 대한 비율입니다. 게임 기본값은 맵, 퍼크, 장비 보정을 유지합니다."
     locale["Percentage of the map's normal standard-zombie spawn cadence. Higher values shorten the delay between ordinary spawns. GAME DEFAULT is inert; special, objective, and scripted spawners remain map-controlled."] = "맵의 일반 좀비 스폰 주기에 대한 비율입니다. 값이 높을수록 일반 스폰 사이의 지연이 짧아집니다. 게임 기본값은 아무 영향이 없으며, 특수, 목표, 스크립트 스포너는 맵이 관리합니다."
     locale["Percentage of the map's normal zombie speed curve. GAME DEFAULT is inert. RANDOM independently chooses one listed percentage when each match initializes. Standard round zombies are scaled; map-owned special enemies remain untouched."] = "맵의 일반 좀비 속도 곡선에 대한 비율입니다. 게임 기본값은 아무 영향이 없습니다. 무작위는 매치가 초기화될 때마다 목록의 비율 중 하나를 개별적으로 고릅니다. 일반 라운드 좀비에 적용되며, 맵 고유의 특수 적은 변경하지 않습니다."
     locale["Percentage of the map's normal zombie-health curve. GAME DEFAULT leaves both starting health and round-to-round growth untouched. RANDOM independently chooses one listed percentage when each match initializes."] = "맵의 일반 좀비 체력 곡선에 대한 비율입니다. 게임 기본값은 시작 체력과 라운드별 증가를 모두 그대로 둡니다. 무작위는 매치가 초기화될 때마다 목록의 비율 중 하나를 개별적으로 고릅니다."
     locale["Percentage of the standard zombie count calculated for each round. GAME DEFAULT is inert. Scripted special rounds and objective spawns remain map-controlled."] = "라운드마다 계산되는 기본 좀비 수에 대한 비율입니다. 게임 기본값은 아무 영향이 없습니다. 스크립트 특수 라운드와 목표 스폰은 맵이 관리합니다."
+    locale["Percentage of the stock delay before health regeneration begins after damage. GAME DEFAULT preserves the map's delay. This does not change the regeneration rate or map-owned healing systems."] = "피해 후 체력 재생이 시작되기까지 기본 지연 시간의 비율입니다. 게임 기본값은 맵의 지연 시간을 유지합니다. 재생 속도나 맵 고유의 치유 체계는 바꾸지 않습니다."
     locale["Player stats, perks, and movement."] = "플레이어 능력치, 퍼크, 이동입니다."
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ko"]
+    locale["Point cost of standard Mystery Boxes while Fire Sale is active. GAME DEFAULT preserves the stock or map-authored sale price. Normal box prices and map-authored nonstandard weapon lotteries remain untouched."] = "세일 중 기본 미스터리 박스의 포인트 가격입니다. 게임 기본값은 원본 또는 맵의 세일 가격을 유지합니다. 일반 가격과 맵 고유 무기 추첨은 변경하지 않습니다."
     locale["Points given to each player when a new match begins. GAME DEFAULT preserves the map's normal behavior, including BO3's stock starting-round calculation of 500 points per selected round."] = "새 매치가 시작될 때 각 플레이어에게 지급하는 포인트입니다. 게임 기본값은 선택한 라운드당 500포인트를 주는 BO3의 기본 시작 라운드 계산을 포함해 맵의 일반 동작을 유지합니다."
     locale["Power, doors, power-ups, and map-owned systems."] = "전원, 문, 파워업, 맵 고유 시스템입니다."
     locale["Preferred Mob of the Dead character, solo or co-op. Host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses this cast."] = "솔로 또는 협동전에서 Mob of the Dead의 선호 캐릭터입니다. 겹치면 호스트가 우선하고, 겹친 나머지 플레이어는 무작위로 정합니다. 무작위는 밀려나지 않는 한 기본 선택을 유지합니다. 이 캐스트를 사용하는 T7 기본 맵은 없습니다."
@@ -246,6 +294,7 @@ local function populate()
     locale["Preferred character on The Giant, Der Eisendrache, Zetsubou, Gorod Krovi or Revelations, solo or co-op. Origins is separate. Host wins ties; tied non-hosts draw randomly. Required co-op story roles are preserved."] = "솔로 또는 협동전에서 The Giant, Der Eisendrache, Zetsubou, Gorod Krovi, Revelations의 선호 캐릭터입니다. Origins는 별도입니다. 겹치면 호스트가 우선하고, 겹친 나머지 플레이어는 무작위로 정합니다. 협동 스토리에 필요한 역할은 유지됩니다."
     locale["Preferred character on TranZit, Die Rise, or Buried. Solo and co-op: host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses Victis."] = "TranZit, Die Rise, Buried에서의 선호 캐릭터입니다. 솔로와 협동전 모두 겹치면 호스트가 우선하고, 겹친 나머지 플레이어는 무작위로 정합니다. 무작위는 밀려나지 않는 한 기본 선택을 유지합니다. Victis를 사용하는 T7 기본 맵은 없습니다."
     locale["Prevent a player's own grenades, launchers, and other standard explosives from damaging that player. OFF leaves the stock damage callback untouched."] = "플레이어 자신의 수류탄, 런처, 기타 기본 폭발물이 자신에게 피해를 주지 않게 합니다. 꺼짐은 기본 피해 콜백을 변경하지 않습니다."
+    locale["Prevent stock Alternate Ammo Types on compatible upgraded weapons, including Pack-a-Punch rerolls. Existing map exemptions remain in force. Custom AAT systems outside the stock registry stay map-owned. OFF preserves stock behavior."] = "호환되는 강화 무기에 기본 대체 탄약이 적용되지 않게 합니다. Pack-a-Punch 재추첨도 포함됩니다. 맵의 기존 예외와 자체 시스템은 유지됩니다. 끄면 기본 동작입니다."
     locale["Prevent the standard Mystery Box from randomly relocating after normal purchases. Explicit scripted or quest-owned box moves remain map-controlled. OFF preserves every map-authored relocation rule."] = "일반 구매 후 기본 미스터리 박스가 무작위로 위치를 옮기지 않게 합니다. 명시적인 스크립트나 퀘스트에 의한 박스 이동은 맵이 관리합니다. 꺼짐은 맵이 정한 모든 이동 규칙을 유지합니다."
     locale["Progress each player through a compatible registered weapon sequence using zombie kills. The challenge disables itself if the map cannot supply a safe progression list."] = "좀비 처치로 각 플레이어가 호환되는 등록 무기 순서를 따라 진행합니다. 맵이 안전한 진행 목록을 제공할 수 없으면 챌린지가 스스로 비활성화됩니다."
     locale["Put every ZTweaks setting back to its default?"] = "ZTweaks의 모든 설정을 기본값으로 되돌릴까요?"
@@ -274,16 +323,13 @@ local function populate()
     locale["RESET TO DEFAULTS"] = "기본값으로 복원"
     locale["REVIVE TIME"] = "소생 시간"
     locale["RICHTOFEN"] = "리히토펜"
+    locale["RISING PLAYER DAMAGE"] = "플레이어 피해 증가"
+    locale["ROUND BONUS"] = "라운드 보너스"
     locale["ROUND DELAY"] = "라운드 지연"
     locale["RUSSMAN"] = "러스맨"
     locale["Randomize this tab after confirmation. GAME DEFAULT remains possible."] = "확인 후 이 탭을 무작위로 설정합니다. 게임 기본값이 나올 수도 있습니다."
+    locale["Reduce the pause between standard barrier-board repairs. Requires Experimental Tweaks. Available only on recognized stock maps with the stock blocker system; custom-map support may be limited. A map-authored repair delay always wins."] = "일반 바리케이드 수리 사이의 대기 시간을 줄입니다. 실험적 조정이 필요합니다. 기본 장애물 시스템을 쓰는 알려진 기본 맵에서만 사용할 수 있으며 사용자 지정 맵 지원은 제한될 수 있습니다. 맵이 지정한 수리 지연이 우선합니다."
     locale["Require headshots for standard zombie kills using the stock Zombies rule. OFF is inert and leaves the map's own game setting unchanged."] = "기본 좀비 규칙을 사용해 일반 좀비를 처치하려면 헤드샷이 필요하게 합니다. 꺼짐이면 개입하지 않고 맵 자체의 게임 설정을 그대로 둡니다."
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["ko"]
     locale["Reset all character preferences only."] = "캐릭터 선호 설정만 모두 초기화합니다."
     locale["Reset every setting in this menu to its default?"] = "이 메뉴의 모든 설정을 기본값으로 초기화할까요?"
     locale["Restart the current level after the normal game-over results have been shown. DEFAULT is OFF."] = "일반 게임 종료 결과가 표시된 뒤 현재 맵을 다시 시작합니다. 기본값은 꺼짐입니다."
@@ -302,6 +348,12 @@ local function populate()
     locale["SHADOWS OF EVIL"] = "SHADOWS OF EVIL"
     locale["SHOTGUN"] = "샷건"
     locale["SMG"] = "기관단총"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ko"]
     locale["SNIPER RIFLE"] = "저격 소총"
     locale["SPAWN PROTECTION"] = "스폰 보호"
     locale["START WITH ALL PERKS"] = "모든 퍼크로 시작"
@@ -316,11 +368,15 @@ local function populate()
     locale["STARTING ROOM ONLY"] = "시작 구역만"
     locale["STARTING ROUND"] = "시작 라운드"
     locale["STARTING WEAPON"] = "시작 무기"
-    locale["STARTING WEAPON UPGRADED"] = "시작 무기 강화"
+    locale["STARTING WEAPON AAT"] = "시작 무기 AAT"
+    locale["STARTING WEAPON PACK-A-PUNCHED"] = "시작 무기 강화"
     locale["STATUS"] = "상태"
     locale["STUHLINGER"] = "스툴링거"
+    locale["Scale ordinary hits from registered Pack-a-Punched weapons against standard zombies. GAME DEFAULT preserves normal damage. Custom upgrades and map-owned damage callbacks remain unchanged."] = "등록된 팩어펀치 무기의 일반 좀비 대상 피해를 조절합니다. 게임 기본값은 원래 피해를 유지합니다. 사용자 지정 강화와 맵 고유 피해 처리는 바꾸지 않습니다."
     locale["Scale standard fall damage or turn it off. GAME DEFAULT delegates to the map; custom scripted hazards are not reclassified as falls."] = "일반 낙하 피해의 배율을 조절하거나 끕니다. 게임 기본값이면 맵에 맡기며, 맵이 따로 스크립트로 만든 위험 요소는 낙하로 취급하지 않습니다."
     locale["Scale the native reserve ammo granted to selected or inherited starting weapons while retaining each weapon's own magazine and ammo type. Values above an asset's hard capacity safely clamp and report degraded compatibility. GAME DEFAULT preserves stock ammo."] = "선택했거나 물려받은 시작 무기에 주어지는 기본 예비 탄약의 배율을 조절하며, 각 무기의 탄창과 탄약 종류는 유지합니다. 에셋의 고정 상한을 넘는 값은 안전하게 제한되고 호환성 저하로 보고됩니다. 게임 기본값이면 기본 탄약을 유지합니다."
+    locale["Scale the price of standard powered perk machines. GAME DEFAULT leaves prices unchanged. Custom perk prices and later map changes remain map-owned. BO2 has no safe equivalent."] = "전원이 켜진 기본 특전 기계의 가격을 조정합니다. 게임 기본값은 변경하지 않습니다. 사용자 지정 가격과 이후 맵 변경은 맵이 관리합니다. BO2에는 안전한 동등 기능이 없습니다."
+    locale["Scale the standard Wunderfizz price, including its purchase hint and stock refund. GAME DEFAULT leaves the map's price unchanged. If a map later takes over the price, its value wins. BO2 has no verified equivalent."] = "기본 원더피즈의 가격과 구매 안내 및 일반 환불 금액을 조정합니다. 게임 기본값은 맵 가격을 유지합니다. 맵이 나중에 가격을 바꾸면 맵 값이 우선합니다. BO2의 대응 기능은 확인되지 않았습니다."
     locale["Seconds a normal dropped power-up remains collectible before its stock flashing phase begins. GAME DEFAULT uses 15 seconds. Map-authored custom lifetimes, infinite quest drops, and BO3 Temporal Gift remain authoritative."] = "일반적으로 떨어진 파워업이 기본 깜박임 단계에 들어가기 전까지 획득할 수 있는 시간(초). 게임 기본값은 15초입니다. 맵이 정한 지속 시간, 무제한 퀘스트 드롭, BO3의 Temporal Gift가 우선합니다."
     locale["Seconds between a completed round and the next round. GAME DEFAULT preserves the map's delay. INSTANT removes only the standard between-round wait; round-change HUD and map-authored scripted waits remain intact."] = "라운드가 끝난 뒤 다음 라운드까지의 시간(초). 게임 기본값이면 맵의 대기 시간을 유지합니다. 즉시는 일반 라운드 간 대기만 없애며, 라운드 전환 HUD와 맵이 스크립트로 만든 대기는 그대로 남습니다."
     locale["Seconds of damage immunity after a player spawns or respawns. GAME DEFAULT adds no ZTweaks protection and leaves map-authored protection alone."] = "플레이어가 스폰하거나 리스폰한 뒤 피해를 받지 않는 시간(초). 게임 기본값이면 ZTweaks 보호를 추가하지 않고 맵 자체의 보호는 그대로 둡니다."
@@ -336,6 +392,10 @@ local function populate()
     locale["Spawn with the selected ZTweaks starting weapon slots Pack-a-Punched when the map registers a safe upgraded variant. MAP DEFAULT leaves both slots unmodified."] = "맵에 안전한 강화 버전이 등록되어 있으면 ZTweaks에서 선택한 시작 무기 슬롯을 Pack-a-Punch 강화 상태로 스폰합니다. 맵 기본값이면 두 슬롯 모두 바꾸지 않습니다."
     locale["Starting weapons, grenades, equipment, and carrying limits."] = "시작 무기, 수류탄, 장비, 소지 한도."
     locale["TAKEO"] = "타케오"
+    locale["TEDDY-BEAR CHANCE"] = "테디베어 등장 확률"
+    locale["THUNDER WALL"] = "썬더 월"
+    locale["TRAP PRICE"] = "함정 가격"
+    locale["TURNED"] = "턴드"
     locale["TYPE"] = "종류"
     locale["Tactical or placeable equipment given at spawn. MAP DEFAULT preserves the map choice. Unsupported items fail closed instead of substituting a different type."] = "스폰할 때 주는 전술 장비 또는 설치형 장비. 맵 기본값이면 맵의 선택을 유지합니다. 지원하지 않는 아이템은 다른 종류로 바꾸지 않고 지급하지 않습니다."
     locale["The game reported a newer compatibility reason; see the ZTweaks runtime log."] = "게임이 더 새로운 호환성 사유를 보고했습니다. ZTweaks 실행 로그를 확인하세요."
@@ -348,21 +408,23 @@ local function populate()
     locale["ULTIMIS"] = "ULTIMIS"
     locale["UNAVAILABLE"] = "사용 불가"
     locale["UNKNOWN"] = "알 수 없음"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["ko"]
     locale["UNLIMITED"] = "무제한"
     locale["VICTIS"] = "VICTIS"
     locale["WALL WEAPONS ONLY"] = "벽 무기만"
     locale["WEAPON DAMAGE"] = "무기 피해"
     locale["WEASEL"] = "위즐"
     locale["WORLD"] = "월드"
+    locale["WUNDERFIZZ PRICE"] = "원더피즈 가격"
     locale["Weapon class that replaces the map's primary starting weapon. MAP DEFAULT preserves the map choice. If the selected class is unavailable, ZTweaks safely keeps the map default."] = "맵의 주 시작 무기를 대체할 무기 클래스. 맵 기본값이면 맵의 선택을 유지합니다. 선택한 클래스를 쓸 수 없으면 ZTweaks가 안전하게 맵 기본값을 유지합니다."
     locale["ZBUNDLE SETTINGS"] = "ZBUNDLE 설정"
     locale["ZBUNDLE SETTINGS - {owner}"] = "ZBUNDLE 설정 - {owner}"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ko"]
+    locale["ZOMBIE DAMAGE"] = "좀비 피해"
     locale["ZOMBIE HEALTH"] = "좀비 체력"
     locale["ZOMBIE SPAWN RATE"] = "좀비 스폰 빈도"
     locale["ZOMBIE SPEED"] = "좀비 속도"
@@ -389,9 +451,12 @@ local function populate()
     locale["composed with the map's live bleed-out duration"] = "맵의 현재 출혈사 시간과 결합함"
     locale["composed with the map's spawn movement scale"] = "맵의 스폰 이동 속도 배율과 결합함"
     locale["custom map exposes no authoritative base player-health variable"] = "커스텀 맵에 기준이 되는 플레이어 기본 체력 변수가 없습니다"
+    locale["custom or changed perk purchases remain map-owned"] = "사용자 지정 또는 변경된 특전 구매는 맵이 관리합니다"
+    locale["custom or changed trap purchases remain map-owned"] = "사용자 지정 또는 변경된 함정 구매는 맵이 관리합니다"
     locale["custom/counter/quest blocker owners were preserved; no ordinary blocker was safe to claim"] = "커스텀/카운터/퀘스트 장애물 관리는 유지함. 안전하게 가져올 수 있는 일반 장애물이 없었음"
     locale["first-round spawning began before the tweak could be applied"] = "조정을 적용하기 전에 첫 라운드 스폰이 시작되었습니다"
     locale["generic inventory restoration would duplicate map quest weapons"] = "일반 소지품 복원은 맵의 퀘스트 무기를 복제하게 됩니다"
+    locale["global stock AAT disable takes precedence"] = "기본 대체 탄약 전체 끄기 설정이 우선합니다"
     locale["ignored an active duplicate at the pickup boundary"] = "획득 시점에 활성 중인 중복 효과를 무시함"
     locale["independent safe box firearm selected for each player"] = "플레이어마다 안전한 상자 총기를 따로 선택함"
     locale["map and perk revive-time callbacks are composed before scaling"] = "배율 적용 전에 맵 및 퍼크 부활 시간 콜백을 결합함"
@@ -399,6 +464,8 @@ local function populate()
     locale["map did not expose standard Zombies match variables"] = "맵에 일반 좀비 매치 변수가 없습니다"
     locale["map did not expose the standard round zombie total"] = "맵에 일반 라운드 좀비 총수가 없습니다"
     locale["map did not initialize round logic before the door-capability timeout"] = "문 기능 확인 시간 제한 전에 맵이 라운드 로직을 초기화하지 않았습니다"
+    locale["map did not initialize the stock Alternate Ammo Type system"] = "맵이 기본 대체 탄약 유형 시스템을 초기화하지 않았습니다"
+    locale["map did not register any supported Alternate Ammo Types"] = "맵에 지원되는 대체 탄약 유형이 등록되지 않았습니다"
     locale["map does not enable standard score-threshold power-up drops"] = "맵이 일반 점수 임계값 파워업 드롭을 사용하지 않습니다"
     locale["map exposes no active player for stock blocker callbacks"] = "맵에 기본 장애물 콜백에 쓸 활성 플레이어가 없습니다"
     locale["map exposes no authoritative starting-weapon replacement seam"] = "맵에 시작 무기를 확실하게 교체할 수 있는 지점이 없습니다"
@@ -414,9 +481,12 @@ local function populate()
     locale["map exposes no registered weapon pool"] = "맵에 등록된 무기 풀이 없습니다"
     locale["map exposes no safe standard purchasable doors"] = "맵에 안전한 일반 구매형 문이 없습니다"
     locale["map exposes no safely owned timed effect storage"] = "맵에 관리 주체가 안전하게 확인되는 시간제 효과 저장소가 없습니다"
+    locale["map exposes no standard Wunderfizz machine or price"] = "맵에 기본 원더피즈 기계나 가격이 없습니다"
     locale["map exposes no standard between-round delay"] = "맵에 일반 라운드 간 대기 시간이 없습니다"
     locale["map exposes no standard between-round delay callback"] = "맵에 일반 라운드 간 대기 콜백이 없습니다"
+    locale["map exposes no standard death-point penalty"] = "맵에 기본 사망 점수 벌칙이 없습니다"
     locale["map exposes no standard game-start delay"] = "맵에 일반 게임 시작 대기 시간이 없습니다"
+    locale["map exposes no standard health-regeneration delay"] = "맵에 기본 체력 재생 지연 값이 없습니다"
     locale["map exposes no standard zombie spawn cadence"] = "맵에 일반 좀비 스폰 간격이 없습니다"
 end
 populate()
@@ -428,6 +498,8 @@ local function populate()
     locale["map exposes no standard zombie-health curve"] = "맵에 일반 좀비 체력 곡선이 없습니다"
     locale["map exposes no standard zombie-speed curve"] = "맵에 일반 좀비 속도 곡선이 없습니다"
     locale["map exposes no stock-compatible perk machines"] = "맵에 기본 시스템과 호환되는 퍼크 기계가 없습니다"
+    locale["map has no standard perk machines"] = "맵에 기본 특전 기계가 없습니다"
+    locale["map has no standard purchase traps"] = "맵에 구매 가능한 기본 함정이 없습니다"
     locale["map has not published a compatible BO2 bank capability"] = "맵이 호환되는 BO2 은행 기능을 공개하지 않았습니다"
     locale["map has not published a finalized stock GobbleGum registry"] = "맵이 완료된 기본 고블검 등록 목록을 공개하지 않았습니다"
     locale["map has not published a perk-limit capability"] = "맵이 퍼크 한도 기능을 공개하지 않았습니다"
@@ -441,6 +513,11 @@ local function populate()
     locale["map has not published an actor-damage callback"] = "맵이 액터 피해 콜백을 공개하지 않았습니다"
     locale["map mode did not publish its stock startup power state"] = "맵 모드가 기본 시작 전원 상태를 공개하지 않았습니다"
     locale["map mode starts with power already enabled"] = "이 맵 모드는 처음부터 전원이 켜진 상태로 시작합니다"
+    locale["map owns Mystery Box teddy-bear chance"] = "맵이 미스터리 박스의 테디베어 확률을 관리합니다"
+    locale["map owns a nonstandard death-point penalty"] = "맵이 비표준 사망 점수 벌칙을 관리합니다"
+    locale["map owns its perk purchase hints or prices"] = "맵이 특전 구매 안내 또는 가격을 직접 관리합니다"
+    locale["map owns its trap purchase callbacks or prices"] = "맵이 함정 구매 처리 또는 가격을 직접 관리합니다"
+    locale["map owns the primary-weapon limit"] = "맵이 주 무기 제한을 관리합니다"
     locale["map published an invalid bank denomination"] = "맵이 잘못된 은행 거래 단위를 공개했습니다"
     locale["map registered no activation-limited GobbleGums"] = "맵에 사용 횟수 제한 고블검이 등록되지 않았습니다"
     locale["map registered no compatible carried weapons"] = "맵에 호환되는 소지 무기가 등록되지 않았습니다"
@@ -448,9 +525,14 @@ local function populate()
     locale["map registered no round-limited GobbleGums"] = "맵에 라운드 제한 고블검이 등록되지 않았습니다"
     locale["map registered no time-limited GobbleGums"] = "맵에 시간 제한 고블검이 등록되지 않았습니다"
     locale["map rejected its standard door-open requests"] = "맵이 일반 문 열기 요청을 거부했습니다"
+    locale["map replaced Mystery Box teddy-bear chance"] = "맵이 미스터리 박스의 테디베어 확률을 교체했습니다"
+    locale["map replaced a Mystery Box price; that location remains map-owned"] = "맵이 미스터리 박스 가격을 변경하여 해당 위치는 맵의 제어를 유지합니다"
+    locale["map replaced the Wunderfizz price; its value remains map-owned"] = "맵이 원더피즈 가격을 변경하여 그 값은 맵에서 관리합니다"
+    locale["map replaced the primary-weapon limit"] = "맵이 주 무기 제한을 교체했습니다"
     locale["map replaces stock power-up pickup dispatch; classic Double Points/Insta-Kill remain map-owned"] = "맵이 기본 파워업 획득 처리를 대체하므로 클래식 더블 포인트/인스타킬은 맵이 계속 관리합니다"
     locale["map starts with power already enabled"] = "이 맵은 처음부터 전원이 켜진 상태로 시작합니다"
     locale["map supplies a custom Insta-Kill lifecycle and remains authoritative"] = "맵이 자체 인스타킬 처리를 제공하므로 맵의 처리가 우선합니다"
+    locale["map uses fixed-price legacy Mystery Box hints"] = "맵이 고정 가격의 기존 미스터리 박스 안내를 사용합니다"
     locale["map's published power consumers rejected activation"] = "맵이 공개한 전력 소비 장치가 활성화를 거부했습니다"
     locale["map's registered power consumers were already enabled"] = "맵에 등록된 전력 소비 장치가 이미 켜져 있었습니다"
     locale["map's starting loadout already fills every primary slot"] = "맵의 시작 장비가 이미 모든 주 무기 슬롯을 채우고 있습니다"
@@ -461,6 +543,8 @@ local function populate()
     locale["map-owned Insta-Kill override preserved"] = "맵 자체의 인스타킬 재정의를 유지함"
     locale["map-owned or multi-FX timed lifecycle preserved"] = "맵 자체 또는 다중 효과의 시간제 처리를 유지함"
     locale["no second registered weapon matches the selected class"] = "선택한 클래스에 맞는 두 번째 등록 무기가 없습니다"
+    locale["no selected Pack-a-Punched starting weapon supports Alternate Ammo Types"] = "선택한 Pack-a-Punch 시작 무기 중 대체 탄약 유형을 지원하는 무기가 없습니다"
+    locale["one-weapon-slot challenge takes precedence"] = "무기 슬롯 하나 챌린지가 우선합니다"
     locale["opened common traversal blockers; custom, counter, airlock, and quest-owned blockers were preserved"] = "일반 통로 장애물을 열었음. 커스텀, 카운터, 에어록, 퀘스트 장애물은 유지함"
     locale["opened every initialized ordinary door, linked barrier, debris group and Moon buy airlock"] = "초기화된 일반 문, 연결된 장벽, 잔해 묶음, Moon의 구매형 에어록을 모두 열었음"
     locale["opened initialized ordinary traversal blockers; custom, counter, cycling-airlock and quest owners were preserved"] = "초기화된 일반 통로 장애물을 열었음. 커스텀, 카운터, 순환 에어록, 퀘스트 관리는 유지함"
@@ -474,6 +558,12 @@ local function populate()
     locale["powered all six stock traversal stairs and published perk/door transformers; quest outputs 20/21/23 remain map-owned"] = "기본 이동 계단 6곳과 공개된 퍼크/문 변압기에 전원을 공급함. 퀘스트 출력 20/21/23은 맵이 관리함"
     locale["powered generator perk consumers; captures, Mystery Boxes, and Pack-a-Punch remain map-owned"] = "발전기의 퍼크 소비 장치에 전원을 공급함. 점령, 미스터리 박스, Pack-a-Punch는 맵이 관리함"
     locale["powered perk shock boxes; other Afterlife panels and quest state remain map-owned"] = "퍼크 전기 상자에 전원을 공급함. 다른 애프터라이프 패널과 퀘스트 상태는 맵이 관리함"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ko"]
     locale["powered published perk/door transformers; other Beast and quest interactions remain map-owned"] = "공개된 퍼크/문 변압기에 전원을 공급함. 다른 비스트 및 퀘스트 상호작용은 맵이 관리함"
     locale["powered registered consumers; the buildable switch, reactor, Avogadro, gates, bus, morse code, and quest flags remain map-owned"] = "등록된 소비 장치에 전원을 공급함. 제작형 스위치, 원자로, 아보가드로, 게이트, 버스, 모스 부호, 퀘스트 플래그는 맵이 관리함"
     locale["powered registered global consumers; custom switches, local power, and quest state remain map-owned"] = "등록된 전체 소비 장치에 전원을 공급함. 커스텀 스위치, 국지 전원, 퀘스트 상태는 맵이 관리함"
@@ -481,19 +571,16 @@ local function populate()
     locale["powered the stock global consumers and Verruckt trap controls"] = "기본 전체 소비 장치와 Verruckt의 함정 제어 장치에 전원을 공급함"
     locale["powered the stock global consumers, Pack-a-Punch and Giant traversal links"] = "기본 전체 소비 장치, Pack-a-Punch, Giant의 통로 연결에 전원을 공급함"
     locale["race-team Double Points has additional map-owned state and remains stock"] = "레이스 팀 더블 포인트는 맵 자체의 추가 상태가 있어 기본 동작을 유지합니다"
+    locale["recognized stock map required"] = "알려진 기본 맵이 필요합니다"
+    locale["registered upgrades only; custom upgrade systems remain map-owned"] = "등록된 강화에만 적용; 사용자 지정 강화 시스템은 맵에서 제어합니다"
     locale["round logic began before the tweak could be applied"] = "조정을 적용하기 전에 라운드 로직이 시작되었습니다"
     locale["scaled from BO2's stock base and composed with perk/map health bonuses"] = "BO2 기본 체력을 기준으로 배율을 적용하고 퍼크/맵 체력 보너스와 결합함"
     locale["scaled the stock baseline before map special-round thresholds"] = "맵의 특수 라운드 임계값보다 먼저 기본 기준값을 조절함"
+    locale["selected Alternate Ammo Type is not registered by this map"] = "선택한 대체 탄약 유형이 이 맵에 등록되어 있지 않습니다"
     locale["selected NO ADDITIONAL RULE for this match"] = "이번 매치에 추가 규칙 없음을 선택함"
     locale["selected NO MYSTERY BOX for this match"] = "이번 매치에 미스터리 박스 없음을 선택함"
     locale["selected NO PERKS for this match"] = "이번 매치에 퍼크 없음을 선택함"
     locale["selected RANDOM LOADOUT for this match"] = "이번 매치에 무작위 장비를 선택함"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["ko"]
     locale["selected WALL WEAPONS ONLY for this match"] = "이번 매치에 벽 무기만을 선택함"
     locale["selected equipment is not registered by this map"] = "선택한 장비가 이 맵에 등록되어 있지 않습니다"
     locale["selected grenade is not registered by this map"] = "선택한 수류탄이 이 맵에 등록되어 있지 않습니다"
@@ -502,6 +589,8 @@ local function populate()
     locale["standard Mystery Boxes disabled; scripted quest rewards remain map-owned"] = "일반 미스터리 박스를 비활성화함. 스크립트 퀘스트 보상은 맵이 관리함"
     locale["standard door capability disappeared during map initialization"] = "맵 초기화 중 일반 문 기능이 사라졌습니다"
     locale["standard purchases and ZTweaks grants are blocked; scripted quest grants remain map-owned"] = "일반 구매와 ZTweaks 지급을 막음. 스크립트 퀘스트 지급은 맵이 관리함"
+    locale["stock barriers without map-authored delays only"] = "맵 지정 지연이 없는 기본 바리케이드에만 적용"
+    locale["stock blocker system has no unowned repair delay"] = "기본 시스템에 사용 가능한 수리 지연이 없습니다"
     locale["stock classic co-op already permits unlimited ordinary downs"] = "기본 클래식 협동 모드는 이미 일반 다운을 무제한 허용합니다"
     locale["stock earned score and box refunds are scaled; direct map score restoration remains map-owned"] = "기본 획득 점수와 상자 환불에 배율을 적용함. 맵의 직접 점수 복원은 맵이 관리함"
     locale["stock earned score is scaled; direct map score restoration remains map-owned"] = "기본 획득 점수에 배율을 적용함. 맵의 직접 점수 복원은 맵이 관리함"

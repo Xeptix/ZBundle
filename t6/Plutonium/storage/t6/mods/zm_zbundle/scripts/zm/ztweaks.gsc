@@ -1,4 +1,4 @@
-// ZTWEAKS T6 v1.3
+// ZTWEAKS T6 v1.4
 // Compatibility-first Zombies tweaks. Inactive live-boundary hooks preserve stock behavior.
 
 // T6 custom scripts do not inherit the stock Zombies include table. These
@@ -372,7 +372,7 @@ zt_register_self()
 zt_version()
 {
     // ZT_VERSION_BEGIN
-    return "1.3";
+    return "1.4";
     // ZT_VERSION_END
 }
 
@@ -428,16 +428,28 @@ zt_report_sync_player()
     while ( !zt_game_ready() )
         wait 0.1;
 
+    // BO2's SetClientDvar is a reliable server command. A late, slow client
+    // must not receive every active compatibility row in one loading burst.
+    // This report is diagnostic; it can trail the actual gameplay join.
+    wait 5;
+
+    // Publish the epoch before rows so the menu rejects prior-match values.
+    // Live zt_feature changes may publish concurrently; each snapshot row
+    // reads its current value, so the latest state wins either ordering.
+    self SetClientDvar( "zt_ui_report_epoch", level.zt.report_epoch );
+    self.zt_report_ready = 1;
+
     keys = getarraykeys( level.zt.features );
     for ( i = 0; i < keys.size; i++ )
     {
         name = keys[i];
         feature = level.zt.features[name];
         if ( feature.state != "inherit" || feature.reason != "" )
+        {
             self zt_report_publish( name, feature.state, feature.reason );
+            wait 0.25;
+        }
     }
-    self SetClientDvar( "zt_ui_report_epoch", level.zt.report_epoch );
-    self.zt_report_ready = 1;
 }
 
 zt_feature_trace( name, state, reason )

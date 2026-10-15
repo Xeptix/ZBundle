@@ -1,4 +1,4 @@
-// ZTWEAKS T7 v1.3
+// ZTWEAKS T7 v1.4
 // Compatibility-first Zombies tweaks. Inactive live-boundary hooks preserve stock behavior.
 
 #include scripts\shared\callbacks_shared;
@@ -216,6 +216,7 @@ on_spawned()
         self.zt_report_started = 1;
         self thread zt_report_sync_player();
     }
+    self zt_start_ready_listener();
 
     // T7x can attach the mod after the level watcher has already polled this
     // spawn. Start a one-shot catch-up watcher for that case. The per-player
@@ -236,6 +237,10 @@ on_spawned()
 
 on_connected()
 {
+    // Start before the gameplay HUD can acknowledge a slow remote load.
+    // on_spawned() repeats this guarded call for late-attached runtimes.
+    if ( isdefined( level.zt ) && level.zt.config.enabled )
+        self zt_start_ready_listener();
     // Request the diagnostic value at the earliest per-player callback we
     // already own, rather than waiting for the level poll near first spawn.
     // This remains opt-in and does not change character assignment.
@@ -817,7 +822,7 @@ zt_register_self()
 zt_version()
 {
     // ZT_VERSION_BEGIN
-    return "1.3";
+    return "1.4";
     // ZT_VERSION_END
 }
 
@@ -1035,8 +1040,7 @@ zt_report_sync_player()
     // A remote player may still be completing the map load when the server
     // reaches round readiness. Do not queue any report commands until that
     // player's gameplay HUD has installed the packet listener.
-    self.zt_report_requests = 0;
-    self thread zt_report_ready_listener();
+    self zt_start_ready_listener();
     while ( !zt_game_ready() )
         wait 0.1;
     // Leave the join/intro command channel clear. The report is diagnostic UI,
@@ -1087,6 +1091,15 @@ zt_report_sync_player()
     }
 }
 
+zt_start_ready_listener()
+{
+    if ( zt_true( self.zt_ready_listener_started ) )
+        return;
+    self.zt_ready_listener_started = 1;
+    self.zt_report_requests = 0;
+    self thread zt_report_ready_listener();
+}
+
 zt_report_ready_listener()
 {
     self endon( "disconnect" );
@@ -1094,6 +1107,15 @@ zt_report_ready_listener()
     while ( 1 )
     {
         self waittill( "menuresponse", menu, response );
+        if ( isdefined( response ) && response == "zt_join_ready" )
+        {
+            if ( !zt_true( self.zt_client_hud_ready ) )
+            {
+                self.zt_client_hud_ready = 1;
+                self thread zt_apply_pending_remote_spawn();
+            }
+            continue;
+        }
         if ( isdefined( response ) && response == "zt_compat_ready" )
         {
             now = gettime();
@@ -3574,11 +3596,13 @@ zt_player_spawn_watch( apply_current )
         self.zt_point_gain_baseline_pending = 1;
         // Let the stock spawn pipeline finish assigning its default offhand
         // slots and ammo before ZTweaks replaces or expands them.
+        self.zt_spawn_apply_after = gettime() + 400;
         wait 0.4;
         if ( isdefined( self.sessionstate ) && self.sessionstate == "playing" )
         {
             self zt_apply_current_spawn_tweaks();
-            self zt_point_gain_rebaseline();
+            if ( self ishost() || zt_true( self.zt_client_hud_ready ) )
+                self zt_point_gain_rebaseline();
         }
     }
 
@@ -3592,7 +3616,29 @@ zt_player_spawn_watch( apply_current )
         // not score awards. Suppress the frame sampler until that pipeline and
         // the ZTweaks spawn transaction have both settled.
         self.zt_point_gain_baseline_pending = 1;
+        self.zt_spawn_apply_after = gettime() + 400;
         wait 0.4;
+        self zt_apply_current_spawn_tweaks();
+        if ( self ishost() || zt_true( self.zt_client_hud_ready ) )
+            self zt_point_gain_rebaseline();
+    }
+}
+
+zt_apply_pending_remote_spawn()
+{
+    self endon( #"disconnect" );
+    level endon( #"end_game" );
+    if ( self ishost() )
+        return;
+    // A joining client's HUD can come up long after the host's round flag.
+    // Apply only after both the client acknowledgment and the stock 0.4 s
+    // inventory settle; an absent acknowledgment leaves map state untouched.
+    while ( !isdefined( self.zt_player_watch ) || !isdefined( self.zt_inventory_generation ) )
+        wait 0.1;
+    while ( isdefined( self.zt_spawn_apply_after ) && gettime() < self.zt_spawn_apply_after )
+        wait 0.05;
+    if ( isdefined( self.sessionstate ) && self.sessionstate == "playing" )
+    {
         self zt_apply_current_spawn_tweaks();
         self zt_point_gain_rebaseline();
     }
@@ -3607,10 +3653,16 @@ zt_inventory_begin_generation()
 
 zt_apply_current_spawn_tweaks()
 {
+    if ( !( self ishost() ) && !zt_true( self.zt_client_hud_ready ) )
+        return;
+    if ( isdefined( self.zt_spawn_applied_generation ) && isdefined( self.zt_inventory_generation ) &&
+         self.zt_spawn_applied_generation == self.zt_inventory_generation )
+        return;
     zt_refresh_spawn_config();
 
     if ( zt_has_player_tweaks() || zt_true( self.zt_player_health_owned ) || zt_true( self.zt_player_speed_owned ) || zt_true( self.zt_inventory_cap_watch ) || zt_true( self.zt_max_ammo_watch ) || zt_true( self.zt_grenade_round_refill_watch ) )
         self zt_apply_spawn_tweaks();
+    self.zt_spawn_applied_generation = self.zt_inventory_generation;
 }
 
 zt_inventory_cap_watch()

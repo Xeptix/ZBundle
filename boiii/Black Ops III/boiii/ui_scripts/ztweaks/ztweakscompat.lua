@@ -203,6 +203,15 @@ R.Listen = function ( element, controller )
     element:subscribeToGlobalModel( controller, "PerController", "scriptNotify", function ( model )
         R.OnScriptNotify( model )
     end )
+    -- The host's round-ready flag can precede a slow client's gameplay HUD.
+    -- A tiny client-origin acknowledgment lets GSC postpone optional spawn
+    -- mutations until this exact player has finished the loading UI. Retry
+    -- once because the HUD can be constructed before its server listener.
+    pcall( Engine.SendMenuResponse, controller, "StartMenu_Main", "zt_join_ready" )
+    local readyRetryOk, readyRetry = pcall( LUI.UITimer.newElementTimer, 1000, true, function ()
+        pcall( Engine.SendMenuResponse, controller, "StartMenu_Main", "zt_join_ready" )
+    end )
+    if readyRetryOk and readyRetry ~= nil then element:addElement( readyRetry ) end
     local attempts = 0
     local timer
     local request = function ()

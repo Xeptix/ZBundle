@@ -1,4 +1,4 @@
-// ZTWEAKS T6 v1.4
+// ZTWEAKS T6 v1.5
 // Compatibility-first Zombies tweaks. Inactive live-boundary hooks preserve stock behavior.
 
 // T6 custom scripts do not inherit the stock Zombies include table. These
@@ -75,6 +75,8 @@ init()
     zt_feature( "start_doors_open", "inherit", "" );
     zt_new_features_init();
     zt_boot_trace( "features_registered" );
+    if ( level.zt.config.revive_time > 0 )
+        zt_t6_revive_time_install();
 
     if ( level.zt.config.perk_limit != 0 || level.zt.config.challenge_no_perks )
         level thread zt_perk_limit_install();
@@ -148,6 +150,7 @@ zt_round_ready_install()
     zt_boot_trace( "round_ready" );
 
     level thread zt_player_watch();
+    if ( !level.zt.config.knife_lunge ) level thread zt_knife_lunge_install();
     level thread zt_match_value_owner_watch();
     level thread zt_zombies_per_round_install();
     level thread zt_powerup_controls_install();
@@ -162,6 +165,46 @@ zt_round_ready_install()
 zt_true( value )
 {
     return isdefined( value ) && value;
+}
+
+zt_knife_lunge_install()
+{
+    level endon( "end_game" );
+    while ( !zt_game_ready() ) wait 0.1;
+
+    // Only claim the stock ON value. An already-disabled auto-melee dvar
+    // belongs to the map, player, or another mod and needs no ZTweaks write.
+    level.zt_knife_lunge_previous = getdvarint( "aim_automelee_enabled" );
+    if ( level.zt_knife_lunge_previous != 1 ) return;
+    setdvar( "aim_automelee_enabled", 0 );
+    zt_feature( "knife_lunge", "active", "" );
+    level thread zt_knife_lunge_restore();
+
+    while ( 1 )
+    {
+        players = getplayers();
+        for ( i = 0; i < players.size; i++ )
+        {
+            if ( !zt_true( players[i].zt_knife_lunge_applied ) )
+            {
+                players[i] setclientdvar( "aim_automelee_enabled", 0 );
+                players[i].zt_knife_lunge_applied = 1;
+            }
+        }
+        wait 0.5;
+    }
+}
+
+zt_knife_lunge_restore()
+{
+    level waittill( "end_game" );
+    if ( getdvarint( "aim_automelee_enabled" ) != 0 ) return;
+    players = getplayers();
+    for ( i = 0; i < players.size; i++ )
+        if ( zt_true( players[i].zt_knife_lunge_applied ) )
+            players[i] setclientdvar( "aim_automelee_enabled", level.zt_knife_lunge_previous );
+    setdvar( "aim_automelee_enabled", level.zt_knife_lunge_previous );
+    zt_feature( "knife_lunge", "inherit", "" );
 }
 
 zt_cfg_int( name, def )
@@ -228,6 +271,7 @@ zt_load_config()
     level.zt.config.starting_equipment_count = zt_cfg_int( "zt_starting_equipment_count", 0 );
     level.zt.config.start_all_perks = zt_cfg_int( "zt_start_all_perks", 0 );
     level.zt.config.player_speed = zt_cfg_int( "zt_player_speed", 0 );
+    level.zt.config.knife_lunge = zt_cfg_int( "zt_knife_lunge", 1 );
     level.zt.config.zombie_speed = zt_cfg_int( "zt_zombie_speed", 0 );
     level.zt.config.headshots_only = zt_cfg_int( "zt_headshots_only", 0 );
     level.zt.config.zombies_per_round = zt_cfg_int( "zt_zombies_per_round", 0 );
@@ -372,7 +416,7 @@ zt_register_self()
 zt_version()
 {
     // ZT_VERSION_BEGIN
-    return "1.4";
+    return "1.5";
     // ZT_VERSION_END
 }
 
@@ -509,6 +553,7 @@ zt_new_features_init()
     names[38] = "challenge_rising_damage";
     names[39] = "pap_damage_multiplier";
     names[40] = "fast_barrier_rebuild";
+    names[41] = "knife_lunge";
     for ( i = 0; i < names.size; i++ )
         zt_feature( names[i], "inherit", "" );
 }
@@ -543,6 +588,7 @@ zt_feature_label( name )
     if ( name == "challenge_rising_damage" ) return "Rising Player Damage";
     if ( name == "pap_damage_multiplier" ) return "Pack-a-Punch Damage";
     if ( name == "fast_barrier_rebuild" ) return "Faster Barrier Rebuild";
+    if ( name == "knife_lunge" ) return "Knife Lunge";
     if ( name == "powerup_drop_filters" ) return "Power-Up Drop Filters";
     if ( name == "start_power_on" ) return "Start With Power";
     if ( name == "start_doors_open" ) return "Start With Doors Open";
@@ -573,7 +619,7 @@ zt_feature_message( name, reason )
 }
 
 // ZT_NOTICE_DICTIONARY_BEGIN
-zt_notice_signature() { return 11531363; }
+zt_notice_signature() { return 979616; }
 zt_notice_code( name, reason )
 {
     feature = 0;
@@ -615,268 +661,315 @@ zt_notice_code( name, reason )
     if ( name == "headshots_only" ) feature = 36;
     if ( name == "health_regen_delay" ) feature = 37;
     if ( name == "keep_weapons_bleedout" ) feature = 38;
-    if ( name == "lose_perks_on_down" ) feature = 39;
-    if ( name == "max_ammo_reload" ) feature = 40;
-    if ( name == "max_equipment" ) feature = 41;
-    if ( name == "max_grenades" ) feature = 42;
-    if ( name == "melee_damage" ) feature = 43;
-    if ( name == "next_map" ) feature = 44;
-    if ( name == "no_explosive_self_damage" ) feature = 45;
-    if ( name == "pap_damage_multiplier" ) feature = 46;
-    if ( name == "perk_limit" ) feature = 47;
-    if ( name == "perk_price_multiplier" ) feature = 48;
-    if ( name == "player_health" ) feature = 49;
-    if ( name == "player_speed" ) feature = 50;
-    if ( name == "point_gain" ) feature = 51;
-    if ( name == "powerup_drop_filters" ) feature = 52;
-    if ( name == "powerup_drop_rate" ) feature = 53;
-    if ( name == "powerup_effect_time" ) feature = 54;
-    if ( name == "powerup_ground_time" ) feature = 55;
-    if ( name == "powerup_max_per_round" ) feature = 56;
-    if ( name == "powerup_stacking" ) feature = 57;
-    if ( name == "random_starting_perks" ) feature = 58;
-    if ( name == "reserve_ammo" ) feature = 59;
-    if ( name == "revive_time" ) feature = 60;
-    if ( name == "round_bonus" ) feature = 61;
-    if ( name == "round_delay" ) feature = 62;
-    if ( name == "secondary_starting_weapon" ) feature = 63;
-    if ( name == "spawn_protection" ) feature = 64;
-    if ( name == "start_all_perks" ) feature = 65;
-    if ( name == "start_doors_open" ) feature = 66;
-    if ( name == "start_power_on" ) feature = 67;
-    if ( name == "starting_ammo" ) feature = 68;
-    if ( name == "starting_equipment" ) feature = 69;
-    if ( name == "starting_equipment_count" ) feature = 70;
-    if ( name == "starting_grenade" ) feature = 71;
-    if ( name == "starting_grenade_count" ) feature = 72;
-    if ( name == "starting_points" ) feature = 73;
-    if ( name == "starting_round" ) feature = 74;
-    if ( name == "starting_weapon" ) feature = 75;
-    if ( name == "starting_weapon_aat" ) feature = 76;
-    if ( name == "starting_weapon_upgraded" ) feature = 77;
-    if ( name == "teddy_chance" ) feature = 78;
-    if ( name == "trap_price_multiplier" ) feature = 79;
-    if ( name == "weapon_damage" ) feature = 80;
-    if ( name == "wunderfizz_price_multiplier" ) feature = 81;
-    if ( name == "zombie_damage" ) feature = 82;
-    if ( name == "zombie_health" ) feature = 83;
-    if ( name == "zombie_spawn_rate" ) feature = 84;
-    if ( name == "zombie_speed" ) feature = 85;
-    if ( name == "zombies_per_round" ) feature = 86;
+    if ( name == "knife_lunge" ) feature = 39;
+    if ( name == "lose_perks_on_down" ) feature = 40;
+    if ( name == "max_ammo_reload" ) feature = 41;
+    if ( name == "max_equipment" ) feature = 42;
+    if ( name == "max_grenades" ) feature = 43;
+    if ( name == "melee_damage" ) feature = 44;
+    if ( name == "next_map" ) feature = 45;
+    if ( name == "no_explosive_self_damage" ) feature = 46;
+    if ( name == "pap_damage_multiplier" ) feature = 47;
+    if ( name == "perk_limit" ) feature = 48;
+    if ( name == "perk_price_multiplier" ) feature = 49;
+    if ( name == "player_health" ) feature = 50;
+    if ( name == "player_speed" ) feature = 51;
+    if ( name == "point_gain" ) feature = 52;
+    if ( name == "powerup_drop_filters" ) feature = 53;
+    if ( name == "powerup_drop_rate" ) feature = 54;
+    if ( name == "powerup_effect_time" ) feature = 55;
+    if ( name == "powerup_ground_time" ) feature = 56;
+    if ( name == "powerup_max_per_round" ) feature = 57;
+    if ( name == "powerup_stacking" ) feature = 58;
+    if ( name == "random_starting_perks" ) feature = 59;
+    if ( name == "reserve_ammo" ) feature = 60;
+    if ( name == "revive_time" ) feature = 61;
+    if ( name == "round_bonus" ) feature = 62;
+    if ( name == "round_delay" ) feature = 63;
+    if ( name == "secondary_starting_weapon" ) feature = 64;
+    if ( name == "spawn_protection" ) feature = 65;
+    if ( name == "start_all_perks" ) feature = 66;
+    if ( name == "start_doors_open" ) feature = 67;
+    if ( name == "start_power_on" ) feature = 68;
+    if ( name == "starting_ammo" ) feature = 69;
+    if ( name == "starting_equipment" ) feature = 70;
+    if ( name == "starting_equipment_count" ) feature = 71;
+    if ( name == "starting_grenade" ) feature = 72;
+    if ( name == "starting_grenade_count" ) feature = 73;
+    if ( name == "starting_points" ) feature = 74;
+    if ( name == "starting_round" ) feature = 75;
+    if ( name == "starting_weapon" ) feature = 76;
+    if ( name == "starting_weapon_aat" ) feature = 77;
+    if ( name == "starting_weapon_upgraded" ) feature = 78;
+    if ( name == "teddy_chance" ) feature = 79;
+    if ( name == "trap_price_multiplier" ) feature = 80;
+    if ( name == "weapon_damage" ) feature = 81;
+    if ( name == "wunderfizz_price_multiplier" ) feature = 82;
+    if ( name == "zombie_damage" ) feature = 83;
+    if ( name == "zombie_health" ) feature = 84;
+    if ( name == "zombie_spawn_rate" ) feature = 85;
+    if ( name == "zombie_speed" ) feature = 86;
+    if ( name == "zombies_per_round" ) feature = 87;
     if ( feature == 0 ) return 0;
     code = 0;
     if ( code == 0 ) code = zt_notice_reason_0( reason );
     if ( code == 0 ) code = zt_notice_reason_48( reason );
     if ( code == 0 ) code = zt_notice_reason_96( reason );
     if ( code == 0 ) code = zt_notice_reason_144( reason );
+    if ( code == 0 ) code = zt_notice_reason_192( reason );
     if ( code == 0 ) return 0;
     return feature * 512 + code;
 }
 zt_notice_reason_0( reason )
 {
     if ( reason == "Alternate Ammo Type applied only to compatible Pack-a-Punched starting weapons" ) return 1;
-    if ( reason == "BO2 exposes no composable revive-time callback" ) return 2;
-    if ( reason == "BO2 has no safe pre-dispatch seam for ignoring a repeated timed power-up; stock stacking remains in control" ) return 3;
-    if ( reason == "BO2 weapon registrations do not identify wonder weapons generically" ) return 4;
-    if ( reason == "Buried did not initialize its single stock power switch" ) return 5;
-    if ( reason == "Buried rejected its stock switch request" ) return 6;
-    if ( reason == "Die Rise did not initialize its single stock power switch" ) return 7;
-    if ( reason == "Die Rise rejected its stock switch request" ) return 8;
-    if ( reason == "Double Points did not expose its stock team scalar" ) return 9;
-    if ( reason == "Enable Experimental Tweaks to edit this stock-map-only setting." ) return 10;
-    if ( reason == "Insta-Kill did not expose its stock team state" ) return 11;
-    if ( reason == "Mob did not initialize its Afterlife perk-box waiter" ) return 12;
-    if ( reason == "Mob final-showdown health remains map-owned" ) return 13;
-    if ( reason == "Mystery Box relocation is disabled" ) return 14;
-    if ( reason == "Nuketown owns its randomized perk and Pack-a-Punch arrival cadence" ) return 15;
-    if ( reason == "Origins did not publish all six generator consumer zones" ) return 16;
-    if ( reason == "Origins did not publish its generator perk consumers" ) return 17;
-    if ( reason == "Origins exposes no initialized generator-consumer registry" ) return 18;
-    if ( reason == "POWER-UP DROP FILTERS" ) return 19;
-    if ( reason == "Revelations exposes no initialized corruption-grid consumers" ) return 20;
-    if ( reason == "Revelations' stock power consumers rejected activation" ) return 21;
-    if ( reason == "Shadows exposes no complete six-stair/perk/door consumer registry" ) return 22;
-    if ( reason == "Shadows exposes no initialized perk/door power zones" ) return 23;
-    if ( reason == "Shadows' stock power consumers rejected activation" ) return 24;
-    if ( reason == "Shadows' stock stair/perk/door consumers rejected activation" ) return 25;
-    if ( reason == "Shangri-La exposes no initialized two-switch power route" ) return 26;
-    if ( reason == "Shangri-La's stock two-switch power route did not complete" ) return 27;
-    if ( reason == "The game reported a newer compatibility reason; see the ZTweaks runtime log." ) return 28;
-    if ( reason == "TranZit did not publish registered global-power consumers" ) return 29;
-    if ( reason == "Turned/Cleansed owns its 0.05-second role-conversion sentinel" ) return 30;
-    if ( reason == "Turned/Cleansed owns its arena and exposes no meaningful power capability" ) return 31;
-    if ( reason == "Turned/Cleansed owns its arena doors and barriers" ) return 32;
-    if ( reason == "Zetsubou exposes no initialized main-power consumer" ) return 33;
-    if ( reason == "Zetsubou's stock main-power consumer rejected activation" ) return 34;
+    if ( reason == "Buried did not initialize its single stock power switch" ) return 2;
+    if ( reason == "Buried rejected its stock switch request" ) return 3;
+    if ( reason == "Die Rise did not initialize its single stock power switch" ) return 4;
+    if ( reason == "Die Rise rejected its stock switch request" ) return 5;
+    if ( reason == "Double Points did not expose its stock team scalar" ) return 6;
+    if ( reason == "Enable Experimental Tweaks to edit this stock-map-only setting." ) return 7;
+    if ( reason == "Insta-Kill did not expose its stock team state" ) return 8;
+    if ( reason == "Mob did not initialize its Afterlife perk-box waiter" ) return 9;
+    if ( reason == "Mob final-showdown health remains map-owned" ) return 10;
+    if ( reason == "Mystery Box relocation is disabled" ) return 11;
+    if ( reason == "No Mystery Box or Wall Weapons Only takes precedence" ) return 12;
+    if ( reason == "Nuketown owns its randomized perk and Pack-a-Punch arrival cadence" ) return 13;
+    if ( reason == "Origins did not publish all six generator consumer zones" ) return 14;
+    if ( reason == "Origins did not publish its generator perk consumers" ) return 15;
+    if ( reason == "Origins exposes no initialized generator-consumer registry" ) return 16;
+    if ( reason == "POWER-UP DROP FILTERS" ) return 17;
+    if ( reason == "Revelations exposes no initialized corruption-grid consumers" ) return 18;
+    if ( reason == "Revelations' stock power consumers rejected activation" ) return 19;
+    if ( reason == "Shadows exposes no complete six-stair/perk/door consumer registry" ) return 20;
+    if ( reason == "Shadows exposes no initialized perk/door power zones" ) return 21;
+    if ( reason == "Shadows' stock power consumers rejected activation" ) return 22;
+    if ( reason == "Shadows' stock stair/perk/door consumers rejected activation" ) return 23;
+    if ( reason == "Shangri-La exposes no initialized two-switch power route" ) return 24;
+    if ( reason == "Shangri-La's stock two-switch power route did not complete" ) return 25;
+    if ( reason == "Starting Room Only takes precedence" ) return 26;
+    if ( reason == "The game reported a newer compatibility reason; see the ZTweaks runtime log." ) return 27;
+    if ( reason == "TranZit did not publish registered global-power consumers" ) return 28;
+    if ( reason == "Turned/Cleansed owns its 0.05-second role-conversion sentinel" ) return 29;
+    if ( reason == "Turned/Cleansed owns its arena and exposes no meaningful power capability" ) return 30;
+    if ( reason == "Turned/Cleansed owns its arena doors and barriers" ) return 31;
+    if ( reason == "Zetsubou exposes no initialized main-power consumer" ) return 32;
+    if ( reason == "Zetsubou's stock main-power consumer rejected activation" ) return 33;
+    if ( reason == "a map or mod owns the power-up pickup check" ) return 34;
     if ( reason == "activated the stock main-power finalizer without marking temporary-generator/web/defend objectives complete" ) return 35;
-    if ( reason == "classic Double Points/Insta-Kill scaling requires an exact stock team scope" ) return 36;
-    if ( reason == "completed both stock water-wheel switches; Shangri-La's wait_for_power owns global activation" ) return 37;
-    if ( reason == "composed before Revelations' per-player damage pipeline" ) return 38;
-    if ( reason == "composed before the map's player-damage pipeline" ) return 39;
-    if ( reason == "composed with a late map callback" ) return 40;
-    if ( reason == "composed with late map and perk health owners" ) return 41;
-    if ( reason == "composed with late map drop thresholds" ) return 42;
-    if ( reason == "composed with late map round caps" ) return 43;
-    if ( reason == "composed with the map's live bleed-out duration" ) return 44;
-    if ( reason == "composed with the map's spawn movement scale" ) return 45;
-    if ( reason == "custom map exposes no authoritative base player-health variable" ) return 46;
-    if ( reason == "custom or changed perk purchases remain map-owned" ) return 47;
-    if ( reason == "custom or changed trap purchases remain map-owned" ) return 48;
+    if ( reason == "active perk-loss GobbleGum takes precedence on this down" ) return 36;
+    if ( reason == "another mod owns the stock revive function" ) return 37;
+    if ( reason == "another starting-weapon setting owns the slot" ) return 38;
+    if ( reason == "classic Double Points/Insta-Kill scaling requires an exact stock team scope" ) return 39;
+    if ( reason == "completed both stock water-wheel switches; Shangri-La's wait_for_power owns global activation" ) return 40;
+    if ( reason == "composed before Revelations' per-player damage pipeline" ) return 41;
+    if ( reason == "composed before the map's player-damage pipeline" ) return 42;
+    if ( reason == "composed with a late map callback" ) return 43;
+    if ( reason == "composed with late map and perk health owners" ) return 44;
+    if ( reason == "composed with late map drop thresholds" ) return 45;
+    if ( reason == "composed with late map round caps" ) return 46;
+    if ( reason == "composed with the map's live bleed-out duration" ) return 47;
+    if ( reason == "composed with the map's spawn movement scale" ) return 48;
     return 0;
 }
 zt_notice_reason_48( reason )
 {
-    if ( reason == "custom/counter/quest blocker owners were preserved; no ordinary blocker was safe to claim" ) return 49;
-    if ( reason == "first-round spawning began before the tweak could be applied" ) return 50;
-    if ( reason == "generic inventory restoration would duplicate map quest weapons" ) return 51;
-    if ( reason == "global stock AAT disable takes precedence" ) return 52;
-    if ( reason == "ignored an active duplicate at the pickup boundary" ) return 53;
-    if ( reason == "independent safe box firearm selected for each player" ) return 54;
-    if ( reason == "map and perk revive-time callbacks are composed before scaling" ) return 55;
-    if ( reason == "map callback returned no spawn cadence" ) return 56;
-    if ( reason == "map did not expose standard Zombies match variables" ) return 57;
-    if ( reason == "map did not expose the standard round zombie total" ) return 58;
-    if ( reason == "map did not initialize round logic before the door-capability timeout" ) return 59;
-    if ( reason == "map did not initialize the stock Alternate Ammo Type system" ) return 60;
-    if ( reason == "map did not register any supported Alternate Ammo Types" ) return 61;
-    if ( reason == "map does not enable standard score-threshold power-up drops" ) return 62;
-    if ( reason == "map exposes no active player for stock blocker callbacks" ) return 63;
-    if ( reason == "map exposes no authoritative starting-weapon replacement seam" ) return 64;
-    if ( reason == "map exposes no base player-health variable" ) return 65;
-    if ( reason == "map exposes no composable player-damage override" ) return 66;
-    if ( reason == "map exposes no composable player-last-stand callback" ) return 67;
-    if ( reason == "map exposes no initialized ordinary traversal blockers" ) return 68;
-    if ( reason == "map exposes no initialized published perk/door power zones" ) return 69;
-    if ( reason == "map exposes no initialized registered global-power consumers" ) return 70;
-    if ( reason == "map exposes no initialized standard door capability" ) return 71;
-    if ( reason == "map exposes no initialized stock global-power consumers" ) return 72;
-    if ( reason == "map exposes no registered perk list" ) return 73;
-    if ( reason == "map exposes no registered weapon pool" ) return 74;
-    if ( reason == "map exposes no safe standard purchasable doors" ) return 75;
-    if ( reason == "map exposes no safely owned timed effect storage" ) return 76;
-    if ( reason == "map exposes no standard Wunderfizz machine or price" ) return 77;
-    if ( reason == "map exposes no standard between-round delay" ) return 78;
-    if ( reason == "map exposes no standard between-round delay callback" ) return 79;
-    if ( reason == "map exposes no standard death-point penalty" ) return 80;
-    if ( reason == "map exposes no standard game-start delay" ) return 81;
-    if ( reason == "map exposes no standard health-regeneration delay" ) return 82;
-    if ( reason == "map exposes no standard zombie spawn cadence" ) return 83;
-    if ( reason == "map exposes no standard zombie spawn cadence callback" ) return 84;
-    if ( reason == "map exposes no standard zombie-health curve" ) return 85;
-    if ( reason == "map exposes no standard zombie-speed curve" ) return 86;
-    if ( reason == "map exposes no stock-compatible perk machines" ) return 87;
-    if ( reason == "map has no standard perk machines" ) return 88;
-    if ( reason == "map has no standard purchase traps" ) return 89;
-    if ( reason == "map has not published a compatible BO2 bank capability" ) return 90;
-    if ( reason == "map has not published a finalized stock GobbleGum registry" ) return 91;
-    if ( reason == "map has not published a perk-limit capability" ) return 92;
-    if ( reason == "map has not published a registered timed power-up capability" ) return 93;
-    if ( reason == "map has not published a standard Mystery Box" ) return 94;
-    if ( reason == "map has not published a standard Mystery Box registry" ) return 95;
-    if ( reason == "map has not published a standard between-round delay" ) return 96;
+    if ( reason == "custom map exposes no authoritative base player-health variable" ) return 49;
+    if ( reason == "custom or changed perk purchases remain map-owned" ) return 50;
+    if ( reason == "custom or changed trap purchases remain map-owned" ) return 51;
+    if ( reason == "custom or replaced Mystery Boxes remain map-owned" ) return 52;
+    if ( reason == "custom/counter/quest blocker owners were preserved; no ordinary blocker was safe to claim" ) return 53;
+    if ( reason == "first-round spawning began before the tweak could be applied" ) return 54;
+    if ( reason == "generic inventory restoration would duplicate map quest weapons" ) return 55;
+    if ( reason == "global stock AAT disable takes precedence" ) return 56;
+    if ( reason == "ignored an active duplicate at the pickup boundary" ) return 57;
+    if ( reason == "independent safe box firearm selected for each player" ) return 58;
+    if ( reason == "map already retains every perk on down" ) return 59;
+    if ( reason == "map and perk revive-time callbacks are composed before scaling" ) return 60;
+    if ( reason == "map callback returned no spawn cadence" ) return 61;
+    if ( reason == "map changed its ordinary weapon registry before respawn" ) return 62;
+    if ( reason == "map did not expose standard Zombies match variables" ) return 63;
+    if ( reason == "map did not expose the standard round zombie total" ) return 64;
+    if ( reason == "map did not initialize round logic before the door-capability timeout" ) return 65;
+    if ( reason == "map did not initialize the stock Alternate Ammo Type system" ) return 66;
+    if ( reason == "map did not register any supported Alternate Ammo Types" ) return 67;
+    if ( reason == "map does not enable standard score-threshold power-up drops" ) return 68;
+    if ( reason == "map exposes fewer than two safe ordinary firearms" ) return 69;
+    if ( reason == "map exposes no active player for stock blocker callbacks" ) return 70;
+    if ( reason == "map exposes no authoritative starting-weapon replacement seam" ) return 71;
+    if ( reason == "map exposes no base player-health variable" ) return 72;
+    if ( reason == "map exposes no composable player-damage override" ) return 73;
+    if ( reason == "map exposes no composable player-last-stand callback" ) return 74;
+    if ( reason == "map exposes no initialized ordinary traversal blockers" ) return 75;
+    if ( reason == "map exposes no initialized published perk/door power zones" ) return 76;
+    if ( reason == "map exposes no initialized registered global-power consumers" ) return 77;
+    if ( reason == "map exposes no initialized standard door capability" ) return 78;
+    if ( reason == "map exposes no initialized stock global-power consumers" ) return 79;
+    if ( reason == "map exposes no readable active-perk list" ) return 80;
+    if ( reason == "map exposes no registered ordinary firearm inventory" ) return 81;
+    if ( reason == "map exposes no registered ordinary weapon progression" ) return 82;
+    if ( reason == "map exposes no registered perk list" ) return 83;
+    if ( reason == "map exposes no registered weapon pool" ) return 84;
+    if ( reason == "map exposes no safe standard purchasable doors" ) return 85;
+    if ( reason == "map exposes no safely owned timed effect storage" ) return 86;
+    if ( reason == "map exposes no standard Wunderfizz machine or price" ) return 87;
+    if ( reason == "map exposes no standard between-round delay" ) return 88;
+    if ( reason == "map exposes no standard between-round delay callback" ) return 89;
+    if ( reason == "map exposes no standard death-point penalty" ) return 90;
+    if ( reason == "map exposes no standard game-start delay" ) return 91;
+    if ( reason == "map exposes no standard health-regeneration delay" ) return 92;
+    if ( reason == "map exposes no standard zombie spawn cadence" ) return 93;
+    if ( reason == "map exposes no standard zombie spawn cadence callback" ) return 94;
+    if ( reason == "map exposes no standard zombie-health curve" ) return 95;
+    if ( reason == "map exposes no standard zombie-speed curve" ) return 96;
     return 0;
 }
 zt_notice_reason_96( reason )
 {
-    if ( reason == "map has not published a standard power-up drop capability" ) return 97;
-    if ( reason == "map has not published a standard power-up timeout capability" ) return 98;
-    if ( reason == "map has not published a standard zombie spawn cadence" ) return 99;
-    if ( reason == "map has not published an actor-damage callback" ) return 100;
-    if ( reason == "map mode did not publish its stock startup power state" ) return 101;
-    if ( reason == "map mode starts with power already enabled" ) return 102;
-    if ( reason == "map owns Mystery Box teddy-bear chance" ) return 103;
-    if ( reason == "map owns a nonstandard death-point penalty" ) return 104;
-    if ( reason == "map owns its perk purchase hints or prices" ) return 105;
-    if ( reason == "map owns its trap purchase callbacks or prices" ) return 106;
-    if ( reason == "map owns the primary-weapon limit" ) return 107;
-    if ( reason == "map published an invalid bank denomination" ) return 108;
-    if ( reason == "map registered no activation-limited GobbleGums" ) return 109;
-    if ( reason == "map registered no compatible carried weapons" ) return 110;
-    if ( reason == "map registered no perks" ) return 111;
-    if ( reason == "map registered no round-limited GobbleGums" ) return 112;
-    if ( reason == "map registered no time-limited GobbleGums" ) return 113;
-    if ( reason == "map rejected its standard door-open requests" ) return 114;
-    if ( reason == "map replaced Mystery Box teddy-bear chance" ) return 115;
-    if ( reason == "map replaced a Mystery Box price; that location remains map-owned" ) return 116;
-    if ( reason == "map replaced the Wunderfizz price; its value remains map-owned" ) return 117;
-    if ( reason == "map replaced the primary-weapon limit" ) return 118;
-    if ( reason == "map replaces stock power-up pickup dispatch; classic Double Points/Insta-Kill remain map-owned" ) return 119;
-    if ( reason == "map starts with power already enabled" ) return 120;
-    if ( reason == "map supplies a custom Insta-Kill lifecycle and remains authoritative" ) return 121;
-    if ( reason == "map uses fixed-price legacy Mystery Box hints" ) return 122;
-    if ( reason == "map's published power consumers rejected activation" ) return 123;
-    if ( reason == "map's registered power consumers were already enabled" ) return 124;
-    if ( reason == "map's starting loadout already fills every primary slot" ) return 125;
-    if ( reason == "map's stock always-on power path completed" ) return 126;
-    if ( reason == "map's stock always-on power path did not initialize" ) return 127;
-    if ( reason == "map's stock global-power consumers rejected activation" ) return 128;
-    if ( reason == "map-composed candidates are preserved, while stock safety and ownership exclusions remain" ) return 129;
-    if ( reason == "map-owned Insta-Kill override preserved" ) return 130;
-    if ( reason == "map-owned or multi-FX timed lifecycle preserved" ) return 131;
-    if ( reason == "no second registered weapon matches the selected class" ) return 132;
-    if ( reason == "no selected Pack-a-Punched starting weapon supports Alternate Ammo Types" ) return 133;
-    if ( reason == "one-weapon-slot challenge takes precedence" ) return 134;
-    if ( reason == "opened common traversal blockers; custom, counter, airlock, and quest-owned blockers were preserved" ) return 135;
-    if ( reason == "opened every initialized ordinary door, linked barrier, debris group and Moon buy airlock" ) return 136;
-    if ( reason == "opened initialized ordinary traversal blockers; custom, counter, cycling-airlock and quest owners were preserved" ) return 137;
-    if ( reason == "ordinary enemy hits compose outside the map's actor-damage pipeline" ) return 138;
-    if ( reason == "pickup-bound stock lifecycle owner" ) return 139;
-    if ( reason == "pickup-owned fixed effects; timer-owned remaining effects" ) return 140;
-    if ( reason == "player already owns every registered perk" ) return 141;
-    if ( reason == "player-only power-up did not publish player timer vars; broader scopes were left untouched" ) return 142;
-    if ( reason == "powered all four stock grids and their portals/Pack-a-Punch; ritual count and completion remain map-owned" ) return 143;
-    if ( reason == "powered all six generator consumers; capture count and Pack-a-Punch progression remain map-owned" ) return 144;
+    if ( reason == "map exposes no stock-compatible perk machines" ) return 97;
+    if ( reason == "map has no per-player standard Mystery Box use gate" ) return 98;
+    if ( reason == "map has no standard perk machines" ) return 99;
+    if ( reason == "map has no standard purchase traps" ) return 100;
+    if ( reason == "map has not published a compatible BO2 bank capability" ) return 101;
+    if ( reason == "map has not published a finalized stock GobbleGum registry" ) return 102;
+    if ( reason == "map has not published a perk-limit capability" ) return 103;
+    if ( reason == "map has not published a registered timed power-up capability" ) return 104;
+    if ( reason == "map has not published a standard Mystery Box" ) return 105;
+    if ( reason == "map has not published a standard Mystery Box registry" ) return 106;
+    if ( reason == "map has not published a standard between-round delay" ) return 107;
+    if ( reason == "map has not published a standard power-up drop capability" ) return 108;
+    if ( reason == "map has not published a standard power-up timeout capability" ) return 109;
+    if ( reason == "map has not published a standard zombie spawn cadence" ) return 110;
+    if ( reason == "map has not published an actor-damage callback" ) return 111;
+    if ( reason == "map mode did not publish its stock startup power state" ) return 112;
+    if ( reason == "map mode starts with power already enabled" ) return 113;
+    if ( reason == "map owns Mystery Box teddy-bear chance" ) return 114;
+    if ( reason == "map owns a get-up or role-conversion last-stand transaction" ) return 115;
+    if ( reason == "map owns a nonstandard death-point penalty" ) return 116;
+    if ( reason == "map owns a nonstandard outer last-stand transaction" ) return 117;
+    if ( reason == "map owns a role-conversion last-stand transaction" ) return 118;
+    if ( reason == "map owns its perk purchase hints or prices" ) return 119;
+    if ( reason == "map owns its trap purchase callbacks or prices" ) return 120;
+    if ( reason == "map owns the primary-weapon limit" ) return 121;
+    if ( reason == "map published an invalid bank denomination" ) return 122;
+    if ( reason == "map registered no activation-limited GobbleGums" ) return 123;
+    if ( reason == "map registered no compatible carried weapons" ) return 124;
+    if ( reason == "map registered no perks" ) return 125;
+    if ( reason == "map registered no round-limited GobbleGums" ) return 126;
+    if ( reason == "map registered no time-limited GobbleGums" ) return 127;
+    if ( reason == "map rejected its standard door-open requests" ) return 128;
+    if ( reason == "map removed the standard Mystery Box registry" ) return 129;
+    if ( reason == "map replaced Mystery Box teddy-bear chance" ) return 130;
+    if ( reason == "map replaced a Mystery Box price; that location remains map-owned" ) return 131;
+    if ( reason == "map replaced the Wunderfizz price; its value remains map-owned" ) return 132;
+    if ( reason == "map replaced the primary-weapon limit" ) return 133;
+    if ( reason == "map replaces stock power-up pickup dispatch; classic Double Points/Insta-Kill remain map-owned" ) return 134;
+    if ( reason == "map retained-perk registry is not an array" ) return 135;
+    if ( reason == "map starts with power already enabled" ) return 136;
+    if ( reason == "map supplies a custom Insta-Kill lifecycle and remains authoritative" ) return 137;
+    if ( reason == "map uses fixed-price legacy Mystery Box hints" ) return 138;
+    if ( reason == "map's published power consumers rejected activation" ) return 139;
+    if ( reason == "map's registered power consumers were already enabled" ) return 140;
+    if ( reason == "map's starting loadout already fills every primary slot" ) return 141;
+    if ( reason == "map's stock always-on power path completed" ) return 142;
+    if ( reason == "map's stock always-on power path did not initialize" ) return 143;
+    if ( reason == "map's stock global-power consumers rejected activation" ) return 144;
     return 0;
 }
 zt_notice_reason_144( reason )
 {
-    if ( reason == "powered all six stock traversal stairs and published perk/door transformers; quest outputs 20/21/23 remain map-owned" ) return 145;
-    if ( reason == "powered generator perk consumers; captures, Mystery Boxes, and Pack-a-Punch remain map-owned" ) return 146;
-    if ( reason == "powered perk shock boxes; other Afterlife panels and quest state remain map-owned" ) return 147;
-    if ( reason == "powered published perk/door transformers; other Beast and quest interactions remain map-owned" ) return 148;
-    if ( reason == "powered registered consumers; the buildable switch, reactor, Avogadro, gates, bus, morse code, and quest flags remain map-owned" ) return 149;
-    if ( reason == "powered registered global consumers; custom switches, local power, and quest state remain map-owned" ) return 150;
-    if ( reason == "powered the map's published perk/door consumer zones" ) return 151;
-    if ( reason == "powered the stock global consumers and Verruckt trap controls" ) return 152;
-    if ( reason == "powered the stock global consumers, Pack-a-Punch and Giant traversal links" ) return 153;
-    if ( reason == "race-team Double Points has additional map-owned state and remains stock" ) return 154;
-    if ( reason == "recognized stock map required" ) return 155;
-    if ( reason == "registered upgrades only; custom upgrade systems remain map-owned" ) return 156;
-    if ( reason == "round logic began before the tweak could be applied" ) return 157;
-    if ( reason == "scaled from BO2's stock base and composed with perk/map health bonuses" ) return 158;
-    if ( reason == "scaled the stock baseline before map special-round thresholds" ) return 159;
-    if ( reason == "selected Alternate Ammo Type is not registered by this map" ) return 160;
-    if ( reason == "selected NO ADDITIONAL RULE for this match" ) return 161;
-    if ( reason == "selected NO MYSTERY BOX for this match" ) return 162;
-    if ( reason == "selected NO PERKS for this match" ) return 163;
-    if ( reason == "selected RANDOM LOADOUT for this match" ) return 164;
-    if ( reason == "selected WALL WEAPONS ONLY for this match" ) return 165;
-    if ( reason == "selected equipment is not registered by this map" ) return 166;
-    if ( reason == "selected grenade is not registered by this map" ) return 167;
-    if ( reason == "selected weapon is not registered by this map" ) return 168;
-    if ( reason == "standard Mystery Boxes disabled" ) return 169;
-    if ( reason == "standard Mystery Boxes disabled; scripted quest rewards remain map-owned" ) return 170;
-    if ( reason == "standard door capability disappeared during map initialization" ) return 171;
-    if ( reason == "standard purchases and ZTweaks grants are blocked; scripted quest grants remain map-owned" ) return 172;
-    if ( reason == "stock barriers without map-authored delays only" ) return 173;
-    if ( reason == "stock blocker system has no unowned repair delay" ) return 174;
-    if ( reason == "stock classic co-op already permits unlimited ordinary downs" ) return 175;
-    if ( reason == "stock earned score and box refunds are scaled; direct map score restoration remains map-owned" ) return 176;
-    if ( reason == "stock earned score is scaled; direct map score restoration remains map-owned" ) return 177;
-    if ( reason == "stock exposes completion notifications but no safe per-player pre-use veto" ) return 178;
-    if ( reason == "stock ordinary blocker routes did not publish completion" ) return 179;
-    if ( reason == "stock purchase-triggered relocation disabled; explicit map/quest moves remain map-owned" ) return 180;
-    if ( reason == "stock removes perks inside its private last-stand pipeline" ) return 181;
-    if ( reason == "stock weapon grant rejected the registered Pack-a-Punch upgrade" ) return 182;
-    if ( reason == "stock weapon grant rejected the selected firearm" ) return 183;
-    if ( reason == "the map does not publish a safe starting-zone exit set" ) return 184;
-    if ( reason == "the map exposes no standard bleed-out duration" ) return 185;
-    if ( reason == "the map exposes no universal safe Pack-a-Punch disable callback" ) return 186;
-    if ( reason == "the registered weapon pool cannot guarantee quest-safe replacement" ) return 187;
-    if ( reason == "the selected starting weapon has no registered Pack-a-Punch upgrade" ) return 188;
-    if ( reason == "unknown weapon class" ) return 189;
-    if ( reason == "waiting for game over" ) return 190;
-    if ( reason == "weapon assets still own the absolute engine ammo ceiling" ) return 191;
+    if ( reason == "map-composed candidates are preserved, while stock safety and ownership exclusions remain" ) return 145;
+    if ( reason == "map-owned Insta-Kill override preserved" ) return 146;
+    if ( reason == "map-owned inventory has no ordinary starter slot to replace" ) return 147;
+    if ( reason == "map-owned inventory occupies every primary slot" ) return 148;
+    if ( reason == "map-owned or multi-FX timed lifecycle preserved" ) return 149;
+    if ( reason == "map-owned respawn inventory takes precedence" ) return 150;
+    if ( reason == "map-retained perks and solo Quick Revive keep their stock rules" ) return 151;
+    if ( reason == "map-retained perks, solo Quick Revive and Tombstone keep their stock rules" ) return 152;
+    if ( reason == "no remaining compatible firearms; inventory preserved" ) return 153;
+    if ( reason == "no second registered weapon matches the selected class" ) return 154;
+    if ( reason == "no selected Pack-a-Punched starting weapon supports Alternate Ammo Types" ) return 155;
+    if ( reason == "one standard box roll per player" ) return 156;
+    if ( reason == "one-weapon-slot challenge takes precedence" ) return 157;
+    if ( reason == "only eligible ordinary firearms fit the current map weapon limit" ) return 158;
+    if ( reason == "opened common traversal blockers; custom, counter, airlock, and quest-owned blockers were preserved" ) return 159;
+    if ( reason == "opened every initialized ordinary door, linked barrier, debris group and Moon buy airlock" ) return 160;
+    if ( reason == "opened initialized ordinary traversal blockers; custom, counter, cycling-airlock and quest owners were preserved" ) return 161;
+    if ( reason == "ordinary enemy hits compose outside the map's actor-damage pipeline" ) return 162;
+    if ( reason == "ordinary firearms restored after stock bleed-out" ) return 163;
+    if ( reason == "ordinary progression slot advances on zombie kills" ) return 164;
+    if ( reason == "ordinary weapon sequence completed" ) return 165;
+    if ( reason == "pickup-bound stock lifecycle owner" ) return 166;
+    if ( reason == "pickup-owned fixed effects; timer-owned remaining effects" ) return 167;
+    if ( reason == "player already owns every registered perk" ) return 168;
+    if ( reason == "player-only power-up did not publish player timer vars; broader scopes were left untouched" ) return 169;
+    if ( reason == "powered all four stock grids and their portals/Pack-a-Punch; ritual count and completion remain map-owned" ) return 170;
+    if ( reason == "powered all six generator consumers; capture count and Pack-a-Punch progression remain map-owned" ) return 171;
+    if ( reason == "powered all six stock traversal stairs and published perk/door transformers; quest outputs 20/21/23 remain map-owned" ) return 172;
+    if ( reason == "powered generator perk consumers; captures, Mystery Boxes, and Pack-a-Punch remain map-owned" ) return 173;
+    if ( reason == "powered perk shock boxes; other Afterlife panels and quest state remain map-owned" ) return 174;
+    if ( reason == "powered published perk/door transformers; other Beast and quest interactions remain map-owned" ) return 175;
+    if ( reason == "powered registered consumers; the buildable switch, reactor, Avogadro, gates, bus, morse code, and quest flags remain map-owned" ) return 176;
+    if ( reason == "powered registered global consumers; custom switches, local power, and quest state remain map-owned" ) return 177;
+    if ( reason == "powered the map's published perk/door consumer zones" ) return 178;
+    if ( reason == "powered the stock global consumers and Verruckt trap controls" ) return 179;
+    if ( reason == "powered the stock global consumers, Pack-a-Punch and Giant traversal links" ) return 180;
+    if ( reason == "progression gun was replaced or upgraded; preserving player inventory" ) return 181;
+    if ( reason == "progression gun was upgraded; preserving player inventory" ) return 182;
+    if ( reason == "race-team Double Points has additional map-owned state and remains stock" ) return 183;
+    if ( reason == "recognized stock map required" ) return 184;
+    if ( reason == "registered upgrades only; custom upgrade systems remain map-owned" ) return 185;
+    if ( reason == "repeated stock timed drops are consumed before their effects reset" ) return 186;
+    if ( reason == "revive-time change applies next match" ) return 187;
+    if ( reason == "revive-time change applies next match; current revive owner remains active" ) return 188;
+    if ( reason == "round logic began before the tweak could be applied" ) return 189;
+    if ( reason == "safe return deferred while the starting area is obstructed" ) return 190;
+    if ( reason == "scaled from BO2's stock base and composed with perk/map health bonuses" ) return 191;
+    if ( reason == "scaled the stock baseline before map special-round thresholds" ) return 192;
+    return 0;
+}
+zt_notice_reason_192( reason )
+{
+    if ( reason == "selected Alternate Ammo Type is not registered by this map" ) return 193;
+    if ( reason == "selected NO ADDITIONAL RULE for this match" ) return 194;
+    if ( reason == "selected NO MYSTERY BOX for this match" ) return 195;
+    if ( reason == "selected NO PERKS for this match" ) return 196;
+    if ( reason == "selected RANDOM LOADOUT for this match" ) return 197;
+    if ( reason == "selected WALL WEAPONS ONLY for this match" ) return 198;
+    if ( reason == "selected equipment is not registered by this map" ) return 199;
+    if ( reason == "selected grenade is not registered by this map" ) return 200;
+    if ( reason == "selected weapon is not registered by this map" ) return 201;
+    if ( reason == "solo Quick Revive owns a separate auto-revive transaction" ) return 202;
+    if ( reason == "standard Mystery Boxes disabled" ) return 203;
+    if ( reason == "standard Mystery Boxes disabled; scripted quest rewards remain map-owned" ) return 204;
+    if ( reason == "standard door capability disappeared during map initialization" ) return 205;
+    if ( reason == "standard purchases and ZTweaks grants are blocked; scripted quest grants remain map-owned" ) return 206;
+    if ( reason == "stock barriers without map-authored delays only" ) return 207;
+    if ( reason == "stock blocker system has no unowned repair delay" ) return 208;
+    if ( reason == "stock classic co-op already permits unlimited ordinary downs" ) return 209;
+    if ( reason == "stock earned score and box refunds are scaled; direct map score restoration remains map-owned" ) return 210;
+    if ( reason == "stock earned score is scaled; direct map score restoration remains map-owned" ) return 211;
+    if ( reason == "stock exposes completion notifications but no safe per-player pre-use veto" ) return 212;
+    if ( reason == "stock ordinary blocker routes did not publish completion" ) return 213;
+    if ( reason == "stock perk-removal thinker honors selected retained perks" ) return 214;
+    if ( reason == "stock purchase-triggered relocation disabled; explicit map/quest moves remain map-owned" ) return 215;
+    if ( reason == "stock rejected a safe ordinary weapon grant" ) return 216;
+    if ( reason == "stock rejected the next ordinary firearm" ) return 217;
+    if ( reason == "stock removes perks inside its private last-stand pipeline" ) return 218;
+    if ( reason == "stock revive function was not loaded" ) return 219;
+    if ( reason == "stock revive transaction scaled without changing perk and map ownership" ) return 220;
+    if ( reason == "stock weapon grant rejected the registered Pack-a-Punch upgrade" ) return 221;
+    if ( reason == "stock weapon grant rejected the selected firearm" ) return 222;
+    if ( reason == "the map does not publish a safe starting-zone exit set" ) return 223;
+    if ( reason == "the map exposes no standard bleed-out duration" ) return 224;
+    if ( reason == "the map exposes no universal safe Pack-a-Punch disable callback" ) return 225;
+    if ( reason == "the registered weapon pool cannot guarantee quest-safe replacement" ) return 226;
+    if ( reason == "the selected starting weapon has no registered Pack-a-Punch upgrade" ) return 227;
+    if ( reason == "unknown weapon class" ) return 228;
+    if ( reason == "waiting for a safe player inventory" ) return 229;
+    if ( reason == "waiting for a safe starting-area position" ) return 230;
+    if ( reason == "waiting for game over" ) return 231;
+    if ( reason == "weapon assets still own the absolute engine ammo ceiling" ) return 232;
     return 0;
 }
 // Generated from the portable warning transport template. Never hold spawn.
@@ -969,7 +1062,7 @@ zt_has_match_tweaks()
 
 zt_has_player_tweaks()
 {
-    return level.zt.config.player_health > 0 || level.zt.config.max_grenades > 0 || level.zt.config.max_equipment > 0 || level.zt.config.starting_weapon != "default" || level.zt.config.secondary_starting_weapon != "default" || level.zt.config.random_starting_perks > 0 || level.zt.config.starting_grenade != "default" || level.zt.config.starting_grenade_count > 0 || level.zt.config.starting_equipment != "default" || level.zt.config.starting_equipment_count > 0 || level.zt.config.start_all_perks || level.zt.config.player_speed > 0 || level.zt.config.starting_ammo != 0 || level.zt.config.reserve_ammo > 0 || level.zt.config.starting_weapon_upgraded != "default" || level.zt.config.spawn_protection > 0 || level.zt.config.challenge_random_loadout;
+    return level.zt.config.player_health > 0 || level.zt.config.max_grenades > 0 || level.zt.config.max_equipment > 0 || level.zt.config.starting_weapon != "default" || level.zt.config.secondary_starting_weapon != "default" || level.zt.config.random_starting_perks > 0 || level.zt.config.starting_grenade != "default" || level.zt.config.starting_grenade_count > 0 || level.zt.config.starting_equipment != "default" || level.zt.config.starting_equipment_count > 0 || level.zt.config.start_all_perks || level.zt.config.player_speed > 0 || level.zt.config.starting_ammo != 0 || level.zt.config.reserve_ammo > 0 || level.zt.config.starting_weapon_upgraded != "default" || level.zt.config.spawn_protection > 0 || level.zt.config.challenge_random_loadout || level.zt.config.challenge_gun_game;
 }
 
 zt_has_damage_tweaks()
@@ -1262,7 +1355,7 @@ zt_t6_unsafe_random_weapon( weapon )
 
 zt_find_starting_weapon( choice, excluded )
 {
-    if ( !isdefined( level.zombie_weapons ) )
+    if ( !isdefined( level.zombie_weapons ) || !isdefined( level.zombie_weapons_upgraded ) )
         return "";
 
     weapons = zt_starting_weapon_candidates( choice );
@@ -2461,6 +2554,8 @@ zt_apply_spawn_inventory()
     zt_refresh_spawn_config();
     if ( !self zt_player_tweaks_allowed() )
     {
+        self.zt_keep_weapons_candidate = undefined;
+        self.zt_keep_weapons_pending = undefined;
         self zt_release_spawn_ownership();
         return;
     }
@@ -2479,6 +2574,8 @@ zt_apply_spawn_inventory()
     self zt_apply_player_secondary_starting_weapon();
     self zt_apply_starting_upgrades();
     self zt_apply_starting_ammo();
+    self zt_keep_weapons_restore();
+    self zt_gun_game_spawn();
     self zt_apply_starting_throwables();
     self zt_apply_random_starting_perks();
     if ( level.zt.config.spawn_protection > 0 && zt_true( level.zt_player_damage_installed ) )
@@ -3895,6 +3992,7 @@ zt_powerup_controls_install()
     // This watcher reads the duration dvar at each activation boundary. With
     // GAME DEFAULT selected it only observes the registry and changes nothing.
     level thread zt_powerup_effect_watch();
+    level thread zt_powerup_ignore_owner_watch();
 
     if ( isdefined( level._powerup_timeout_custom_time ) )
     {
@@ -4114,6 +4212,87 @@ zt_powerup_filter_watch()
 }
 
 
+zt_powerup_ignore_owner_watch()
+{
+    level endon( "end_game" );
+    while ( 1 )
+    {
+        if ( zt_cfg_string( "zt_powerup_stacking", "default" ) != "ignore" )
+        {
+            wait 0.5;
+            continue;
+        }
+        if ( zt_true( level.zt.powerup_ignore_yielded ) )
+        {
+            zt_transition_feature( "powerup_stacking", "degraded", "a map or mod owns the power-up pickup check" );
+            wait 0.5;
+            continue;
+        }
+        current = level._powerup_grab_check;
+        if ( !zt_true( level.zt.powerup_ignore_claimed ) )
+        {
+            level.zt.powerup_ignore_prev = current;
+            level._powerup_grab_check = ::zt_powerup_ignore_pre_grab;
+            level.zt.powerup_ignore_claimed = 1;
+        }
+        else if ( current != ::zt_powerup_ignore_pre_grab )
+        {
+            // Never steal a late map/Z-mod owner or chain a callback that
+            // might itself have captured our wrapper.
+            level.zt.powerup_ignore_yielded = 1;
+            zt_transition_feature( "powerup_stacking", "degraded", "a map or mod owns the power-up pickup check" );
+            wait 0.5;
+            continue;
+        }
+        zt_transition_feature( "powerup_stacking", "active", "repeated stock timed drops are consumed before their effects reset" );
+        wait 0.25;
+    }
+}
+
+zt_powerup_ignore_pre_grab( player )
+{
+    if ( isdefined( level.zt.powerup_ignore_prev ) && !self [[ level.zt.powerup_ignore_prev ]]( player ) ) return false;
+    if ( !isdefined( self ) || zt_true( level.zt.powerup_ignore_yielded ) || zt_cfg_string( "zt_powerup_stacking", "default" ) != "ignore" || !isdefined( player ) || !isplayer( player ) || isdefined( level.zombie_powerup_grab_func ) ) return true;
+    if ( zt_true( self.zt_powerup_ignore_consuming ) ) return false;
+    if ( !self zt_powerup_ignore_duplicate_active( player ) ) return true;
+    self.zt_powerup_ignore_consuming = 1;
+    self thread zt_powerup_ignore_consume();
+    return false;
+}
+
+zt_powerup_ignore_duplicate_active( player )
+{
+    if ( !isdefined( self.powerup_name ) || !isdefined( level.zombie_powerups ) || !isdefined( level.zombie_powerups[self.powerup_name] ) || !isdefined( level.zombie_vars ) ) return false;
+    powerup = level.zombie_powerups[self.powerup_name];
+    if ( !isdefined( powerup.time_name ) || !isdefined( powerup.on_name ) ) return false;
+    // Fixed stock names/keys prevent an identically named custom power-up
+    // from being consumed before its map-authored effect can run.
+    if ( self.powerup_name == "double_points" && ( powerup.time_name != "zombie_powerup_point_doubler_time" || powerup.on_name != "zombie_powerup_point_doubler_on" ) ) return false;
+    else if ( self.powerup_name == "insta_kill" && ( powerup.time_name != "zombie_powerup_insta_kill_time" || powerup.on_name != "zombie_powerup_insta_kill_on" || isdefined( level.insta_kill_powerup_override ) ) ) return false;
+    else if ( self.powerup_name == "fire_sale" && ( powerup.time_name != "zombie_powerup_fire_sale_time" || powerup.on_name != "zombie_powerup_fire_sale_on" ) ) return false;
+    else if ( self.powerup_name == "bonfire_sale" && ( powerup.time_name != "zombie_powerup_bonfire_sale_time" || powerup.on_name != "zombie_powerup_bonfire_sale_on" ) ) return false;
+    else if ( self.powerup_name != "double_points" && self.powerup_name != "insta_kill" && self.powerup_name != "fire_sale" && self.powerup_name != "bonfire_sale" ) return false;
+    vars = undefined;
+    if ( isdefined( powerup.solo ) && powerup.solo && isdefined( player.zombie_vars ) ) vars = player.zombie_vars;
+    else if ( isdefined( player.team ) && isdefined( level.zombie_vars[player.team] ) && isdefined( level.zombie_vars[player.team][powerup.on_name] ) ) vars = level.zombie_vars[player.team];
+    else if ( isdefined( level.zombie_vars[powerup.on_name] ) ) vars = level.zombie_vars;
+    if ( !isdefined( vars ) || !isdefined( vars[powerup.on_name] ) || !isdefined( vars[powerup.time_name] ) ) return false;
+    return zt_true( vars[powerup.on_name] ) && vars[powerup.time_name] > 0;
+}
+
+zt_powerup_ignore_consume()
+{
+    // The stock pre-grab caller must observe our false result before the
+    // terminal notification releases its own pickup/timeout workers.
+    wait 0.05;
+    if ( !isdefined( self ) ) return;
+    // A separate thread lets the stock pre-grab check return false before
+    // ending its own powerup_grab thread. Use the stock cleanup so the active
+    // drop registry and all timeout/movement watchers release together.
+    self notify( "powerup_grabbed" );
+    if ( isdefined( self ) ) self maps\mp\zombies\_zm_powerups::powerup_delete();
+}
+
 zt_powerup_effect_watch()
 {
     level endon( "end_game" );
@@ -4192,12 +4371,6 @@ zt_powerup_effect_watch()
                 }
             }
         }
-
-        // BO2 exposes the timers only after pickup dispatch. By then every
-        // stock/custom side effect has already fired, so IGNORE cannot be
-        // implemented without pretending to undo an unknown lifecycle.
-        if ( requested_stacking == "ignore" )
-            zt_feature( "powerup_stacking", "unavailable", "BO2 has no safe pre-dispatch seam for ignoring a repeated timed power-up; stock stacking remains in control" );
 
         active_state = 0;
         state_keys = getarraykeys( level.zt.powerup_effect_state );
@@ -5315,6 +5488,11 @@ zt_tomb_bunker_open()
 
 zt_start_doors_install()
 {
+    if ( level.zt.config.challenge_starting_room )
+    {
+        zt_feature( "start_doors_open", "inherit", "Starting Room Only takes precedence" );
+        return;
+    }
     level endon( "end_game" );
 
     if ( zt_map_script() == "zm_transit_dr" || zt_game_mode_name() == "zcleansed" )
@@ -6186,7 +6364,12 @@ zt_fast_barrier_rebuild_install()
         {
             foreach ( barrier in level.exterior_goals )
             {
-                if ( !isdefined( barrier ) || !isdefined( barrier.barrier_chunks ) || barrier.barrier_chunks.size == 0 || isdefined( barrier.zt_fast_repair_checked ) )
+                if ( !isdefined( barrier ) || isdefined( barrier.zt_fast_repair_checked ) )
+                    continue;
+                // Stock blocker_init deliberately empties barrier_chunks when
+                // it binds an animated zbarrier. Both forms use the same
+                // do_post_chunk_repair_delay on this exterior-goal struct.
+                if ( !isdefined( barrier.zbarrier ) && ( !isdefined( barrier.barrier_chunks ) || barrier.barrier_chunks.size == 0 ) )
                     continue;
                 barrier.zt_fast_repair_checked = 1;
                 if ( isdefined( barrier.script_delay ) || isdefined( barrier.script_delay_min ) || isdefined( barrier.script_delay_max ) )
@@ -6347,6 +6530,204 @@ zt_point_gain_rebaseline()
     }
 }
 
+// BO2's ordinary co-op revive loop has no callback for its hardcoded local
+// duration. Plutonium's function detour changes only this one stock function;
+// a map-owned/custom route or an existing detour wins before we install it.
+zt_t6_revive_time_install()
+{
+    if ( !zt_stock_bo2_health_route() || zt_game_mode_name() == "zcleansed" )
+    {
+        zt_feature( "revive_time", "unavailable", "recognized stock map required" );
+        return;
+    }
+    normal = getfunction( "maps/mp/zombies/_zm_laststand", "revive_do_revive" );
+    if ( !isdefined( normal ) )
+    {
+        zt_feature( "revive_time", "unavailable", "stock revive function was not loaded" );
+        return;
+    }
+    prior = getdetour( normal );
+    if ( isdefined( prior ) && prior != normal )
+    {
+        zt_feature( "revive_time", "degraded", "another mod owns the stock revive function" );
+        return;
+    }
+    // Mob's Afterlife revive uses a separate map function. Preflight both
+    // targets before replacing either, so Mob never gets a half-patched path.
+    if ( tolower( getdvar( "mapname" ) ) == "zm_prison" )
+    {
+        afterlife = getfunction( "maps/mp/zombies/_zm_afterlife", "afterlife_revive_do_revive" );
+        if ( !isdefined( afterlife ) )
+        {
+            zt_feature( "revive_time", "unavailable", "stock revive function was not loaded" );
+            return;
+        }
+        prior = getdetour( afterlife );
+        if ( isdefined( prior ) && prior != afterlife )
+        {
+            zt_feature( "revive_time", "degraded", "another mod owns the stock revive function" );
+            return;
+        }
+        // These helpers exist only in Mob's fastfile. A direct :: reference
+        // makes every map link them even when this setting is OFF. Resolve
+        // the complete dependency set on Mob before installing either detour.
+        is_reviving_afterlife = getfunction( "maps/mp/zombies/_zm_afterlife", "is_reviving_afterlife" );
+        revive_clean_up_on_gameover = getfunction( "maps/mp/zombies/_zm_afterlife", "revive_clean_up_on_gameover" );
+        revive_fx_clean_up_on_disconnect = getfunction( "maps/mp/zombies/_zm_afterlife", "revive_fx_clean_up_on_disconnect" );
+        if ( !isdefined( is_reviving_afterlife ) || !isdefined( revive_clean_up_on_gameover ) || !isdefined( revive_fx_clean_up_on_disconnect ) )
+        {
+            zt_feature( "revive_time", "unavailable", "stock revive function was not loaded" );
+            return;
+        }
+        level.zt.is_reviving_afterlife = is_reviving_afterlife;
+        level.zt.revive_clean_up_on_gameover = revive_clean_up_on_gameover;
+        level.zt.revive_fx_clean_up_on_disconnect = revive_fx_clean_up_on_disconnect;
+        replacefunc( afterlife, ::zt_t6_afterlife_revive_do_revive, -1 );
+    }
+    replacefunc( normal, ::zt_t6_revive_do_revive, -1 );
+    level.zt.revive_time_applied = level.zt.config.revive_time;
+    level.zt.revive_time_detour_claimed = 1;
+    zt_feature( "revive_time", "active", "stock revive transaction scaled without changing perk and map ownership" );
+}
+
+zt_t6_revive_do_revive( playerbeingrevived, revivergun )
+{
+    assert( self maps\mp\zombies\_zm_laststand::is_reviving( playerbeingrevived ) );
+    revivetime = 3;
+    if ( self hasperk( "specialty_quickrevive" ) ) revivetime = revivetime / 2;
+    if ( self maps\mp\zombies\_zm_pers_upgrades_functions::pers_revive_active() ) revivetime = revivetime * 0.5;
+    revivetime = revivetime * level.zt.revive_time_applied / 100.0;
+
+    timer = 0;
+    revived = 0;
+    playerbeingrevived.revivetrigger.beingrevived = 1;
+    playerbeingrevived.revive_hud settext( &"ZOMBIE_PLAYER_IS_REVIVING_YOU", self );
+    playerbeingrevived maps\mp\zombies\_zm_laststand::revive_hud_show_n_fade( 3.0 );
+    playerbeingrevived.revivetrigger sethintstring( "" );
+    if ( isplayer( playerbeingrevived ) ) playerbeingrevived startrevive( self );
+    if ( !isdefined( self.reviveprogressbar ) ) self.reviveprogressbar = self createprimaryprogressbar();
+    if ( !isdefined( self.revivetexthud ) ) self.revivetexthud = newclienthudelem( self );
+    self thread maps\mp\zombies\_zm_laststand::laststand_clean_up_on_disconnect( playerbeingrevived, revivergun );
+    if ( !isdefined( self.is_reviving_any ) ) self.is_reviving_any = 0;
+    self.is_reviving_any++;
+    self thread maps\mp\zombies\_zm_laststand::laststand_clean_up_reviving_any( playerbeingrevived );
+    self.reviveprogressbar updatebar( 0.01, 1 / revivetime );
+    self.revivetexthud.alignx = "center";
+    self.revivetexthud.aligny = "middle";
+    self.revivetexthud.horzalign = "center";
+    self.revivetexthud.vertalign = "bottom";
+    self.revivetexthud.y = -113;
+    if ( self issplitscreen() ) self.revivetexthud.y = -347;
+    self.revivetexthud.foreground = 1;
+    self.revivetexthud.font = "default";
+    self.revivetexthud.fontscale = 1.8;
+    self.revivetexthud.alpha = 1;
+    self.revivetexthud.color = ( 1, 1, 1 );
+    self.revivetexthud.hidewheninmenu = 1;
+    if ( self maps\mp\zombies\_zm_pers_upgrades_functions::pers_revive_active() ) self.revivetexthud.color = ( 0.5, 0.5, 1.0 );
+    self.revivetexthud settext( &"ZOMBIE_REVIVING" );
+    self thread maps\mp\zombies\_zm_laststand::check_for_failed_revive( playerbeingrevived );
+    while ( self maps\mp\zombies\_zm_laststand::is_reviving( playerbeingrevived ) )
+    {
+        wait 0.05;
+        timer = timer + 0.05;
+        if ( self maps\mp\zombies\_zm_laststand::player_is_in_laststand() ) break;
+        if ( isdefined( playerbeingrevived.revivetrigger.auto_revive ) && playerbeingrevived.revivetrigger.auto_revive == 1 ) break;
+        if ( timer >= revivetime )
+        {
+            revived = 1;
+            break;
+        }
+    }
+    if ( isdefined( self.reviveprogressbar ) ) self.reviveprogressbar destroyelem();
+    if ( isdefined( self.revivetexthud ) ) self.revivetexthud destroy();
+    if ( isdefined( playerbeingrevived.revivetrigger.auto_revive ) && playerbeingrevived.revivetrigger.auto_revive == 1 )
+    {
+    }
+    else if ( !revived && isplayer( playerbeingrevived ) ) playerbeingrevived stoprevive( self );
+    playerbeingrevived.revivetrigger sethintstring( &"ZOMBIE_BUTTON_TO_REVIVE_PLAYER" );
+    playerbeingrevived.revivetrigger.beingrevived = 0;
+    self notify( "do_revive_ended_normally" );
+    self.is_reviving_any--;
+    if ( !revived ) playerbeingrevived thread maps\mp\zombies\_zm_laststand::checkforbleedout( self );
+    return revived;
+}
+
+// Mob's Afterlife revive is a separate stock transaction. Keep its sounds,
+// FX, cleanup and one-second ghost modifier; scale only its local duration.
+zt_t6_afterlife_revive_do_revive( playerbeingrevived, revivergun )
+{
+    assert( self [[ level.zt.is_reviving_afterlife ]]( playerbeingrevived ) );
+    revivetime = 3;
+    playloop = 0;
+    if ( isdefined( self.afterlife ) && self.afterlife )
+    {
+        playloop = 1;
+        revivetime = 1;
+    }
+    revivetime = revivetime * level.zt.revive_time_applied / 100.0;
+    timer = 0;
+    revived = 0;
+    playerbeingrevived.revivetrigger.beingrevived = 1;
+    playerbeingrevived.revive_hud settext( &"GAME_PLAYER_IS_REVIVING_YOU", self );
+    playerbeingrevived maps\mp\zombies\_zm_laststand::revive_hud_show_n_fade( 3.0 );
+    playerbeingrevived.revivetrigger sethintstring( "" );
+    if ( isplayer( playerbeingrevived ) ) playerbeingrevived startrevive( self );
+    if ( !isdefined( self.reviveprogressbar ) ) self.reviveprogressbar = self createprimaryprogressbar();
+    if ( !isdefined( self.revivetexthud ) ) self.revivetexthud = newclienthudelem( self );
+    self thread [[ level.zt.revive_clean_up_on_gameover ]]();
+    self thread maps\mp\zombies\_zm_laststand::laststand_clean_up_on_disconnect( playerbeingrevived, revivergun );
+    if ( !isdefined( self.is_reviving_any ) ) self.is_reviving_any = 0;
+    self.is_reviving_any++;
+    self thread maps\mp\zombies\_zm_laststand::laststand_clean_up_reviving_any( playerbeingrevived );
+    self.reviveprogressbar updatebar( 0.01, 1 / revivetime );
+    self.revivetexthud.alignx = "center";
+    self.revivetexthud.aligny = "middle";
+    self.revivetexthud.horzalign = "center";
+    self.revivetexthud.vertalign = "bottom";
+    self.revivetexthud.y = -113;
+    if ( self issplitscreen() ) self.revivetexthud.y = -347;
+    self.revivetexthud.foreground = 1;
+    self.revivetexthud.font = "default";
+    self.revivetexthud.fontscale = 1.8;
+    self.revivetexthud.alpha = 1;
+    self.revivetexthud.color = ( 1, 1, 1 );
+    self.revivetexthud.hidewheninmenu = 1;
+    if ( self maps\mp\zombies\_zm_pers_upgrades_functions::pers_revive_active() ) self.revivetexthud.color = ( 0.5, 0.5, 1.0 );
+    self.revivetexthud settext( &"GAME_REVIVING" );
+    self thread maps\mp\zombies\_zm_laststand::check_for_failed_revive( playerbeingrevived );
+    e_fx = spawn( "script_model", playerbeingrevived.revivetrigger.origin );
+    e_fx setmodel( "tag_origin" );
+    e_fx thread [[ level.zt.revive_fx_clean_up_on_disconnect ]]( playerbeingrevived );
+    playfxontag( level._effect["afterlife_leave"], e_fx, "tag_origin" );
+    if ( isdefined( playloop ) && playloop ) e_fx playloopsound( "zmb_afterlife_reviving", 0.05 );
+    while ( self [[ level.zt.is_reviving_afterlife ]]( playerbeingrevived ) )
+    {
+        wait 0.05;
+        timer = timer + 0.05;
+        if ( self maps\mp\zombies\_zm_laststand::player_is_in_laststand() ) break;
+        if ( isdefined( playerbeingrevived.revivetrigger.auto_revive ) && playerbeingrevived.revivetrigger.auto_revive == 1 ) break;
+        if ( timer >= revivetime )
+        {
+            revived = 1;
+            break;
+        }
+    }
+    e_fx delete();
+    if ( isdefined( self.reviveprogressbar ) ) self.reviveprogressbar destroyelem();
+    if ( isdefined( self.revivetexthud ) ) self.revivetexthud destroy();
+    if ( isdefined( playerbeingrevived.revivetrigger.auto_revive ) && playerbeingrevived.revivetrigger.auto_revive == 1 )
+    {
+    }
+    else if ( !revived && isplayer( playerbeingrevived ) ) playerbeingrevived stoprevive( self );
+    playerbeingrevived.revivetrigger sethintstring( &"GAME_BUTTON_TO_REVIVE_PLAYER" );
+    playerbeingrevived.revivetrigger.beingrevived = 0;
+    self notify( "do_revive_ended_normally" );
+    self.is_reviving_any--;
+    if ( !revived ) playerbeingrevived thread maps\mp\zombies\_zm_laststand::checkforbleedout( self );
+    return revived;
+}
+
 zt_down_tweaks_install()
 {
     level endon( "end_game" );
@@ -6364,24 +6745,201 @@ zt_down_tweaks_install()
     level.zt_player_laststand_last_limit = level.zt.config.down_limit;
     level thread zt_player_laststand_owner_watch();
 
-    if ( level.zt.config.revive_time > 0 ) zt_feature( "revive_time", "unavailable", "BO2 exposes no composable revive-time callback" );
-    if ( level.zt.config.lose_perks_on_down != "default" ) zt_feature( "lose_perks_on_down", "unavailable", "stock removes perks inside its private last-stand pipeline" );
-    if ( level.zt.config.keep_weapons_bleedout ) zt_feature( "keep_weapons_bleedout", "unavailable", "generic inventory restoration would duplicate map quest weapons" );
+    // The stock-only detour is installed before the first revive is started.
+    // Its status is reported by zt_t6_revive_time_install().
 }
 
 zt_down_limit_unavailable_reason()
 {
-    if ( !zt_stock_bo2_health_route() )
-        return "unknown/custom map down routing is not safely composable";
+    if ( !isdefined( level.callbackplayerlaststand ) || level.callbackplayerlaststand != maps\mp\zombies\_zm::callback_playerlaststand )
+        return "map owns a nonstandard outer last-stand transaction";
     if ( zt_game_mode_name() == "zcleansed" )
         return "Turned/Cleansed owns its role-conversion last-stand transaction";
+    if ( !isdefined( level.laststandgetupallowed ) || level.laststandgetupallowed )
+        return "map owns a get-up or role-conversion last-stand transaction";
     if ( zt_flag_is_set( "solo_game" ) )
         return "solo Quick Revive eligibility resolves before the composable last-stand callback";
-    if ( zt_true( level.zombiemode_using_chugabud_perk ) )
-        return "Who's Who resolves before the composable last-stand callback";
-    if ( zt_true( level.zombiemode_using_afterlife ) )
-        return "Mob Afterlife resolves before the composable last-stand callback";
+    // Who's Who and Afterlife intercept lethal damage before the ordinary
+    // last-stand callback. Their presence does not disable ordinary downs
+    // elsewhere on the same map, including players with no special life left.
     return "";
+}
+
+zt_perk_loss_unavailable_reason()
+{
+    if ( !isdefined( level.callbackplayerlaststand ) || level.callbackplayerlaststand != maps\mp\zombies\_zm::callback_playerlaststand )
+        return "map owns a nonstandard outer last-stand transaction";
+    if ( zt_game_mode_name() == "zcleansed" )
+        return "map owns a role-conversion last-stand transaction";
+    if ( !isdefined( level.laststandgetupallowed ) || level.laststandgetupallowed )
+        return "map owns a get-up or role-conversion last-stand transaction";
+    return "";
+}
+
+zt_ordinary_down_player()
+{
+    // Never apply an ordinary-life budget or perk selection to a ghost or
+    // Who's Who replacement body if a map explicitly calls the stock path.
+    return self zt_player_tweaks_allowed() && !zt_true( self.afterlife ) &&
+        !zt_true( self.in_zombify_call ) && !isdefined( self.e_chugabud_corpse );
+}
+
+zt_keep_weapons_unavailable_reason()
+{
+    if ( !isdefined( level.callbackplayerlaststand ) || level.callbackplayerlaststand != maps\mp\zombies\_zm::callback_playerlaststand )
+        return "map owns a nonstandard outer last-stand transaction";
+    // Who's Who and Afterlife bypass this callback only for their special
+    // per-player down paths. Ordinary bleed-outs on those maps remain eligible.
+    if ( zt_game_mode_name() == "zcleansed" )
+        return "map owns a role-conversion last-stand transaction";
+    if ( !isdefined( level.zombie_weapons ) )
+        return "map exposes no registered ordinary firearm inventory";
+    return "";
+}
+
+zt_keep_weapon_safe( weapon )
+{
+    if ( !isdefined( weapon ) || weapon == "" || zt_t6_unsafe_random_weapon( weapon ) ||
+         is_offhand_weapon( weapon ) || is_melee_weapon( weapon ) || is_equipment( weapon ) )
+        return false;
+    base = maps\mp\zombies\_zm_weapons::get_base_weapon_name( weapon, 1 );
+    if ( !isdefined( base ) || !zt_starting_weapon_registry_safe( base ) )
+        return false;
+    if ( isdefined( level.zombie_weapons_callbacks ) &&
+         ( isdefined( level.zombie_weapons_callbacks[weapon] ) || isdefined( level.zombie_weapons_callbacks[base] ) ) )
+        return false;
+    weapon_class = weaponclass( weapon );
+    return weapon_class == "pistol" || weapon_class == "pistol spread" || weapon_class == "pistolspread" ||
+           weapon_class == "smg" || weapon_class == "spread" || weapon_class == "rifle" || weapon_class == "mg";
+}
+
+zt_keep_weapons_capture()
+{
+    snapshot = spawnstruct();
+    snapshot.weapons = [];
+    snapshot.clips = [];
+    snapshot.stocks = [];
+    snapshot.partial = 0;
+    snapshot.selected = self getcurrentweapon();
+    primaries = self getweaponslistprimaries();
+    for ( i = 0; i < primaries.size; i++ )
+    {
+        weapon = primaries[i];
+        if ( !zt_keep_weapon_safe( weapon ) )
+        {
+            snapshot.partial = 1;
+            continue;
+        }
+        slot = snapshot.weapons.size;
+        snapshot.weapons[slot] = weapon;
+        snapshot.clips[slot] = self getweaponammoclip( weapon );
+        snapshot.stocks[slot] = self getweaponammostock( weapon );
+    }
+    self.zt_keep_weapons_candidate = snapshot;
+    self.zt_keep_weapons_pending = undefined;
+}
+
+zt_keep_weapons_lifecycle()
+{
+    self endon( "disconnect" );
+    self endon( "zt_stop_keep_weapons_watch" );
+    level endon( "end_game" );
+    while ( 1 )
+    {
+        outcome = self waittill_any_return( "bled_out", "player_revived", "fake_death" );
+        if ( outcome == "bled_out" && isdefined( self.zt_keep_weapons_candidate ) )
+            self.zt_keep_weapons_pending = self.zt_keep_weapons_candidate;
+        else
+            self.zt_keep_weapons_pending = undefined;
+        self.zt_keep_weapons_candidate = undefined;
+    }
+}
+
+zt_keep_weapons_restore()
+{
+    snapshot = self.zt_keep_weapons_pending;
+    self.zt_keep_weapons_pending = undefined;
+    if ( !isdefined( snapshot ) || !level.zt.config.keep_weapons_bleedout ||
+         zt_keep_weapons_unavailable_reason() != "" || snapshot.weapons.size <= 0 ||
+         !isdefined( self.sessionstate ) || self.sessionstate != "playing" || !self zt_player_tweaks_allowed() )
+        return;
+
+    current = self getweaponslistprimaries();
+    if ( current.size <= 0 )
+    {
+        zt_feature( "keep_weapons_bleedout", "degraded", "map-owned respawn inventory takes precedence" );
+        return;
+    }
+    for ( i = 0; i < current.size; i++ )
+    {
+        if ( !zt_keep_weapon_safe( current[i] ) )
+        {
+            zt_feature( "keep_weapons_bleedout", "degraded", "map-owned respawn inventory takes precedence" );
+            return;
+        }
+    }
+    limit = get_player_weapon_limit( self );
+    if ( !isdefined( limit ) || limit <= 0 ) return;
+    for ( i = 0; i < snapshot.weapons.size; i++ )
+    {
+        if ( !zt_keep_weapon_safe( snapshot.weapons[i] ) || !( self maps\mp\zombies\_zm_weapons::player_can_use_content( snapshot.weapons[i] ) ) )
+        {
+            zt_feature( "keep_weapons_bleedout", "degraded", "map changed its ordinary weapon registry before respawn" );
+            return;
+        }
+    }
+
+    fallback_clips = [];
+    fallback_stocks = [];
+    fallback_selected = self getcurrentweapon();
+    for ( i = 0; i < current.size; i++ )
+    {
+        fallback_clips[i] = self getweaponammoclip( current[i] );
+        fallback_stocks[i] = self getweaponammostock( current[i] );
+        self takeweapon( current[i] );
+    }
+    restored = [];
+    count = snapshot.weapons.size;
+    if ( count > limit ) count = limit;
+    for ( i = 0; i < count; i++ )
+    {
+        weapon = snapshot.weapons[i];
+        self maps\mp\zombies\_zm_weapons::weapon_give( weapon, maps\mp\zombies\_zm_weapons::is_weapon_upgraded( weapon ), 0, 1 );
+        if ( !( self hasweapon( weapon ) ) )
+        {
+            snapshot.partial = 1;
+            continue;
+        }
+        restored[restored.size] = weapon;
+        self setweaponammoclip( weapon, snapshot.clips[i] );
+        self setweaponammostock( weapon, snapshot.stocks[i] );
+    }
+    if ( restored.size <= 0 )
+    {
+        for ( i = 0; i < current.size && i < limit; i++ )
+        {
+            self maps\mp\zombies\_zm_weapons::weapon_give( current[i], maps\mp\zombies\_zm_weapons::is_weapon_upgraded( current[i] ), 0, 1 );
+            if ( self hasweapon( current[i] ) )
+            {
+                self setweaponammoclip( current[i], fallback_clips[i] );
+                self setweaponammostock( current[i], fallback_stocks[i] );
+                if ( current[i] == fallback_selected ) self switchtoweapon( current[i] );
+            }
+        }
+        zt_feature( "keep_weapons_bleedout", "degraded", "stock weapon grant rejected the selected firearm" );
+        return;
+    }
+    for ( i = 0; i < restored.size; i++ )
+        if ( restored[i] == snapshot.selected )
+        {
+            self switchtoweapon( restored[i] );
+            break;
+        }
+    if ( restored.size > 0 && i == restored.size ) self switchtoweapon( restored[0] );
+    if ( snapshot.partial || count < snapshot.weapons.size || restored.size < count )
+        zt_feature( "keep_weapons_bleedout", "degraded", "only eligible ordinary firearms fit the current map weapon limit" );
+    else if ( restored.size > 0 )
+        zt_feature( "keep_weapons_bleedout", "active", "ordinary firearms restored after stock bleed-out" );
 }
 
 zt_bleedout_time_watch()
@@ -6470,18 +7028,17 @@ zt_bleedout_time_watch()
             level.zt.config.bleedout_time = percent;
         previous_bleedout = percent;
 
-        // BO2 exposes no safe common owner for these private last-stand
-        // operations. They still have live NEXT DOWN / NEXT BLEED-OUT menu
-        // boundaries, so resample them and keep the compatibility report in
-        // sync with the current request rather than the match-start snapshot.
+        // BO2 revive timing remains private. Perk and firearm retention use
+        // the stock last-stand owner below.
         revive = zt_cfg_int( "zt_revive_time", 0 );
         if ( revive != previous_revive )
         {
             level.zt.config.revive_time = revive;
-            if ( revive > 0 )
-                zt_feature( "revive_time", "unavailable", "BO2 exposes no composable revive-time callback" );
-            else
-                zt_feature( "revive_time", "inherit", "" );
+            if ( zt_true( level.zt.revive_time_detour_claimed ) )
+                zt_feature( "revive_time", "degraded", "revive-time change applies next match; current revive owner remains active" );
+            else if ( revive > 0 )
+                zt_feature( "revive_time", "unavailable", "revive-time change applies next match" );
+            else zt_feature( "revive_time", "inherit", "" );
             previous_revive = revive;
         }
 
@@ -6489,10 +7046,6 @@ zt_bleedout_time_watch()
         if ( lose_perks != previous_lose_perks )
         {
             level.zt.config.lose_perks_on_down = lose_perks;
-            if ( lose_perks != "default" )
-                zt_feature( "lose_perks_on_down", "unavailable", "stock removes perks inside its private last-stand pipeline" );
-            else
-                zt_feature( "lose_perks_on_down", "inherit", "" );
             previous_lose_perks = lose_perks;
         }
 
@@ -6500,10 +7053,6 @@ zt_bleedout_time_watch()
         if ( keep_weapons != previous_keep_weapons )
         {
             level.zt.config.keep_weapons_bleedout = keep_weapons;
-            if ( keep_weapons )
-                zt_feature( "keep_weapons_bleedout", "unavailable", "generic inventory restoration would duplicate map quest weapons" );
-            else
-                zt_feature( "keep_weapons_bleedout", "inherit", "" );
             previous_keep_weapons = keep_weapons;
         }
 
@@ -6521,7 +7070,18 @@ zt_player_laststand_owner_watch()
         unavailable = "";
         if ( limit != 0 )
             unavailable = zt_down_limit_unavailable_reason();
-        enabled = limit > 0 && unavailable == "";
+        perk_choice = zt_cfg_string( "zt_lose_perks_on_down", "default" );
+        level.zt.config.lose_perks_on_down = perk_choice;
+        perk_reason = "";
+        if ( perk_choice != "default" && perk_choice != "all" )
+            perk_reason = zt_perk_loss_unavailable_reason();
+        perk_enabled = perk_choice != "default" && perk_choice != "all" && perk_reason == "";
+        keep_weapons = zt_cfg_int( "zt_keep_weapons_bleedout", 0 );
+        level.zt.config.keep_weapons_bleedout = keep_weapons;
+        keep_reason = "";
+        if ( keep_weapons ) keep_reason = zt_keep_weapons_unavailable_reason();
+        keep_enabled = keep_weapons && keep_reason == "";
+        enabled = limit > 0 && unavailable == "" || perk_enabled || keep_enabled;
 
         if ( enabled && !zt_true( level.zt_player_laststand_owned ) && isdefined( level.playerlaststand_func ) )
         {
@@ -6533,7 +7093,8 @@ zt_player_laststand_owner_watch()
             level.zt_player_laststand_detached = 0;
             level.zt_player_laststand_missing_reported = 0;
             level.zt_player_laststand_unavailable = "";
-            zt_feature( "down_limit", "active", "" );
+            if ( limit > 0 && unavailable == "" )
+                zt_feature( "down_limit", "active", "" );
         }
         else if ( enabled && zt_true( level.zt_player_laststand_owned ) && !isdefined( level.playerlaststand_func ) )
         {
@@ -6547,7 +7108,7 @@ zt_player_laststand_owner_watch()
         }
         else if ( enabled && !zt_true( level.zt_player_laststand_owned ) && !isdefined( level.playerlaststand_func ) )
         {
-            if ( !zt_true( level.zt_player_laststand_missing_reported ) )
+            if ( limit > 0 && !zt_true( level.zt_player_laststand_missing_reported ) )
             {
                 zt_feature( "down_limit", "unavailable", "map exposes no composable player-last-stand callback" );
                 level.zt_player_laststand_missing_reported = 1;
@@ -6566,6 +7127,72 @@ zt_player_laststand_owner_watch()
             }
             level.zt_player_laststand_owned = 0;
             level.zt_player_laststand_detached = 1;
+        }
+
+        if ( perk_enabled && zt_true( level.zt_player_laststand_owned ) )
+        {
+            players = getplayers();
+            for ( i = 0; i < players.size; i++ )
+            {
+                if ( !zt_true( players[i].zt_perk_loss_watching ) )
+                {
+                    players[i].zt_perk_loss_watching = 1;
+                    players[i] thread zt_perk_loss_lifecycle();
+                }
+            }
+        }
+
+        players = get_players();
+        for ( i = 0; i < players.size; i++ )
+        {
+            if ( keep_enabled && zt_true( level.zt_player_laststand_owned ) && !zt_true( players[i].zt_keep_weapons_watching ) )
+            {
+                players[i].zt_keep_weapons_watching = 1;
+                players[i] thread zt_keep_weapons_lifecycle();
+            }
+            else if ( ( !keep_enabled || !zt_true( level.zt_player_laststand_owned ) ) && zt_true( players[i].zt_keep_weapons_watching ) )
+            {
+                players[i] notify( "zt_stop_keep_weapons_watch" );
+                players[i].zt_keep_weapons_watching = 0;
+                players[i].zt_keep_weapons_candidate = undefined;
+                players[i].zt_keep_weapons_pending = undefined;
+            }
+        }
+        keep_state = "inherit";
+        if ( keep_weapons )
+        {
+            keep_state = "active";
+            if ( keep_reason != "" || !zt_true( level.zt_player_laststand_owned ) ) keep_state = "unavailable";
+        }
+        if ( keep_state == "unavailable" && keep_reason == "" )
+            keep_reason = "map exposes no composable player-last-stand callback";
+        if ( !isdefined( level.zt_keep_weapons_last_choice ) || level.zt_keep_weapons_last_choice != keep_weapons ||
+             !isdefined( level.zt_keep_weapons_last_state ) || level.zt_keep_weapons_last_state != keep_state ||
+             !isdefined( level.zt_keep_weapons_last_reason ) || level.zt_keep_weapons_last_reason != keep_reason )
+        {
+            zt_feature( "keep_weapons_bleedout", keep_state, keep_reason );
+            level.zt_keep_weapons_last_choice = keep_weapons;
+            level.zt_keep_weapons_last_state = keep_state;
+            level.zt_keep_weapons_last_reason = keep_reason;
+        }
+
+        perk_state = "inherit";
+        if ( perk_choice != "default" )
+        {
+            perk_state = "active";
+            if ( perk_reason != "" || perk_enabled && !zt_true( level.zt_player_laststand_owned ) )
+                perk_state = "unavailable";
+        }
+        if ( perk_state == "unavailable" && perk_reason == "" )
+            perk_reason = "map exposes no composable player-last-stand callback";
+        if ( !isdefined( level.zt_perk_loss_last_choice ) || level.zt_perk_loss_last_choice != perk_choice ||
+             !isdefined( level.zt_perk_loss_last_state ) || level.zt_perk_loss_last_state != perk_state ||
+             !isdefined( level.zt_perk_loss_last_reason ) || level.zt_perk_loss_last_reason != perk_reason )
+        {
+            zt_feature( "lose_perks_on_down", perk_state, perk_reason );
+            level.zt_perk_loss_last_choice = perk_choice;
+            level.zt_perk_loss_last_state = perk_state;
+            level.zt_perk_loss_last_reason = perk_reason;
         }
 
         if ( unavailable != "" && ( !isdefined( level.zt_player_laststand_unavailable ) || level.zt_player_laststand_unavailable != unavailable ) )
@@ -6589,6 +7216,146 @@ zt_player_laststand_owner_watch()
         // This passive owner runs at DEFAULT; yield real time between checks.
         wait 0.05;
     }
+}
+
+zt_perk_loss_lifecycle()
+{
+    self endon( "disconnect" );
+    level endon( "end_game" );
+    self.zt_perk_retained_owned = [];
+    while ( 1 )
+    {
+        outcome = self waittill_any_return( "player_revived", "bled_out", "death", "fake_death", "spawned_player" );
+        owned = self.zt_perk_retained_owned;
+        if ( !isdefined( owned ) || owned.size <= 0 )
+            continue;
+
+        // Only release our entries. Buried and custom maps may own other
+        // retained-perk slots, notably Mule Kick.
+        for ( i = 0; i < owned.size; i++ )
+            if ( isdefined( self._retain_perks_array ) && isdefined( self._retain_perks_array[owned[i]] ) && self._retain_perks_array[owned[i]] == 1 )
+                self._retain_perks_array[owned[i]] = undefined;
+        self.zt_perk_retained_owned = [];
+
+        if ( outcome == "player_revived" )
+        {
+            // Stock perk_think exits when it honors a retained perk. Re-arm
+            // exactly those thinkers after the normal revive so a later down
+            // applies the setting again; never re-grant a perk or its effects.
+            wait 0.05;
+            for ( i = 0; i < owned.size; i++ )
+                if ( self hasperk( owned[i] ) && !zt_true( self.laststand ) )
+                    self thread maps\mp\zombies\_zm_perks::perk_think( owned[i] );
+        }
+        else if ( outcome == "bled_out" || outcome == "death" || outcome == "fake_death" )
+            self thread zt_perk_loss_terminal_cleanup( owned );
+    }
+}
+
+zt_perk_loss_terminal_cleanup( owned )
+{
+    self endon( "disconnect" );
+    self endon( "spawned_player" );
+    self endon( "player_revived" );
+    level endon( "end_game" );
+    // Allow an existing stock removal thinker to finish first. On a normal
+    // retained down it has exited; on a same-frame death it may still be live.
+    wait 0.05;
+    for ( i = 0; i < owned.size; i++ )
+    {
+        perk = owned[i];
+        if ( !self hasperk( perk ) || zt_true( self._retain_perks ) ||
+             isdefined( self._retain_perks_array ) && zt_true( self._retain_perks_array[perk] ) )
+            continue;
+        // Use the stock per-perk stop contract: HUD, perk-specific teardown,
+        // num_perks and callbacks stay together. Never emit a global death.
+        self thread maps\mp\zombies\_zm_perks::perk_think( perk );
+        self notify( perk + "_stop" );
+    }
+}
+
+zt_perk_loss_prepare()
+{
+    choice = level.zt.config.lose_perks_on_down;
+    if ( choice == "default" || choice == "all" || !zt_true( self.zt_perk_loss_watching ) || zt_true( self.no_revive_trigger ) )
+        return;
+    if ( isdefined( self.zt_perk_retained_owned ) && self.zt_perk_retained_owned.size > 0 )
+        return;
+    if ( zt_true( self._retain_perks ) )
+    {
+        zt_feature( "lose_perks_on_down", "degraded", "map already retains every perk on down" );
+        return;
+    }
+    if ( isdefined( self._retain_perks_array ) && !isarray( self._retain_perks_array ) )
+    {
+        zt_feature( "lose_perks_on_down", "unavailable", "map retained-perk registry is not an array" );
+        return;
+    }
+    if ( !isdefined( self.perks_active ) || !isarray( self.perks_active ) )
+    {
+        if ( isdefined( self.num_perks ) && self.num_perks > 0 )
+            zt_feature( "lose_perks_on_down", "unavailable", "map exposes no readable active-perk list" );
+        return;
+    }
+
+    requested_loss = 0;
+    if ( choice == "1" ) requested_loss = 1;
+    else if ( choice == "2" ) requested_loss = 2;
+    else if ( choice == "3" ) requested_loss = 3;
+    else if ( choice == "4" ) requested_loss = 4;
+    else if ( choice != "none" ) return;
+
+    eligible = [];
+    forced_loss = 0;
+    map_protected = 0;
+    for ( i = 0; i < self.perks_active.size; i++ )
+    {
+        perk = self.perks_active[i];
+        if ( !isdefined( perk ) || !( self hasperk( perk ) ) || isinarray( eligible, perk ) )
+            continue;
+        if ( zt_flag_is_set( "solo_game" ) && perk == "specialty_quickrevive" )
+        {
+            forced_loss++;
+            continue;
+        }
+        // Stock consumes Tombstone inside player_laststand and creates its
+        // recovery drop. Do not retain its perk bit while consuming its state.
+        if ( perk == "specialty_scavenger" && zt_true( self.hasperkspecialtytombstone ) )
+        {
+            forced_loss++;
+            continue;
+        }
+        if ( isdefined( self._retain_perks_array ) && isdefined( self._retain_perks_array[perk] ) && self._retain_perks_array[perk] )
+        {
+            map_protected = 1;
+            continue;
+        }
+        eligible[eligible.size] = perk;
+    }
+    requested_loss -= forced_loss;
+    if ( requested_loss < 0 ) requested_loss = 0;
+    if ( requested_loss > eligible.size ) requested_loss = eligible.size;
+    losses = [];
+    while ( losses.size < requested_loss )
+    {
+        perk = eligible[randomint( eligible.size )];
+        if ( !isinarray( losses, perk ) ) losses[losses.size] = perk;
+    }
+
+    if ( !isdefined( self._retain_perks_array ) ) self._retain_perks_array = [];
+    owned = [];
+    for ( i = 0; i < eligible.size; i++ )
+    {
+        perk = eligible[i];
+        if ( isinarray( losses, perk ) ) continue;
+        self._retain_perks_array[perk] = 1;
+        owned[owned.size] = perk;
+    }
+    self.zt_perk_retained_owned = owned;
+    if ( map_protected || forced_loss && choice == "none" )
+        zt_feature( "lose_perks_on_down", "degraded", "map-retained perks, solo Quick Revive and Tombstone keep their stock rules" );
+    else
+        zt_feature( "lose_perks_on_down", "active", "stock perk-removal thinker honors selected retained perks" );
 }
 
 zt_player_laststand_release_owner()
@@ -6676,9 +7443,13 @@ zt_player_laststand_wrapper( inflictor, attacker, damage, meansofdeath, weapon, 
         return;
     }
 
+    if ( level.zt.config.keep_weapons_bleedout && zt_true( self.zt_keep_weapons_watching ) &&
+         self zt_player_tweaks_allowed() && zt_keep_weapons_unavailable_reason() == "" )
+        self zt_keep_weapons_capture();
+
     limit = zt_cfg_int( "zt_down_limit", 0 );
     over_limit = 0;
-    if ( self zt_player_tweaks_allowed() && limit > 0 )
+    if ( self zt_ordinary_down_player() && limit > 0 && zt_down_limit_unavailable_reason() == "" )
     {
         if ( !isdefined( self.zt_downs ) )
             self.zt_downs = 0;
@@ -6686,6 +7457,11 @@ zt_player_laststand_wrapper( inflictor, attacker, damage, meansofdeath, weapon, 
         over_limit = self.zt_downs > limit;
         zt_feature( "down_limit", "active", "" );
     }
+
+    // Stock player_laststand takes the Mule Kick gun synchronously. Its
+    // retention check must see our choice before that call, not after it.
+    if ( !over_limit && self zt_ordinary_down_player() && zt_perk_loss_unavailable_reason() == "" )
+        self zt_perk_loss_prepare();
 
     self zt_player_laststand_forward( inflictor, attacker, damage, meansofdeath, weapon, direction, hitloc, offsettime, deathanimduration );
 
@@ -6919,8 +7695,8 @@ zt_box_tweaks_install()
         level.customrandomweaponweights = ::zt_box_weights;
         if ( level.zt.config.box_quality != "default" )
         {
-            if ( level.zt.config.box_quality == "no_wonders" ) zt_feature( "box_quality", "unavailable", "BO2 weapon registrations do not identify wonder weapons generically" );
-            else if ( level.zt.config.box_quality == "everything" ) zt_feature( "box_quality", "degraded", "map-composed candidates are preserved, while stock safety and ownership exclusions remain" );
+            if ( level.zt.config.box_quality == "no_wonders" && !zt_stock_bo2_health_route() ) zt_feature( "box_quality", "degraded", "map-composed candidates are preserved, while stock safety and ownership exclusions remain" );
+            else if ( level.zt.config.box_quality == "everything" ) zt_feature( "box_quality", "active", "" );
             else zt_feature( "box_quality", "active", "" );
         }
         if ( level.zt.config.box_no_repeat ) zt_feature( "box_no_repeat", "active", "" );
@@ -6937,7 +7713,152 @@ zt_box_tweaks_install()
         if ( level.zt.config.challenge_no_box ) zt_feature( "challenge_no_box", "active", "standard Mystery Boxes disabled" );
         if ( level.zt.config.challenge_wall_only ) zt_feature( "challenge_wall_only", "degraded", "standard Mystery Boxes disabled; scripted quest rewards remain map-owned" );
     }
-    if ( level.zt.config.challenge_one_box ) zt_feature( "challenge_one_box", "unavailable", "stock exposes completion notifications but no safe per-player pre-use veto" );
+    if ( level.zt.config.challenge_one_box )
+    {
+        if ( level.zt.config.challenge_no_box || level.zt.config.challenge_wall_only )
+            zt_feature( "challenge_one_box", "unavailable", "No Mystery Box or Wall Weapons Only takes precedence" );
+        else
+            level thread zt_one_box_watch();
+    }
+}
+
+zt_one_box_watch()
+{
+    level endon( "end_game" );
+    while ( 1 )
+    {
+        if ( !isdefined( level.chests ) )
+        {
+            zt_transition_feature( "challenge_one_box", "unavailable", "map removed the standard Mystery Box registry" );
+            wait 0.25;
+            continue;
+        }
+        covered = 0;
+        unowned = 0;
+        for ( i = 0; i < level.chests.size; i++ )
+        {
+            chest = level.chests[i];
+            if ( !isdefined( chest ) ) continue;
+
+            // Stock sets chest_user only after accepting a use and charging
+            // (or deliberately auto-opening) the box. It remains set while
+            // the offer is resolved, well before another purchase is possible.
+            if ( isdefined( chest.chest_user ) && isplayer( chest.chest_user ) )
+            {
+                if ( !isdefined( chest.zt_one_box_cycle_owner ) || chest.zt_one_box_cycle_owner != chest.chest_user )
+                {
+                    chest.chest_user.zt_one_box_used = 1;
+                    chest.zt_one_box_cycle_owner = chest.chest_user;
+                }
+            }
+            else
+                chest.zt_one_box_cycle_owner = undefined;
+
+            // Inactive stock box locations have a stub but no registered
+            // use handler. They cannot be purchased and are not gaps.
+            if ( isdefined( chest.unitrigger_stub ) && !isdefined( chest.unitrigger_stub.trigger_func ) && ( !isdefined( chest.unitrigger_stub.registered ) || !chest.unitrigger_stub.registered ) )
+                continue;
+
+            if ( !isdefined( chest.unitrigger_stub ) || !isdefined( chest.unitrigger_stub.script_unitrigger_type ) || chest.unitrigger_stub.script_unitrigger_type != "unitrigger_box_use" || !isdefined( chest.unitrigger_stub.trigger_target ) || chest.unitrigger_stub.trigger_target != chest || !zt_true( chest.unitrigger_stub.trigger_per_player ) || !isdefined( chest.unitrigger_stub.prompt_and_visibility_func ) || !isdefined( chest.unitrigger_stub.trigger_func ) || zt_true( chest.zt_one_box_owner_lost ) )
+            {
+                unowned++;
+                continue;
+            }
+            stub = chest.unitrigger_stub;
+            if ( stub.trigger_func != ::zt_one_box_use_think && stub.trigger_func != maps\mp\zombies\_zm_magicbox::magicbox_unitrigger_think )
+            {
+                chest.zt_one_box_owner_lost = 1;
+                unowned++;
+                continue;
+            }
+            if ( !isdefined( stub.zt_one_box_previous ) )
+            {
+                if ( stub.prompt_and_visibility_func == ::zt_one_box_prompt )
+                {
+                    unowned++;
+                    continue;
+                }
+                stub.zt_one_box_previous = stub.prompt_and_visibility_func;
+                stub.prompt_and_visibility_func = ::zt_one_box_prompt;
+            }
+            else if ( stub.prompt_and_visibility_func != ::zt_one_box_prompt )
+            {
+                // A late map/mod owner wins. Do not wrap a callback that may
+                // have captured our own wrapper or fight over the trigger.
+                chest.zt_one_box_owner_lost = 1;
+                unowned++;
+                continue;
+            }
+            // Stock may re-register this stub after the weapon is collected.
+            // Reclaim only its exact stock handler; a foreign handler wins.
+            if ( stub.trigger_func == maps\mp\zombies\_zm_magicbox::magicbox_unitrigger_think )
+            {
+                stub.trigger_func = ::zt_one_box_use_think;
+                stub.zt_one_box_needs_cleanup = 1;
+            }
+            if ( zt_true( stub.zt_one_box_needs_cleanup ) && !isdefined( chest.chest_user ) )
+            {
+                // unitrigger captures trigger_func when its trigger thread
+                // starts. Replacing the stub alone leaves a live stock relay.
+                // Rebuild only our verified box triggers, never an active
+                // weapon offer or another mod's pooled trigger.
+                players = getplayers();
+                for ( p = 0; p < players.size; p++ )
+                {
+                    slot = players[p] getentitynumber();
+                    if ( isdefined( stub.playertrigger ) && isdefined( stub.playertrigger[slot] ) && isdefined( level._unitriggers.trigger_pool[slot] ) && level._unitriggers.trigger_pool[slot] == stub.playertrigger[slot] )
+                        maps\mp\zombies\_zm_unitrigger::cleanup_trigger( stub.playertrigger[slot], players[p] );
+                }
+                stub.zt_one_box_needs_cleanup = 0;
+            }
+            // A live stock trigger captured the prior relay. Do not report
+            // full ownership until that trigger can be rebuilt safely.
+            if ( zt_true( stub.zt_one_box_needs_cleanup ) )
+            {
+                unowned++;
+                continue;
+            }
+            covered++;
+        }
+        if ( covered > 0 && unowned == 0 ) zt_transition_feature( "challenge_one_box", "active", "one standard box roll per player" );
+        else if ( covered > 0 ) zt_transition_feature( "challenge_one_box", "degraded", "custom or replaced Mystery Boxes remain map-owned" );
+        else zt_transition_feature( "challenge_one_box", "unavailable", "map has no per-player standard Mystery Box use gate" );
+        wait 0.05;
+    }
+}
+
+zt_one_box_prompt( player )
+{
+    // This is the stock unitrigger's pre-use visibility gate, not a global
+    // chest disable. Keep the first buyer's offer collectible after their
+    // one use; all other standard purchases are hidden before any charge.
+    if ( !isdefined( self.stub ) || !isdefined( self.stub.zt_one_box_previous ) ) return false;
+    chest = self.stub.trigger_target;
+    if ( !zt_one_box_use_allowed( player, chest ) )
+    {
+        self setcursorhint( "HINT_NOICON" );
+        self setinvisibletoplayer( player );
+        return false;
+    }
+    return self [[ self.stub.zt_one_box_previous ]]( player );
+}
+
+zt_one_box_use_allowed( player, chest )
+{
+    if ( !isdefined( player ) || !isplayer( player ) ) return false;
+    if ( !zt_true( player.zt_one_box_used ) ) return true;
+    return isdefined( chest ) && zt_true( chest.grab_weapon_hint ) && isdefined( chest.chest_user ) && chest.chest_user == player;
+}
+
+zt_one_box_use_think()
+{
+    self endon( "kill_trigger" );
+    while ( true )
+    {
+        self waittill( "trigger", player );
+        if ( isdefined( self.stub ) && zt_one_box_use_allowed( player, self.stub.trigger_target ) )
+            self.stub.trigger_target notify( "trigger", player );
+    }
 }
 
 zt_box_lock_claim()
@@ -7274,9 +8195,62 @@ zt_box_weights( keys )
         return self zt_box_weights_forward( keys );
 
     // Every mode composes after the complete map/custom callback chain.
-    // EVERYTHING means no additional ZTweaks filtering or promotion; it must
-    // not bypass a map's eligibility, side effects, or authored weighting.
+    // FULL MAP POOL changes weighting only within the map-approved pool; it
+    // never reintroduces quest or unavailable weapons removed by the map.
     keys = self zt_box_weights_forward( keys );
+    if ( level.zt.config.box_quality == "everything" )
+    {
+        if ( !isdefined( level.zombie_weapons ) || keys.size == 0 )
+        {
+            zt_transition_feature( "box_quality", "degraded", "map-composed candidates are preserved, while stock safety and ownership exclusions remain" );
+            return self zt_box_avoid_duplicate( keys );
+        }
+        full_pool = [];
+        seen = [];
+        for ( i = 0; i < keys.size; i++ )
+        {
+            weapon = keys[i];
+            if ( !isdefined( level.zombie_weapons[weapon] ) )
+            {
+                zt_transition_feature( "box_quality", "degraded", "map-composed candidates are preserved, while stock safety and ownership exclusions remain" );
+                return self zt_box_avoid_duplicate( keys );
+            }
+            if ( !isdefined( seen[weapon] ) )
+            {
+                seen[weapon] = 1;
+                full_pool[full_pool.size] = weapon;
+            }
+        }
+        // Stock chooses the first receivable entry. An unbiased shuffle of
+        // unique, map-approved candidates removes duplicate/order weights.
+        return self zt_box_avoid_duplicate( array_randomize( full_pool ) );
+    }
+    if ( level.zt.config.box_quality == "no_wonders" )
+    {
+        filtered = [];
+        for ( i = 0; i < keys.size; i++ )
+        {
+            // BO2 has no mandatory wonder bit. Recognize audited stock
+            // families and honor the optional metadata used by custom maps.
+            weapon = keys[i];
+            wonder = zt_t6_unsafe_random_weapon( weapon );
+            if ( isdefined( level.zombie_weapons[weapon] ) && isdefined( level.zombie_weapons[weapon].is_wonder_weapon ) && level.zombie_weapons[weapon].is_wonder_weapon ) wonder = true;
+            if ( !wonder ) filtered[filtered.size] = weapon;
+        }
+        if ( filtered.size == 0 )
+        {
+            // Stock falls back to keys[0]; an empty filter is NOT a veto.
+            // Yield this filter, not the map's purchase transaction.
+            zt_transition_feature( "box_quality", "degraded", "map-composed candidates are preserved, while stock safety and ownership exclusions remain" );
+            if ( !isdefined( level.zt_box_empty_filter_reported ) )
+            {
+                level.zt_box_empty_filter_reported = 1;
+                logprint( "ZTweaks: NO WONDER WEAPONS yielded: filtering would empty the map-composed Mystery Box pool.\n" );
+            }
+            return self zt_box_avoid_duplicate( keys );
+        }
+        return self zt_box_avoid_duplicate( filtered );
+    }
     if ( level.zt.config.box_quality == "improved" )
     {
         high = [];
@@ -7300,11 +8274,552 @@ zt_box_weights( keys )
 zt_challenges_install()
 {
     if ( level.zt.config.challenge_no_perks ) zt_feature( "challenge_no_perks", "degraded", "standard purchases and ZTweaks grants are blocked; scripted quest grants remain map-owned" );
-    if ( level.zt.config.challenge_no_pap ) zt_feature( "challenge_no_pap", "unavailable", "the map exposes no universal safe Pack-a-Punch disable callback" );
-    if ( level.zt.config.challenge_starting_room ) zt_feature( "challenge_starting_room", "unavailable", "the map does not publish a safe starting-zone exit set" );
-    if ( level.zt.config.challenge_gun_game ) zt_feature( "challenge_gun_game", "unavailable", "the registered weapon pool cannot guarantee quest-safe replacement" );
+    if ( level.zt.config.challenge_no_pap ) level thread zt_no_pap_install();
+    if ( level.zt.config.challenge_starting_room ) level thread zt_starting_room_install();
+    if ( level.zt.config.challenge_gun_game )
+    {
+        maps\mp\zombies\_zm_spawner::register_zombie_death_event_callback( ::zt_gun_game_zombie_death );
+        zt_feature( "challenge_gun_game", "inherit", "waiting for a safe player inventory" );
+    }
     if ( level.zt.config.challenge_random_rules )
         zt_feature( "challenge_random_rules", "active", "selected " + level.zt.random_challenge_name + " for this match" );
+}
+
+// STARTING_ROOM_BEGIN
+// Source-verified stock zones + opt-in custom zone contract. Never rewrite
+// zone activation/spawn/quest flags. Teleport enforcement uses observed safe
+// positions only; it does not manufacture spawn points or replace map travel.
+zt_starting_room_install()
+{
+    level endon( "end_game" );
+    while ( !zt_game_ready() ) wait 0.1;
+    if ( zt_game_mode_name() == "zcleansed" )
+    {
+        zt_feature( "challenge_starting_room", "unavailable", "Turned/Cleansed owns its arena doors and barriers" );
+        return;
+    }
+    names = zt_starting_room_names();
+    elapsed = 0;
+    while ( !zt_starting_room_registry_ready( names ) && elapsed < 20 )
+    {
+        wait 0.5;
+        elapsed += 0.5;
+        names = zt_starting_room_names();
+    }
+    if ( !zt_starting_room_registry_ready( names ) )
+    {
+        zt_feature( "challenge_starting_room", "unavailable", "the map does not publish a safe starting-zone exit set" );
+        return;
+    }
+    level.zt_room_zones = zt_starting_room_expand( names );
+    if ( !zt_starting_room_registry_ready( level.zt_room_zones ) )
+    {
+        zt_feature( "challenge_starting_room", "unavailable", "the map does not publish a safe starting-zone exit set" );
+        return;
+    }
+    level.zt_room_points = [];
+    level.zt_room_point_index = 0;
+    level.zt_room_door_flags = [];
+    foreach ( name in level.zt_room_zones )
+    {
+        zone = level.zones[name];
+        if ( !isdefined( zone.adjacent_zones ) || !isarray( zone.adjacent_zones ) ) continue;
+        adjacent = getarraykeys( zone.adjacent_zones );
+        foreach ( other in adjacent )
+        {
+            if ( zt_starting_room_contains( level.zt_room_zones, other ) ) continue;
+            edge = zone.adjacent_zones[other];
+            if ( !isdefined( edge.flags ) || !isarray( edge.flags ) ) continue;
+            foreach ( flag_name in edge.flags )
+                if ( isstring( flag_name ) && flag_name != "always_on" && flag_name != "power_on" )
+                    level.zt_room_door_flags[flag_name] = 1;
+        }
+    }
+    level.zt_room_previous_door_check = level.custom_door_buy_check;
+    level.custom_door_buy_check = ::zt_starting_room_door_check;
+    zt_transition_feature( "challenge_starting_room", "inherit", "waiting for a safe starting-area position" );
+    while ( 1 )
+    {
+        // Only opt-in, post-start, low-frequency discovery. No client dvar
+        // burst and no dependency on all clients finishing their loading.
+        players = getplayers();
+        foreach ( player in players )
+        {
+            if ( !isdefined( player ) || zt_true( player.zt_room_watching ) ) continue;
+            player.zt_room_watching = 1;
+            player thread zt_starting_room_watch();
+        }
+        wait 1;
+    }
+}
+
+zt_starting_room_names()
+{
+    // Map authors may publish a nonempty array of exact zone names. Invalid
+    // explicit adapters fail closed, never silently fall back to a guess.
+    if ( isdefined( level.zt_starting_room_zones ) )
+        return level.zt_starting_room_zones;
+    map_name = zt_map_script();
+    if ( map_name == "zm_transit" )
+    {
+        location = getdvar( "ui_zm_mapstartlocation" );
+        if ( location == "town" ) return strtok( "zone_tow", "," );
+        if ( location == "farm" ) return strtok( "zone_far_ext", "," );
+        // Stock calls Bus Depot "transit" too; the mode distinguishes the
+        // open survival arena from TranZit's interior spawn.
+        if ( location == "transit" && zt_game_mode_name() != "zclassic" ) return strtok( "zone_station_ext", "," );
+        return strtok( "zone_pri", "," );
+    }
+    if ( map_name == "zm_transit_dr" ) return strtok( "zone_roadside_west,zone_roadside_east", "," );
+    if ( map_name == "zm_nuked" ) return strtok( "culdesac_yellow_zone,culdesac_green_zone", "," );
+    // Include the introductory elevator/drop landing, not every initially
+    // enabled high-rise zone or the whole one-way drop graph.
+    if ( map_name == "zm_highrise" ) return strtok( "zone_green_start,zone_green_escape_pod_ground,zone_orange_level3a", "," );
+    if ( map_name == "zm_buried" ) return strtok( "zone_street_lighteast,zone_street_lightwest", "," );
+    if ( map_name == "zm_prison" )
+    {
+        if ( zt_game_mode_name() == "zgrief" ) return strtok( "zone_cellblock_east,zone_cellblock_west_warden,zone_cellblock_west_barber,zone_cellblock_west", "," );
+        return strtok( "zone_start", "," );
+    }
+    if ( map_name == "zm_tomb" ) return strtok( "zone_start", "," );
+    // Common stock-derived custom-map conventions. Merely being enabled is
+    // NOT sufficient: many maps enable every zone during initialization.
+    if ( isdefined( level.zones ) && isarray( level.zones ) )
+    {
+        if ( isdefined( level.zones["start_zone"] ) && isdefined( level.zones["zone_start"] ) ) return [];
+        if ( isdefined( level.zones["start_zone"] ) ) return strtok( "start_zone", "," );
+        if ( isdefined( level.zones["zone_start"] ) ) return strtok( "zone_start", "," );
+    }
+    return [];
+}
+
+zt_starting_room_contains( names, name )
+{
+    foreach ( candidate in names )
+        if ( candidate == name ) return true;
+    return false;
+}
+
+zt_starting_room_zone_ready( name )
+{
+    if ( !isdefined( level.zones ) || !isarray( level.zones ) ||
+         !isstring( name ) || !isdefined( level.zones[name] ) ) return false;
+    zone = level.zones[name];
+    if ( !isdefined( zone.volumes ) || !isarray( zone.volumes ) || zone.volumes.size == 0 || zone.volumes.size > 64 ) return false;
+    foreach ( volume in zone.volumes )
+        if ( !isdefined( volume ) || !isdefined( volume.classname ) || volume.classname != "info_volume" ) return false;
+    return true;
+}
+
+zt_starting_room_registry_ready( names )
+{
+    if ( !isdefined( level.zones ) || !isarray( level.zones ) ||
+         !isdefined( names ) || !isarray( names ) || names.size == 0 || names.size > 32 ) return false;
+    volume_count = 0;
+    foreach ( name in names )
+    {
+        if ( !zt_starting_room_zone_ready( name ) ) return false;
+        volume_count += level.zones[name].volumes.size;
+        if ( volume_count > 256 ) return false;
+    }
+    return true;
+}
+
+zt_starting_room_free_edge( edge )
+{
+    return isdefined( edge ) && isdefined( edge.flags ) && isarray( edge.flags ) &&
+           edge.flags.size == 1 && edge.flags[0] == "always_on";
+}
+
+zt_starting_room_expand( seeds )
+{
+    result = [];
+    foreach ( name in seeds )
+        if ( !zt_starting_room_contains( result, name ) ) result[result.size] = name;
+    // Only reciprocal ALWAYS_ON edges describe freely connected room pieces.
+    // Never follow unlocked purchases, one-way drops or scripted transitions.
+    for ( i = 0; i < result.size; i++ )
+    {
+        name = result[i];
+        zone = level.zones[name];
+        if ( !isdefined( zone.adjacent_zones ) || !isarray( zone.adjacent_zones ) ) continue;
+        adjacent = getarraykeys( zone.adjacent_zones );
+        foreach ( other in adjacent )
+        {
+            if ( zt_starting_room_contains( result, other ) || !zt_starting_room_zone_ready( other ) ) continue;
+            back = level.zones[other];
+            if ( !isdefined( back.adjacent_zones ) || !isarray( back.adjacent_zones ) ) continue;
+            if ( zt_starting_room_free_edge( zone.adjacent_zones[other] ) &&
+                 zt_starting_room_free_edge( back.adjacent_zones[name] ) )
+            {
+                // Oversized connected areas are unsupported, not truncated
+                // into an arbitrary smaller boundary through an open room.
+                if ( result.size >= 32 ) return [];
+                result[result.size] = other;
+            }
+        }
+    }
+    return result;
+}
+
+zt_starting_room_door_check( door )
+{
+    // Stock calls on the buyer BEFORE charging. Preserve an existing veto
+    // and its side effects. Never re-acquire this seam from a later owner.
+    if ( zt_true( self.zt_room_door_inside ) ) return true;
+    if ( isdefined( level.zt_room_previous_door_check ) )
+    {
+        self.zt_room_door_inside = 1;
+        accepted = self [[ level.zt_room_previous_door_check ]]( door );
+        self.zt_room_door_inside = 0;
+        if ( !isdefined( accepted ) || !accepted ) return false;
+    }
+    // Permit introductory entry/re-entry from outside; never trap a player
+    // behind the same flag that locks an outward purchase from the room.
+    if ( !isplayer( self ) || !self zt_starting_room_inside() ) return true;
+    if ( !isdefined( door ) || !isdefined( door.script_flag ) || !isstring( door.script_flag ) ) return true;
+    // Only published zone exit flags, not costs/quest state/unknown blockers.
+    flags = strtok( door.script_flag, "," );
+    foreach ( flag_name in flags )
+        if ( isdefined( level.zt_room_door_flags[flag_name] ) ) return false;
+    return true;
+}
+
+zt_starting_room_inside()
+{
+    foreach ( name in level.zt_room_zones )
+    {
+        if ( !zt_starting_room_zone_ready( name ) ) continue;
+        foreach ( volume in level.zones[name].volumes )
+            if ( self istouching( volume ) ) return true;
+    }
+    return false;
+}
+
+zt_starting_room_movable()
+{
+    if ( !isdefined( self.sessionstate ) || self.sessionstate != "playing" || !isalive( self ) ) return false;
+    if ( self maps\mp\zombies\_zm_laststand::player_is_in_laststand() || !self zt_ordinary_down_player() ) return false;
+    if ( isdefined( self getlinkedent() ) || self isinvehicle() ) return false;
+    if ( zt_true( self.b_teleporting ) || zt_true( self.teleporting ) ||
+         zt_true( self.is_teleporting ) || zt_true( self.isteleporting ) ||
+         zt_true( self.is_flung ) || zt_true( self.zt_starting_room_suspend ) ||
+         zt_true( level.zt_starting_room_suspend ) || zt_true( self.hostmigrationcontrolsfrozen ) ) return false;
+    return self isonground();
+}
+
+zt_starting_room_intro()
+{
+    return zt_map_script() == "zm_buried" || zt_true( level.zt_starting_room_intro );
+}
+
+zt_starting_room_watch()
+{
+    self endon( "disconnect" );
+    level endon( "end_game" );
+    self.zt_room_points = [];
+    self.zt_room_point_index = 0;
+    self.zt_room_entered = 0;
+    stable = 0;
+    outside = 0;
+    previous = self.origin;
+    previous_health = self.health;
+    while ( 1 )
+    {
+        wait 0.5;
+        if ( !self zt_starting_room_movable() )
+        {
+            stable = 0;
+            outside = 0;
+            previous = self.origin;
+            previous_health = self.health;
+            continue;
+        }
+        // Require consecutive ordinary grounded samples after spawn, revive,
+        // a special form or scripted transit before caching or returning.
+        stable++;
+        if ( stable < 3 ) { previous = self.origin; previous_health = self.health; continue; }
+        if ( self zt_starting_room_inside() )
+        {
+            outside = 0;
+            self.zt_room_entered = 1;
+            if ( isdefined( self.health ) && isdefined( previous_health ) &&
+                 self.health >= previous_health && distancesquared( self.origin, previous ) < 1024 )
+                self zt_starting_room_remember();
+        }
+        else
+        {
+            outside++;
+            if ( outside >= 3 && ( self.zt_room_entered || !zt_starting_room_intro() ) )
+            {
+                self zt_starting_room_return();
+                outside = 0;
+                stable = 0;
+            }
+        }
+        previous = self.origin;
+        previous_health = self.health;
+    }
+}
+
+zt_starting_room_remember()
+{
+    // Bounded, dispersed history: don't overwrite every safe point with the
+    // same place or a doorway edge. Anchors survive ordinary respawns.
+    if ( isdefined( self.maxhealth ) && self.health < self.maxhealth ) return;
+    foreach ( point in self.zt_room_points )
+        if ( distancesquared( point.origin, self.origin ) < 4096 ) return;
+    point = spawnstruct();
+    point.origin = self.origin;
+    point.angles = self.angles;
+    self.zt_room_points[self.zt_room_point_index] = point;
+    self.zt_room_point_index = ( self.zt_room_point_index + 1 ) % 8;
+    level.zt_room_points[level.zt_room_point_index] = point;
+    level.zt_room_point_index = ( level.zt_room_point_index + 1 ) % 32;
+    zt_transition_feature( "challenge_starting_room", "active", "" );
+}
+
+zt_starting_room_destination_safe( point, players, actors )
+{
+    // One reusable stock-style zone probe, allocated only when a return is
+    // needed. Recheck membership BEFORE moving the player, including when a
+    // custom map replaces/moves a volume after the anchor was recorded.
+    if ( !isdefined( level.zt_room_probe ) )
+        level.zt_room_probe = spawn( "script_origin", point.origin );
+    if ( !isdefined( level.zt_room_probe ) ) return false;
+    level.zt_room_probe.origin = point.origin;
+    if ( !level.zt_room_probe zt_starting_room_inside() ) return false;
+    // Optional map-authored destination veto for dynamic hazards. This is
+    // our own opt-in contract, not a replacement for another mod's callback.
+    if ( isdefined( level.zt_starting_room_safe_return ) &&
+         !self [[ level.zt_starting_room_safe_return ]]( point.origin ) ) return false;
+    // Revalidate geometry; do not trust an old position after doors/platforms
+    // have moved. The trace uses the player hull, not a thin bullet ray.
+    landed = playerphysicstrace( point.origin + ( 0, 0, 24 ), point.origin - ( 0, 0, 8 ) );
+    if ( distancesquared( landed, point.origin ) > 16 ) return false;
+    // Reject crowding rather than displacing/damaging occupants.
+    foreach ( player in players )
+        if ( isdefined( player ) && player != self && isalive( player ) &&
+             distancesquared( point.origin, player.origin ) < 9216 ) return false;
+    foreach ( actor in actors )
+        if ( isdefined( actor ) && isalive( actor ) &&
+             distancesquared( point.origin, actor.origin ) < 16384 ) return false;
+    return true;
+}
+
+zt_starting_room_return()
+{
+    if ( !self zt_starting_room_movable() ) return;
+    players = getplayers();
+    actors = getaiarray( level.zombie_team );
+    // Prefer this player's anchors. The shared fallback covers later spawns
+    // outside the room without inventing coordinates or moving other players.
+    points = self.zt_room_points;
+    for ( pass = 0; pass < 2; pass++ )
+    {
+        foreach ( point in points )
+        {
+            if ( !self zt_starting_room_destination_safe( point, players, actors ) ) continue;
+            // A custom destination veto must be synchronous, but recheck in
+            // case a map implementation yielded or changed the player's role.
+            if ( !self zt_starting_room_movable() || self zt_starting_room_inside() ) return;
+            // No wait between state check and relocation; no damage, freeze,
+            // inventory changes, global notifications or quest flag writes.
+            self setvelocity( ( 0, 0, 0 ) );
+            self setorigin( point.origin );
+            self setplayerangles( point.angles );
+            if ( self zt_starting_room_inside() )
+            {
+                self.zt_room_entered = 1;
+                zt_transition_feature( "challenge_starting_room", "active", "" );
+            }
+            return;
+        }
+        points = level.zt_room_points;
+    }
+    zt_transition_feature( "challenge_starting_room", "degraded", "safe return deferred while the starting area is obstructed" );
+}
+// STARTING_ROOM_END
+
+zt_no_pap_install()
+{
+    level endon( "end_game" );
+    while ( !zt_game_ready() ) wait 0.1;
+    elapsed = 0;
+    // Nuketown/buildable machines may arrive much later. Keep discovery alive
+    // without manufacturing a registry or changing power/quest progression.
+    while ( 1 )
+    {
+        triggers = getentarray( "specialty_weapupgrade", "script_noteworthy" );
+        legacy = getentarray( "zombie_vending_upgrade", "targetname" );
+        if ( triggers.size > 0 || legacy.size > 0 ) break;
+        if ( elapsed >= 20 ) zt_transition_feature( "challenge_no_pap", "unavailable", "the map exposes no universal safe Pack-a-Punch disable callback" );
+        wait 0.5;
+        elapsed += 0.5;
+    }
+    level.zt_no_pap_previous = level.custom_pap_validation;
+    level.custom_pap_validation = ::zt_no_pap_validate;
+    zt_transition_feature( "challenge_no_pap", "active", "" );
+    while ( 1 )
+    {
+        if ( !isdefined( level.custom_pap_validation ) || level.custom_pap_validation != ::zt_no_pap_validate )
+        {
+            // Do not fight a late owner or re-wrap a callback capturing ours.
+            zt_transition_feature( "challenge_no_pap", "unavailable", "the map exposes no universal safe Pack-a-Punch disable callback" );
+            return;
+        }
+        wait 0.5;
+    }
+}
+
+zt_no_pap_validate( player )
+{
+    // Stock calls with self = the purchase trigger, before any charge/removal.
+    // Preserve map validation side effects (including Mob's Afterlife check).
+    if ( !zt_true( self.zt_pap_validation_inside ) && isdefined( level.zt_no_pap_previous ) )
+    {
+        self.zt_pap_validation_inside = 1;
+        self [[ level.zt_no_pap_previous ]]( player );
+        self.zt_pap_validation_inside = 0;
+    }
+    return false;
+}
+
+zt_gun_game_spawn()
+{
+    if ( !level.zt.config.challenge_gun_game ) return;
+    if ( level.zt.config.starting_weapon != "default" || level.zt.config.secondary_starting_weapon != "default" || level.zt.config.starting_weapon_upgraded != "default" || level.zt.config.challenge_random_loadout )
+    {
+        zt_feature( "challenge_gun_game", "unavailable", "another starting-weapon setting owns the slot" );
+        return;
+    }
+    if ( !isdefined( level.zombie_weapons ) || !isdefined( level.start_weapon ) || level.start_weapon == "" )
+    {
+        zt_feature( "challenge_gun_game", "unavailable", "map exposes no registered ordinary weapon progression" );
+        return;
+    }
+    if ( !isdefined( self.zt_gun_game_list ) )
+    {
+        keys = getarraykeys( level.zombie_weapons );
+        list = [];
+        for ( i = 0; i < keys.size; i++ )
+            if ( self zt_safe_random_starting_weapon( keys[i], level.zombie_weapons[keys[i]] ) ) list[list.size] = keys[i];
+        if ( list.size < 2 )
+        {
+            zt_feature( "challenge_gun_game", "unavailable", "map exposes fewer than two safe ordinary firearms" );
+            return;
+        }
+        self.zt_gun_game_list = array_randomize( list );
+        self.zt_gun_game_index = 0;
+    }
+    weapon = self.zt_gun_game_list[self.zt_gun_game_index];
+    if ( self hasweapon( weapon ) )
+    {
+        self.zt_gun_game_weapon = weapon;
+        self zt_gun_game_start_watch();
+        return;
+    }
+    if ( self has_weapon_or_upgrade( weapon ) )
+    {
+        zt_feature( "challenge_gun_game", "degraded", "progression gun was upgraded; preserving player inventory" );
+        return;
+    }
+    starter = level.start_weapon;
+    if ( isdefined( level.zt.map_start_weapon ) ) starter = level.zt.map_start_weapon;
+    if ( !( self hasweapon( starter ) ) )
+    {
+        zt_feature( "challenge_gun_game", "degraded", "map-owned inventory has no ordinary starter slot to replace" );
+        return;
+    }
+    self takeweapon( starter );
+    remaining = self getweaponslistprimaries();
+    if ( remaining.size >= maps\mp\zombies\_zm_utility::get_player_weapon_limit( self ) )
+    {
+        self maps\mp\zombies\_zm_weapons::weapon_give( starter, 0, 0, 1 );
+        zt_feature( "challenge_gun_game", "degraded", "map-owned inventory occupies every primary slot" );
+        return;
+    }
+    self maps\mp\zombies\_zm_weapons::weapon_give( weapon, 0, 0, 1 );
+    if ( !( self hasweapon( weapon ) ) )
+    {
+        self maps\mp\zombies\_zm_weapons::weapon_give( starter, 0, 0, 1 );
+        zt_feature( "challenge_gun_game", "degraded", "stock rejected a safe ordinary weapon grant" );
+        return;
+    }
+    self.zt_gun_game_weapon = weapon;
+    self switchtoweapon( weapon );
+    self zt_gun_game_start_watch();
+    zt_feature( "challenge_gun_game", "active", "ordinary progression slot advances on zombie kills" );
+}
+
+zt_gun_game_start_watch()
+{
+    if ( zt_true( self.zt_gun_game_watching ) ) return;
+    self.zt_gun_game_watching = 1;
+    self thread zt_gun_game_kills();
+}
+
+zt_gun_game_zombie_death()
+{
+    attacker = self.attacker;
+    if ( !isdefined( attacker ) || !isplayer( attacker ) || !isdefined( attacker.zt_gun_game_weapon ) || !isdefined( self.damageweapon ) || self.damageweapon != attacker.zt_gun_game_weapon || zt_true( self.nuked ) ) return;
+    attacker notify( "zt_gun_game_kill" );
+}
+
+zt_gun_game_kills()
+{
+    self endon( "disconnect" );
+    level endon( "end_game" );
+    while ( true )
+    {
+        self waittill( "zt_gun_game_kill" );
+        // Let the stock death transaction finish its score, weapon stats and
+        // sibling callbacks before touching a player's ordinary inventory.
+        wait 0.05;
+        if ( !isdefined( self.sessionstate ) || self.sessionstate != "playing" || !isdefined( self.zt_gun_game_weapon ) ) continue;
+        if ( !( self hasweapon( self.zt_gun_game_weapon ) ) )
+        {
+            zt_transition_feature( "challenge_gun_game", "degraded", "progression gun was replaced or upgraded; preserving player inventory" );
+            continue;
+        }
+        // Only progress the ZTweaks-owned equipped slot. A quest or shared
+        // weapon held at the death event is never switched away underfoot.
+        if ( self getcurrentweapon() != self.zt_gun_game_weapon ) continue;
+        if ( self.zt_gun_game_index + 1 >= self.zt_gun_game_list.size )
+        {
+            zt_transition_feature( "challenge_gun_game", "active", "ordinary weapon sequence completed" );
+            continue;
+        }
+        next_index = self.zt_gun_game_index + 1;
+        while ( next_index < self.zt_gun_game_list.size && !( self zt_safe_random_starting_weapon( self.zt_gun_game_list[next_index], level.zombie_weapons[self.zt_gun_game_list[next_index]] ) ) )
+            next_index++;
+        if ( next_index >= self.zt_gun_game_list.size )
+        {
+            zt_transition_feature( "challenge_gun_game", "degraded", "no remaining compatible firearms; inventory preserved" );
+            continue;
+        }
+        next = self.zt_gun_game_list[next_index];
+        current = self.zt_gun_game_weapon;
+        self takeweapon( current );
+        remaining = self getweaponslistprimaries();
+        if ( remaining.size >= maps\mp\zombies\_zm_utility::get_player_weapon_limit( self ) )
+        {
+            self maps\mp\zombies\_zm_weapons::weapon_give( current, 0, 0, 1 );
+            zt_transition_feature( "challenge_gun_game", "degraded", "map-owned inventory occupies every primary slot" );
+            continue;
+        }
+        self maps\mp\zombies\_zm_weapons::weapon_give( next, 0, 0, 1 );
+        if ( !( self hasweapon( next ) ) )
+        {
+            self maps\mp\zombies\_zm_weapons::weapon_give( current, 0, 0, 1 );
+            zt_transition_feature( "challenge_gun_game", "degraded", "stock rejected the next ordinary firearm" );
+            continue;
+        }
+        self.zt_gun_game_index = next_index;
+        self.zt_gun_game_weapon = next;
+        self switchtoweapon( next );
+        zt_transition_feature( "challenge_gun_game", "active", "ordinary progression slot advances on zombie kills" );
+    }
 }
 
 zt_one_weapon_slot_install()

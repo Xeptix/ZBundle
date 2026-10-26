@@ -1821,7 +1821,10 @@ B.ModsTab = B.ModsTab or {
 CoD.ZPauseAPI = CoD.ZPauseAPI or {}
 local A = CoD.ZPauseAPI
 
-A.MENU = "zpause"
+-- The stock pause menu's name with a tagged response, for the reason
+-- zpausepausemenu.lua gives: a name the game does not know never arrives.
+A.MENU = "StartMenu_Main"
+A.TAG = "zpause|"
 
 -- What the server last told this player, for a game that is not the server.
 -- The dvars the script publishes are the host's own -- the host's client is
@@ -1965,7 +1968,7 @@ A.Request = function ( controller, what )
 		return false
 	end
 	A.LeaveStockPause( controller )
-	pcall( Engine.SendMenuResponse, controller, A.MENU, "request_" .. what )
+	pcall( Engine.SendMenuResponse, controller, A.MENU, A.TAG .. "request_" .. what )
 	Z.Set( controller, "zp_ui_request", what )
 	return true
 end

@@ -1,4 +1,4 @@
-// ZSTATS T6 v1.2
+// ZSTATS T6 v1.3
 // Passive Zombies telemetry, live HUD, round MVP feed, and game-over awards.
 
 // Every raw Plutonium GSC is linked independently, including each component
@@ -18,6 +18,7 @@ init()
     level.zstats = spawnstruct();
     level.zstats.match_start = undefined;
     level.zstats.round_start = undefined;
+    level.zstats.round_anchor_floor = -1;
     level.zstats.current_round = 0;
     level.zstats.round_serial = 0;
     level.zstats.in_round = 0;
@@ -405,7 +406,7 @@ zs_api_add_value( player, id, delta )
 zs_version()
 {
     // ZS_VERSION_BEGIN
-    return "1.2";
+    return "1.3";
     // ZS_VERSION_END
 }
 
@@ -442,7 +443,10 @@ zs_player_spawned( player )
 
 zs_stock_round_start_time()
 {
-    if ( zs_numeric( level.round_start_time ) && level.round_start_time > 0 && level.round_start_time <= gettime() )
+    // Some custom maps advance the round before refreshing this stock field.
+    // An anchor from the completed round must never restart the new timer.
+    if ( zs_numeric( level.round_start_time ) && level.round_start_time > 0 &&
+        level.round_start_time <= gettime() && level.round_start_time > level.zstats.round_anchor_floor )
         return level.round_start_time;
     return -1;
 }
@@ -455,7 +459,8 @@ zs_reconcile_round_state()
     round_number = int( level.round_number );
     // Proven event streams own the current numbered lifecycle, but a custom
     // map may stop notifying later. Recover only when its number advances.
-    if ( level.zstats.capabilities.round_events && level.zstats.round_serial > 0 && level.zstats.current_round == round_number )
+    if ( level.zstats.capabilities.round_events && level.zstats.capabilities.round_timing &&
+        level.zstats.round_serial > 0 && level.zstats.current_round == round_number )
         return;
 
     active = zs_active_zombie_count();
@@ -483,6 +488,8 @@ zs_reconcile_round_state()
 
     if ( level.zstats.round_serial > 0 )
     {
+        if ( zs_numeric( level.zstats.round_start ) && level.zstats.round_start > level.zstats.round_anchor_floor )
+            level.zstats.round_anchor_floor = level.zstats.round_start;
         if ( level.zstats.pending_round_completion )
             zs_finalize_pending_round();
         else
@@ -1663,6 +1670,9 @@ zs_round_watch()
         continuing_round = level.zstats.in_round && level.zstats.current_round == round_number;
         if ( !continuing_round )
         {
+            if ( level.zstats.round_serial > 0 && zs_numeric( level.zstats.round_start ) &&
+                level.zstats.round_start > level.zstats.round_anchor_floor )
+                level.zstats.round_anchor_floor = level.zstats.round_start;
             level.zstats.round_serial++;
             level.zstats.round_start = zs_stock_round_start_time();
             if ( level.zstats.round_start < 0 )
@@ -1706,6 +1716,8 @@ zs_round_end_watch()
         completed_round = level.zstats.current_round;
         level.zstats.pending_round_number = completed_round;
         level.zstats.pending_round_end_time = gettime();
+        if ( level.zstats.pending_round_end_time > level.zstats.round_anchor_floor )
+            level.zstats.round_anchor_floor = level.zstats.pending_round_end_time;
         level.zstats.pending_round_completion = 1;
         players = getplayers();
         for ( i = 0; i < players.size; i++ )

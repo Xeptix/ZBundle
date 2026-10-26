@@ -37,9 +37,6 @@ local function populate()
     locale["BILLY"] = "БИЛЛИ"
     locale["BLAST FURNACE"] = "ДОМЕННАЯ ПЕЧЬ"
     locale["BLEED-OUT TIME"] = "ВРЕМЯ ДО СМЕРТИ"
-    locale["BO2 exposes no composable revive-time callback"] = "BO2 не предоставляет совместимый обработчик времени оживления"
-    locale["BO2 has no safe pre-dispatch seam for ignoring a repeated timed power-up; stock stacking remains in control"] = "В BO2 нельзя безопасно отклонить повторное временное усиление до обработки; накоплением управляет игра"
-    locale["BO2 weapon registrations do not identify wonder weapons generically"] = "Реестр оружия BO2 не позволяет универсально определять чудо-оружие"
     locale["BOTH"] = "ОБА"
     locale["BURST PISTOL"] = "ПИСТОЛЕТ С ОТСЕЧКОЙ"
     locale["BUTTON"] = "КНОПКА"
@@ -61,22 +58,22 @@ local function populate()
     locale["Choose a favorite by cast. Supports stock maps and custom maps with a compatible adapter."] = "Выберите любимого героя для каждой группы. Поддерживаются официальные карты и пользовательские карты с совместимым адаптером."
     locale["Choose an independent compatible registered starting weapon loadout for each player. Explicit primary and secondary starting-weapon choices take precedence."] = "Независимо выбирает каждому игроку совместимый зарегистрированный стартовый набор оружия. Явно выбранные основное и дополнительное стартовое оружие имеют приоритет."
     locale["Choose how a repeated standard timed power-up affects its active timer. REFRESH restarts the configured duration, EXTEND adds another duration, and IGNORE preserves the current timer."] = "Влияние повторного обычного временного бонуса на действующий таймер. ОБНОВИТЬ заново запускает заданную длительность, ПРОДЛИТЬ добавляет ещё одну длительность, ИГНОРИРОВАТЬ сохраняет текущий таймер."
-    locale["Choose how many perks are removed through the standard down path. MAP DEFAULT keeps the map rule; NONE attempts to preserve every standard registered perk."] = "Сколько перков теряется при обычном падении. По умолчанию действует правило карты; НЕТ пытается сохранить все зарегистрированные стандартные перки."
+    locale["Choose how many perks to lose on each ordinary down: ALL follows the map, NONE keeps eligible perks, and 1-4 randomly lose that many. Solo Quick Revive and map-owned perk protections still follow stock rules. Unsupported down routes leave perks unchanged by ZTweaks."] = "Выберите число перков, теряемых при обычном падении: ВСЕ следует правилу карты, НИ ОДНОГО сохраняет допустимые перки, а 1–4 случайно удаляет указанное число. Быстрое оживление соло и защита карты работают по штатным правилам. Несовместимые сценарии ZTweaks не меняет."
     locale["Choose random values for every setting on this tab? GAME DEFAULT may be selected."] = "Выбрать случайные значения на этой вкладке? Возможен выбор ПО УМОЛЧАНИЮ ИГРЫ."
     locale["Choose random values for this page? DEFAULT may be selected."] = "Выбрать случайные значения для этой страницы? Возможно значение ПО УМОЛЧАНИЮ."
     locale["Choose the map selected after every completed game. This works independently of Auto Restart: with Auto Restart off, ZTweaks changes the lobby selection without launching it. Random choices exclude the current map when another valid map exists."] = "Выбирает карту после каждой завершённой игры. Работает независимо от автоперезапуска: если он выключен, меняется лишь выбор в лобби, без запуска. Случайный выбор исключает текущую карту, если есть другая подходящая."
     locale["Configure installed Z mod settings and gameplay tweaks."] = "Настройка установленных Z-модов и игрового процесса."
     locale["DEAD WIRE"] = "МЁРТВЫЙ ПРОВОД"
     locale["DEFAULT"] = "ПО УМОЛЧАНИЮ"
+    locale["DEGRADED"] = "ЧАСТИЧНО"
+    locale["DEMPSEY"] = "ДЕМПСИ"
+    locale["DESCRIPTION"] = "ОПИСАНИЕ"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["ru"]
-    locale["DEGRADED"] = "ЧАСТИЧНО"
-    locale["DEMPSEY"] = "ДЕМПСИ"
-    locale["DESCRIPTION"] = "ОПИСАНИЕ"
     locale["DISABLE CARPENTER DROPS"] = "ОТКЛЮЧИТЬ ВЫПАДЕНИЕ ПЛОТНИКА"
     locale["DISABLE DOUBLE POINTS DROPS"] = "ОТКЛЮЧИТЬ ВЫПАДЕНИЕ ДВОЙНЫХ ОЧКОВ"
     locale["DISABLE FIRE SALE DROPS"] = "ОТКЛЮЧИТЬ ВЫПАДЕНИЕ РАСПРОДАЖИ"
@@ -138,15 +135,15 @@ local function populate()
     locale["HOST CONTROLLED"] = "УПРАВЛЯЕТСЯ ХОСТОМ"
     locale["HOST VALUE"] = "ЗНАЧЕНИЕ ХОСТА"
     locale["HOST VALUE UNAVAILABLE"] = "ЗНАЧЕНИЕ ХОСТА НЕДОСТУПНО"
+    locale["Host status unknown; this host-controlled setting is locked."] = "Статус хоста неизвестен; эта настройка хоста заблокирована."
+    locale["IGNORE"] = "ИГНОРИРОВАТЬ"
+    locale["IMPROVED"] = "УЛУЧШЕНО"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["ru"]
-    locale["Host status unknown; this host-controlled setting is locked."] = "Статус хоста неизвестен; эта настройка хоста заблокирована."
-    locale["IGNORE"] = "ИГНОРИРОВАТЬ"
-    locale["IMPROVED"] = "УЛУЧШЕНО"
     locale["INHERIT"] = "КАК НА КАРТЕ"
     locale["INSTANT"] = "МГНОВЕННО"
     locale["Increase ordinary player weapon and melee damage against standard zombies each round after round 1. The selected percentage is added per round, up to 500% of normal damage. OFF preserves the map's damage. Quest actors, friendly NPCs, and map-owned damage callbacks remain protected."] = "Увеличивает обычный урон оружия и ближнего боя по зомби в каждом раунде после первого. Выбранный процент прибавляется за раунд, максимум до 500 % обычного урона. ВЫКЛ. сохраняет урон карты. Квестовые персонажи, союзники и правила карты защищены."
@@ -154,7 +151,7 @@ local function populate()
     locale["JACK VINCENT"] = "ДЖЕК ВИНСЕНТ"
     locale["JESSICA"] = "ДЖЕССИКА"
     locale["KEEP WEAPONS AFTER BLEED-OUT"] = "СОХРАНЯТЬ ОРУЖИЕ ПОСЛЕ СМЕРТИ"
-    locale["Keep players in the map's starting zone only when the map safely identifies its exit doors. The challenge disables itself rather than guessing at scripted progression blockers."] = "Удерживает игроков в начальной зоне, только если карта безопасно определяет выходные двери. Испытание отключается, а не пытается угадать сценарные препятствия прогрессу."
+    locale["KNIFE LUNGE"] = "РЫВОК С НОЖОМ"
     locale["LMG"] = "РУЧНОЙ ПУЛЕМЁТ"
     locale["LOADOUT"] = "СНАРЯЖЕНИЕ"
     locale["LOCAL"] = "ЛОКАЛЬНО"
@@ -208,17 +205,18 @@ local function populate()
     locale["NO PACK-A-PUNCH"] = "БЕЗ PACK-A-PUNCH"
     locale["NO PERKS"] = "БЕЗ ПЕРКОВ"
     locale["NO SELF-DAMAGE"] = "БЕЗ САМОУРОНА"
+    locale["NO SETTINGS"] = "НЕТ НАСТРОЕК"
+    locale["NO WONDER WEAPONS"] = "БЕЗ ЧУДО-ОРУЖИЯ"
+    locale["NONE"] = "НЕТ"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["ru"]
-    locale["NO SETTINGS"] = "НЕТ НАСТРОЕК"
-    locale["NO WONDER WEAPONS"] = "БЕЗ ЧУДО-ОРУЖИЯ"
-    locale["NONE"] = "НЕТ"
     locale["NORMAL"] = "ОБЫЧНОЕ"
     locale["NOT REPORTED"] = "НЕТ ДАННЫХ"
+    locale["No Mystery Box or Wall Weapons Only takes precedence"] = "Режим без ящика или только настенное оружие имеет приоритет"
     locale["No gameplay compatibility report was received."] = "Отчёт о совместимости из матча не получен."
     locale["No settings are available on this tab."] = "На этой вкладке нет доступных настроек."
     locale["Nuketown owns its randomized perk and Pack-a-Punch arrival cadence"] = "Nuketown управляет случайным прибытием перков и Pack-a-Punch"
@@ -278,14 +276,14 @@ local function populate()
     locale["Percentage of the standard zombie count calculated for each round. GAME DEFAULT is inert. Scripted special rounds and objective spawns remain map-controlled."] = "Процент стандартного количества зомби, рассчитанного на раунд. По умолчанию изменений нет. Особые раунды по сценарию и появления для заданий остаются под управлением карты."
     locale["Percentage of the stock delay before health regeneration begins after damage. GAME DEFAULT preserves the map's delay. This does not change the regeneration rate or map-owned healing systems."] = "Процент стандартной задержки перед восстановлением здоровья после урона. ПО УМОЛЧАНИЮ ИГРЫ сохраняет задержку карты. Скорость восстановления и лечение карты не меняются."
     locale["Player stats, perks, and movement."] = "Характеристики игрока, перки и передвижение."
+    locale["Point cost of standard Mystery Boxes while Fire Sale is active. GAME DEFAULT preserves the stock or map-authored sale price. Normal box prices and map-authored nonstandard weapon lotteries remain untouched."] = "Цена стандартных случайных ящиков во время распродажи. По умолчанию игры сохраняется штатная цена или цена карты. Обычные цены и особые оружейные лотереи не меняются."
+    locale["Points given to each player when a new match begins. GAME DEFAULT preserves the map's normal behavior, including BO3's stock starting-round calculation of 500 points per selected round."] = "Очки каждого игрока в начале игры. Значение по умолчанию сохраняет правила карты, включая расчёт BO3: 500 очков, умноженные на номер выбранного стартового раунда."
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["ru"]
-    locale["Point cost of standard Mystery Boxes while Fire Sale is active. GAME DEFAULT preserves the stock or map-authored sale price. Normal box prices and map-authored nonstandard weapon lotteries remain untouched."] = "Цена стандартных случайных ящиков во время распродажи. По умолчанию игры сохраняется штатная цена или цена карты. Обычные цены и особые оружейные лотереи не меняются."
-    locale["Points given to each player when a new match begins. GAME DEFAULT preserves the map's normal behavior, including BO3's stock starting-round calculation of 500 points per selected round."] = "Очки каждого игрока в начале игры. Значение по умолчанию сохраняет правила карты, включая расчёт BO3: 500 очков, умноженные на номер выбранного стартового раунда."
     locale["Power, doors, power-ups, and map-owned systems."] = "Электричество, двери, бонусы и системы карты."
     locale["Preferred Mob of the Dead character, solo or co-op. Host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses this cast."] = "Предпочитаемый персонаж Mob of the Dead, в одиночной или совместной игре. Приоритет у хоста; остальные совпадения разрешаются случайно. СЛУЧАЙНО сохраняет выбор игры, если персонаж не отдан другому игроку. На официальных картах T7 нет этой группы."
     locale["Preferred Origins character in either game, solo or co-op; saved separately from Primis. Host wins ties; tied non-hosts draw randomly. RANDOM keeps stock unless displaced. Required co-op story roles are preserved."] = "Предпочитаемый персонаж Origins в обеих играх, соло или совместно; хранится отдельно от Primis. Приоритет у хоста; остальные совпадения разрешаются случайно. СЛУЧАЙНО сохраняет выбор игры, если персонаж не отдан другому. Обязательные роли совместного сюжета сохраняются."
@@ -348,14 +346,14 @@ local function populate()
     locale["SHADOWS OF EVIL"] = "SHADOWS OF EVIL"
     locale["SHOTGUN"] = "ДРОБОВИК"
     locale["SMG"] = "ПИСТОЛЕТ-ПУЛЕМЁТ"
+    locale["SNIPER RIFLE"] = "СНАЙПЕРСКАЯ ВИНТОВКА"
+    locale["SPAWN PROTECTION"] = "ЗАЩИТА ПРИ ПОЯВЛЕНИИ"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["ru"]
-    locale["SNIPER RIFLE"] = "СНАЙПЕРСКАЯ ВИНТОВКА"
-    locale["SPAWN PROTECTION"] = "ЗАЩИТА ПРИ ПОЯВЛЕНИИ"
     locale["START WITH ALL PERKS"] = "ВСЕ ПЕРКИ НА СТАРТЕ"
     locale["START WITH DOORS OPEN"] = "ОТКРЫТЫЕ ДВЕРИ НА СТАРТЕ"
     locale["START WITH POWER ON"] = "ЭЛЕКТРИЧЕСТВО НА СТАРТЕ"
@@ -390,7 +388,9 @@ local function populate()
     locale["Shangri-La exposes no initialized two-switch power route"] = "Shangri-La не предоставляет инициализированную схему питания с двумя выключателями"
     locale["Shangri-La's stock two-switch power route did not complete"] = "Стандартная схема питания Shangri-La с двумя выключателями не завершилась"
     locale["Spawn with the selected ZTweaks starting weapon slots Pack-a-Punched when the map registers a safe upgraded variant. MAP DEFAULT leaves both slots unmodified."] = "Выдаёт при появлении улучшенные в Pack-a-Punch версии выбранного в ZTweaks стартового оружия, если карта зарегистрировала безопасный вариант. По умолчанию карты оба слота остаются без изменений."
+    locale["Starting Room Only takes precedence"] = "Приоритет у режима «Только стартовая зона»"
     locale["Starting weapons, grenades, equipment, and carrying limits."] = "Начальное оружие, гранаты, снаряжение и лимиты переноски."
+    locale["Stay in the first survival area after introductory travel. Known door exits are blocked; other escapes return living players to a checked safe position. Returns wait during downs, vehicles or special forms. Overrides Start Doors Open; unsupported areas remain map-controlled."] = "Ограничивает первой зоной выживания после вступления. Известные выходные двери блокируются; при других побегах живые игроки возвращаются в проверенное безопасное место. Возврат ждёт окончания падения, поездки или особой формы. Приоритет над открытием дверей со старта; неподдерживаемые зоны остаются под управлением карты."
     locale["TAKEO"] = "ТАКЕО"
     locale["TEDDY-BEAR CHANCE"] = "ШАНС ПОЯВЛЕНИЯ МИШКИ"
     locale["THUNDER WALL"] = "ГРОМОВАЯ СТЕНА"
@@ -401,6 +401,7 @@ local function populate()
     locale["The game reported a newer compatibility reason; see the ZTweaks runtime log."] = "Игра сообщила о новой причине совместимости; см. журнал ZTweaks."
     locale["The gameplay compatibility report gave no further detail."] = "Отчёт о совместимости не содержит дополнительных сведений."
     locale["TranZit did not publish registered global-power consumers"] = "TranZit не предоставила зарегистрированные потребители общего питания"
+    locale["Turn off the stock automatic knife charge toward nearby targets. ON leaves the game's movement unchanged. This uses the engine's auto-melee setting and may not affect custom melee systems."] = "Отключает автоматический рывок с ножом к ближайшим целям. ВКЛ. не меняет движение в игре. Использует настройку автоматической ближней атаки движка и может не затрагивать пользовательские системы."
     locale["Turn on the map's stock power consumers at match start. Global systems use the common power state; zoned systems activate published perk, random-perk, and door power zones. Activation rituals/generators and their counters remain map-controlled; downstream systems that listen to real power, including stock traversal and Pack-a-Punch, still unlock."] = "Включает штатные потребители энергии при начале игры. Общие системы используют общий статус питания; зональные включают доступные зоны перков, случайных перков и дверей. Ритуалы, генераторы и их счётчики остаются под управлением карты; системы, реагирующие на реальное питание, включая обычные маршруты и Pack-a-Punch, всё же разблокируются."
     locale["Turned/Cleansed owns its 0.05-second role-conversion sentinel"] = "Turned/Cleansed сохраняет свой маркер смены роли длительностью 0,05 секунды"
     locale["Turned/Cleansed owns its arena and exposes no meaningful power capability"] = "Turned/Cleansed управляет своей ареной без применимой системы питания"
@@ -417,13 +418,13 @@ local function populate()
     locale["WUNDERFIZZ PRICE"] = "ЦЕНА ВУНДЕРФИЦЦА"
     locale["Weapon class that replaces the map's primary starting weapon. MAP DEFAULT preserves the map choice. If the selected class is unavailable, ZTweaks safely keeps the map default."] = "Класс оружия, заменяющего основное стартовое оружие карты. По умолчанию сохраняется выбор карты. Если класс недоступен, ZTweaks безопасно оставляет стандартное оружие."
     locale["ZBUNDLE SETTINGS"] = "НАСТРОЙКИ ZBUNDLE"
-    locale["ZBUNDLE SETTINGS - {owner}"] = "НАСТРОЙКИ ZBUNDLE - {owner}"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["ru"]
+    locale["ZBUNDLE SETTINGS - {owner}"] = "НАСТРОЙКИ ZBUNDLE - {owner}"
     locale["ZOMBIE DAMAGE"] = "УРОН ЗОМБИ"
     locale["ZOMBIE HEALTH"] = "ЗДОРОВЬЕ ЗОМБИ"
     locale["ZOMBIE SPAWN RATE"] = "ЧАСТОТА ПОЯВЛЕНИЯ ЗОМБИ"
@@ -439,7 +440,11 @@ local function populate()
     locale["Zombie health, speed, and round population."] = "Здоровье, скорость и число зомби за раунд."
     locale["[{boundary}] [{scope}] {hint}"] = "[{boundary}] [{scope}] {hint}"
     locale["[{boundary}] {hint}"] = "[{boundary}] {hint}"
+    locale["a map or mod owns the power-up pickup check"] = "карта или мод управляет проверкой подбора усилений"
     locale["activated the stock main-power finalizer without marking temporary-generator/web/defend objectives complete"] = "Стандартное завершение включения основного питания активировано без выполнения целей временных генераторов, паутины и защиты"
+    locale["active perk-loss GobbleGum takes precedence on this down"] = "активный GobbleGum для перков имеет приоритет при этом падении"
+    locale["another mod owns the stock revive function"] = "другой мод управляет штатной функцией оживления"
+    locale["another starting-weapon setting owns the slot"] = "другая настройка стартового оружия управляет слотом"
     locale["classic Double Points/Insta-Kill scaling requires an exact stock team scope"] = "Классическое масштабирование двойных очков и мгновенного убийства требует точной стандартной командной области"
     locale["completed both stock water-wheel switches; Shangri-La's wait_for_power owns global activation"] = "Включены оба стандартных выключателя водяных колёс; общую активацию выполняет wait_for_power карты Shangri-La"
     locale["composed before Revelations' per-player damage pipeline"] = "Добавлено перед обработкой урона каждому игроку в Revelations"
@@ -453,20 +458,24 @@ local function populate()
     locale["custom map exposes no authoritative base player-health variable"] = "Пользовательская карта не предоставляет определяющую переменную базового здоровья игрока"
     locale["custom or changed perk purchases remain map-owned"] = "Особые или изменённые покупки перков остаются под управлением карты"
     locale["custom or changed trap purchases remain map-owned"] = "Особые или изменённые покупки ловушек остаются под управлением карты"
+    locale["custom or replaced Mystery Boxes remain map-owned"] = "особые или заменённые ящики остаются под управлением карты"
     locale["custom/counter/quest blocker owners were preserved; no ordinary blocker was safe to claim"] = "Сохранены владельцы особых, счётчиковых и квестовых препятствий; ни одно обычное препятствие нельзя безопасно обработать"
     locale["first-round spawning began before the tweak could be applied"] = "Появление врагов первого раунда началось до применения настройки"
     locale["generic inventory restoration would duplicate map quest weapons"] = "Универсальное восстановление инвентаря дублировало бы квестовое оружие карты"
     locale["global stock AAT disable takes precedence"] = "глобальное отключение стандартных альтернативных патронов имеет приоритет"
     locale["ignored an active duplicate at the pickup boundary"] = "Повторное активное усиление проигнорировано при подборе"
     locale["independent safe box firearm selected for each player"] = "Для каждого игрока независимо выбрано безопасное огнестрельное оружие из ящика"
+    locale["map already retains every perk on down"] = "карта уже сохраняет все перки при падении"
     locale["map and perk revive-time callbacks are composed before scaling"] = "Обработчики времени оживления карты и перков совмещаются до масштабирования"
     locale["map callback returned no spawn cadence"] = "Обработчик карты не вернул интервал появления"
+    locale["map changed its ordinary weapon registry before respawn"] = "карта изменила реестр обычного оружия до возрождения"
     locale["map did not expose standard Zombies match variables"] = "Карта не предоставила стандартные переменные матча Зомби"
     locale["map did not expose the standard round zombie total"] = "Карта не предоставляет стандартное число зомби в раунде"
     locale["map did not initialize round logic before the door-capability timeout"] = "Логика раундов не инициализирована до истечения ожидания проверки дверей"
     locale["map did not initialize the stock Alternate Ammo Type system"] = "Карта не инициализировала стандартную систему альтернативных боеприпасов"
     locale["map did not register any supported Alternate Ammo Types"] = "Карта не зарегистрировала ни одного поддерживаемого альтернативного типа боеприпасов"
     locale["map does not enable standard score-threshold power-up drops"] = "Карта не включает стандартное выпадение усилений по порогам очков"
+    locale["map exposes fewer than two safe ordinary firearms"] = "на карте меньше двух безопасных обычных видов огнестрельного оружия"
     locale["map exposes no active player for stock blocker callbacks"] = "Карта не предоставляет активного игрока для стандартных обработчиков препятствий"
     locale["map exposes no authoritative starting-weapon replacement seam"] = "Карта не предоставляет определяющий интерфейс замены начального оружия"
     locale["map exposes no base player-health variable"] = "Карта не предоставляет переменную базового здоровья игрока"
@@ -477,6 +486,15 @@ local function populate()
     locale["map exposes no initialized registered global-power consumers"] = "Карта не предоставляет зарегистрированные и инициализированные потребители общего питания"
     locale["map exposes no initialized standard door capability"] = "Карта не предоставляет инициализированную стандартную систему дверей"
     locale["map exposes no initialized stock global-power consumers"] = "Карта не предоставляет инициализированные стандартные потребители общего питания"
+    locale["map exposes no readable active-perk list"] = "карта не предоставляет читаемый список активных перков"
+    locale["map exposes no registered ordinary firearm inventory"] = "карта не предоставляет реестр обычного огнестрельного оружия"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ru"]
+    locale["map exposes no registered ordinary weapon progression"] = "карта не предоставляет зарегистрированную цепочку обычного оружия"
     locale["map exposes no registered perk list"] = "Карта не предоставляет список зарегистрированных перков"
     locale["map exposes no registered weapon pool"] = "Карта не предоставляет набор зарегистрированного оружия"
     locale["map exposes no safe standard purchasable doors"] = "Карта не предоставляет стандартные покупаемые двери, которые можно безопасно изменить"
@@ -488,16 +506,11 @@ local function populate()
     locale["map exposes no standard game-start delay"] = "Карта не предоставляет стандартную задержку начала игры"
     locale["map exposes no standard health-regeneration delay"] = "Карта не предоставляет стандартную задержку восстановления здоровья"
     locale["map exposes no standard zombie spawn cadence"] = "Карта не предоставляет стандартный интервал появления зомби"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["ru"]
     locale["map exposes no standard zombie spawn cadence callback"] = "Карта не предоставляет стандартный обработчик интервала появления зомби"
     locale["map exposes no standard zombie-health curve"] = "Карта не предоставляет стандартную кривую здоровья зомби"
     locale["map exposes no standard zombie-speed curve"] = "Карта не предоставляет стандартную кривую скорости зомби"
     locale["map exposes no stock-compatible perk machines"] = "Карта не предоставляет автоматы перков, совместимые со стандартной системой"
+    locale["map has no per-player standard Mystery Box use gate"] = "на карте нет штатной проверки использования ящика для каждого игрока"
     locale["map has no standard perk machines"] = "На карте нет стандартных автоматов с перками"
     locale["map has no standard purchase traps"] = "На карте нет стандартных покупаемых ловушек"
     locale["map has not published a compatible BO2 bank capability"] = "Карта не предоставляет совместимую с BO2 систему банка"
@@ -514,7 +527,10 @@ local function populate()
     locale["map mode did not publish its stock startup power state"] = "Режим карты не предоставил стандартное начальное состояние питания"
     locale["map mode starts with power already enabled"] = "Режим карты запускается с уже включённым питанием"
     locale["map owns Mystery Box teddy-bear chance"] = "карта уже управляет шансом мишки в тайном ящике"
+    locale["map owns a get-up or role-conversion last-stand transaction"] = "карта управляет подъёмом или сменой роли при падении"
     locale["map owns a nonstandard death-point penalty"] = "Карта управляет нестандартным штрафом очков за смерть"
+    locale["map owns a nonstandard outer last-stand transaction"] = "карта управляет нестандартным внешним сценарием падения"
+    locale["map owns a role-conversion last-stand transaction"] = "карта управляет сменой роли при падении"
     locale["map owns its perk purchase hints or prices"] = "Карта управляет подсказками или ценами покупки перков"
     locale["map owns its trap purchase callbacks or prices"] = "Карта сама управляет покупкой или ценой ловушек"
     locale["map owns the primary-weapon limit"] = "Карта управляет лимитом основного оружия"
@@ -525,11 +541,13 @@ local function populate()
     locale["map registered no round-limited GobbleGums"] = "Не зарегистрированы GobbleGum с ограничением по раундам"
     locale["map registered no time-limited GobbleGums"] = "Не зарегистрированы GobbleGum с ограничением по времени"
     locale["map rejected its standard door-open requests"] = "Карта отклонила стандартные запросы открытия дверей"
+    locale["map removed the standard Mystery Box registry"] = "карта удалила штатный реестр случайного ящика"
     locale["map replaced Mystery Box teddy-bear chance"] = "карта заменила обработчик шанса мишки в тайном ящике"
     locale["map replaced a Mystery Box price; that location remains map-owned"] = "карта заменила цену тайного ящика; это место остаётся под управлением карты"
     locale["map replaced the Wunderfizz price; its value remains map-owned"] = "карта изменила цену Вундерфицца; теперь она управляет этим значением"
     locale["map replaced the primary-weapon limit"] = "Карта заменила лимит основного оружия"
     locale["map replaces stock power-up pickup dispatch; classic Double Points/Insta-Kill remain map-owned"] = "Карта заменяет стандартную обработку подбора усилений; двойные очки и мгновенное убийство остаются под её контролем"
+    locale["map retained-perk registry is not an array"] = "реестр сохраняемых картой перков не является массивом"
     locale["map starts with power already enabled"] = "Карта запускается с уже включённым питанием"
     locale["map supplies a custom Insta-Kill lifecycle and remains authoritative"] = "Карта сохраняет контроль над собственным циклом мгновенного убийства"
     locale["map uses fixed-price legacy Mystery Box hints"] = "карта использует старые подсказки ящика с фиксированной ценой"
@@ -540,15 +558,32 @@ local function populate()
     locale["map's stock always-on power path did not initialize"] = "Стандартная схема постоянного питания карты не инициализирована"
     locale["map's stock global-power consumers rejected activation"] = "Стандартные потребители общего питания карты отклонили активацию"
     locale["map-composed candidates are preserved, while stock safety and ownership exclusions remain"] = "Кандидаты карты сохранены вместе со стандартными исключениями безопасности и принадлежности"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ru"]
     locale["map-owned Insta-Kill override preserved"] = "Сохранена настройка мгновенного убийства карты"
+    locale["map-owned inventory has no ordinary starter slot to replace"] = "в инвентаре карты нет обычного стартового слота для замены"
+    locale["map-owned inventory occupies every primary slot"] = "инвентарь карты занимает все основные слоты"
     locale["map-owned or multi-FX timed lifecycle preserved"] = "Сохранён временной цикл карты или цикл с несколькими эффектами"
+    locale["map-owned respawn inventory takes precedence"] = "снаряжение при возрождении, управляемое картой, имеет приоритет"
+    locale["map-retained perks and solo Quick Revive keep their stock rules"] = "перки, сохраняемые картой, и Быстрое оживление соло работают по штатным правилам"
+    locale["map-retained perks, solo Quick Revive and Tombstone keep their stock rules"] = "перки, сохраняемые картой, Быстрое оживление соло и Tombstone работают по штатным правилам"
+    locale["no remaining compatible firearms; inventory preserved"] = "совместимых видов оружия больше нет; инвентарь сохранён"
     locale["no second registered weapon matches the selected class"] = "Нет второго зарегистрированного оружия выбранного класса"
     locale["no selected Pack-a-Punched starting weapon supports Alternate Ammo Types"] = "Ни одно выбранное стартовое оружие с Pack-a-Punch не поддерживает альтернативные боеприпасы"
+    locale["one standard box roll per player"] = "один обычный прокрут ящика на игрока"
     locale["one-weapon-slot challenge takes precedence"] = "Испытание с одним слотом оружия имеет приоритет"
+    locale["only eligible ordinary firearms fit the current map weapon limit"] = "только подходящее обычное огнестрельное оружие помещается в текущий лимит оружия карты"
     locale["opened common traversal blockers; custom, counter, airlock, and quest-owned blockers were preserved"] = "Открыты обычные проходы; особые, счётчиковые, шлюзовые и квестовые препятствия сохранены"
     locale["opened every initialized ordinary door, linked barrier, debris group and Moon buy airlock"] = "Открыты все инициализированные обычные двери, связанные барьеры, группы обломков и покупаемые шлюзы Moon"
     locale["opened initialized ordinary traversal blockers; custom, counter, cycling-airlock and quest owners were preserved"] = "Открыты инициализированные обычные проходы; особое, счётчиковое, циклическое шлюзовое и квестовое управление сохранено"
     locale["ordinary enemy hits compose outside the map's actor-damage pipeline"] = "Обычные удары врагов обрабатываются отдельно от обработки урона по персонажам карты"
+    locale["ordinary firearms restored after stock bleed-out"] = "обычное огнестрельное оружие восстановлено после стандартного истечения кровью"
+    locale["ordinary progression slot advances on zombie kills"] = "обычный оружейный слот продвигается за убийства зомби"
+    locale["ordinary weapon sequence completed"] = "цепочка обычного оружия завершена"
     locale["pickup-bound stock lifecycle owner"] = "Стандартный цикл управляется при подборе"
     locale["pickup-owned fixed effects; timer-owned remaining effects"] = "Фиксированные эффекты управляются при подборе; остальные - таймерами"
     locale["player already owns every registered perk"] = "У игрока уже есть все зарегистрированные перки"
@@ -558,22 +593,22 @@ local function populate()
     locale["powered all six stock traversal stairs and published perk/door transformers; quest outputs 20/21/23 remain map-owned"] = "Запитаны все шесть стандартных лестниц и опубликованные трансформаторы перков/дверей; квестовые выходы 20/21/23 остаются под контролем карты"
     locale["powered generator perk consumers; captures, Mystery Boxes, and Pack-a-Punch remain map-owned"] = "Запитаны потребители перков от генераторов; захваты, случайные ящики и Pack-a-Punch остаются под контролем карты"
     locale["powered perk shock boxes; other Afterlife panels and quest state remain map-owned"] = "Запитаны электрические ящики перков; остальные панели загробного мира и состояние квестов остаются под контролем карты"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["ru"]
     locale["powered published perk/door transformers; other Beast and quest interactions remain map-owned"] = "Запитаны опубликованные трансформаторы перков/дверей; остальные взаимодействия зверя и квестов остаются под контролем карты"
     locale["powered registered consumers; the buildable switch, reactor, Avogadro, gates, bus, morse code, and quest flags remain map-owned"] = "Запитаны зарегистрированные потребители; собираемый выключатель, реактор, Авогадро, ворота, автобус, азбука Морзе и флаги квестов остаются под контролем карты"
     locale["powered registered global consumers; custom switches, local power, and quest state remain map-owned"] = "Запитаны зарегистрированные общие потребители; особые выключатели, местное питание и квесты остаются под контролем карты"
     locale["powered the map's published perk/door consumer zones"] = "Запитаны опубликованные зоны потребителей перков/дверей карты"
     locale["powered the stock global consumers and Verruckt trap controls"] = "Запитаны стандартные общие потребители и управление ловушками Verruckt"
     locale["powered the stock global consumers, Pack-a-Punch and Giant traversal links"] = "Запитаны стандартные общие потребители, Pack-a-Punch и переходы Giant"
+    locale["progression gun was replaced or upgraded; preserving player inventory"] = "оружие прогрессии заменено или улучшено; инвентарь сохранён"
+    locale["progression gun was upgraded; preserving player inventory"] = "оружие прогрессии улучшено; инвентарь сохранён"
     locale["race-team Double Points has additional map-owned state and remains stock"] = "Двойные очки командной гонки имеют дополнительное состояние карты и остаются без изменений"
     locale["recognized stock map required"] = "Требуется распознанная стандартная карта"
     locale["registered upgrades only; custom upgrade systems remain map-owned"] = "Только зарегистрированные улучшения; пользовательские системы остаются под управлением карты"
+    locale["repeated stock timed drops are consumed before their effects reset"] = "повторные обычные временные усиления поглощаются до сброса их эффектов"
+    locale["revive-time change applies next match"] = "изменение времени оживления вступит в силу в следующем матче"
+    locale["revive-time change applies next match; current revive owner remains active"] = "изменение времени оживления вступит в силу в следующем матче; текущая настройка остаётся активной"
     locale["round logic began before the tweak could be applied"] = "Логика раундов запустилась до применения настройки"
+    locale["safe return deferred while the starting area is obstructed"] = "безопасный возврат отложен, пока стартовая зона заблокирована"
     locale["scaled from BO2's stock base and composed with perk/map health bonuses"] = "Масштабировано от стандартной базы BO2 с учётом бонусов здоровья перков и карты"
     locale["scaled the stock baseline before map special-round thresholds"] = "Стандартная база масштабирована до применения порогов особых раундов карты"
     locale["selected Alternate Ammo Type is not registered by this map"] = "Выбранный альтернативный тип боеприпасов не зарегистрирован на этой карте"
@@ -585,6 +620,7 @@ local function populate()
     locale["selected equipment is not registered by this map"] = "Выбранное снаряжение не зарегистрировано на карте"
     locale["selected grenade is not registered by this map"] = "Выбранная граната не зарегистрирована на карте"
     locale["selected weapon is not registered by this map"] = "Выбранное оружие не зарегистрировано на карте"
+    locale["solo Quick Revive owns a separate auto-revive transaction"] = "Быстрое оживление соло управляет отдельным самовоскрешением"
     locale["standard Mystery Boxes disabled"] = "Стандартные случайные ящики отключены"
     locale["standard Mystery Boxes disabled; scripted quest rewards remain map-owned"] = "Стандартные случайные ящики отключены; скриптовые награды квестов остаются под контролем карты"
     locale["standard door capability disappeared during map initialization"] = "Стандартная функция дверей исчезла при инициализации карты"
@@ -592,12 +628,23 @@ local function populate()
     locale["stock barriers without map-authored delays only"] = "Только стандартные баррикады без задержки, заданной картой"
     locale["stock blocker system has no unowned repair delay"] = "В штатной системе нет свободной задержки ремонта"
     locale["stock classic co-op already permits unlimited ordinary downs"] = "Классический кооператив уже допускает неограниченное число обычных падений"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["ru"]
     locale["stock earned score and box refunds are scaled; direct map score restoration remains map-owned"] = "Полученные очки и возвраты ящика масштабированы; прямое восстановление очков остаётся под контролем карты"
     locale["stock earned score is scaled; direct map score restoration remains map-owned"] = "Полученные очки масштабированы; прямое восстановление очков остаётся под контролем карты"
     locale["stock exposes completion notifications but no safe per-player pre-use veto"] = "Игра сообщает о завершении, но не позволяет безопасно запретить использование заранее для отдельного игрока"
     locale["stock ordinary blocker routes did not publish completion"] = "Стандартные процедуры обычных препятствий не сообщили о завершении"
+    locale["stock perk-removal thinker honors selected retained perks"] = "штатное удаление перков учитывает выбранные сохраняемые перки"
     locale["stock purchase-triggered relocation disabled; explicit map/quest moves remain map-owned"] = "Стандартное перемещение после покупок отключено; явные перемещения карты и квестов остаются под её контролем"
+    locale["stock rejected a safe ordinary weapon grant"] = "игра отклонила выдачу безопасного обычного оружия"
+    locale["stock rejected the next ordinary firearm"] = "игра отклонила следующее обычное оружие"
     locale["stock removes perks inside its private last-stand pipeline"] = "Игра удаляет перки внутри закрытой процедуры падения"
+    locale["stock revive function was not loaded"] = "штатная функция оживления не загрузилась"
+    locale["stock revive transaction scaled without changing perk and map ownership"] = "штатное оживление изменено без вмешательства в управление перками и картой"
     locale["stock weapon grant rejected the registered Pack-a-Punch upgrade"] = "Стандартная выдача оружия отклонила зарегистрированное улучшение Pack-a-Punch"
     locale["stock weapon grant rejected the selected firearm"] = "Стандартная выдача оружия отклонила выбранное огнестрельное оружие"
     locale["the map does not publish a safe starting-zone exit set"] = "Карта не предоставляет безопасный набор выходов из начальной зоны"
@@ -606,6 +653,8 @@ local function populate()
     locale["the registered weapon pool cannot guarantee quest-safe replacement"] = "Набор зарегистрированного оружия не гарантирует безопасную для квестов замену"
     locale["the selected starting weapon has no registered Pack-a-Punch upgrade"] = "У выбранного стартового оружия нет зарегистрированного улучшения Pack-a-Punch"
     locale["unknown weapon class"] = "Неизвестный класс оружия"
+    locale["waiting for a safe player inventory"] = "ожидание безопасного инвентаря игрока"
+    locale["waiting for a safe starting-area position"] = "ожидание безопасной позиции в стартовой зоне"
     locale["waiting for game over"] = "Ожидание конца игры"
     locale["weapon assets still own the absolute engine ammo ceiling"] = "Абсолютный предел боезапаса движка по-прежнему задаётся ресурсами оружия"
     locale["{hint}  Current value from {owner}."] = "{hint}  Текущее значение из {owner}."

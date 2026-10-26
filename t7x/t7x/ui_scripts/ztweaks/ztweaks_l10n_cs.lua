@@ -37,9 +37,6 @@ local function populate()
     locale["BILLY"] = "BILLY"
     locale["BLAST FURNACE"] = "VYSOKÁ PEC"
     locale["BLEED-OUT TIME"] = "ČAS DO VYKRVÁCENÍ"
-    locale["BO2 exposes no composable revive-time callback"] = "BO2 nenabízí skládatelné zpětné volání pro dobu oživování"
-    locale["BO2 has no safe pre-dispatch seam for ignoring a repeated timed power-up; stock stacking remains in control"] = "BO2 nemá bezpečné místo před zpracováním, kde by šlo ignorovat opakovaný časovaný bonus; sčítání dál řídí hra"
-    locale["BO2 weapon registrations do not identify wonder weapons generically"] = "Registrace zbraní v BO2 neumožňují obecně rozpoznat zázračné zbraně"
     locale["BOTH"] = "OBOJÍ"
     locale["BURST PISTOL"] = "DÁVKOVÁ PISTOLE"
     locale["BUTTON"] = "TLAČÍTKO"
@@ -61,22 +58,22 @@ local function populate()
     locale["Choose a favorite by cast. Supports stock maps and custom maps with a compatible adapter."] = "Zvolte oblíbenou postavu pro každou skupinu. Podporuje standardní mapy i vlastní mapy s kompatibilním adaptérem."
     locale["Choose an independent compatible registered starting weapon loadout for each player. Explicit primary and secondary starting-weapon choices take precedence."] = "Pro každého hráče zvolí samostatnou kompatibilní registrovanou počáteční výbavu zbraní. Výslovná volba primární a sekundární počáteční zbraně má přednost."
     locale["Choose how a repeated standard timed power-up affects its active timer. REFRESH restarts the configured duration, EXTEND adds another duration, and IGNORE preserves the current timer."] = "Určuje, jak opakovaný standardní časovaný bonus ovlivní běžící časovač. ZNOVU SPUSTIT spustí nastavenou dobu od začátku, PRODLOUŽIT přidá další dobu a IGNOROVAT zachová současný časovač."
-    locale["Choose how many perks are removed through the standard down path. MAP DEFAULT keeps the map rule; NONE attempts to preserve every standard registered perk."] = "Určuje, kolik perků se odebere při standardním sražení. VÝCHOZÍ MAPY zachová pravidlo mapy; ŽÁDNÝ se pokusí zachovat všechny standardní registrované perky."
+    locale["Choose how many perks to lose on each ordinary down: ALL follows the map, NONE keeps eligible perks, and 1-4 randomly lose that many. Solo Quick Revive and map-owned perk protections still follow stock rules. Unsupported down routes leave perks unchanged by ZTweaks."] = "Zvolte počet perků ztracených při běžném sražení: VŠECHNY se řídí mapou, ŽÁDNÉ zachová dostupné perky a 1–4 náhodně odebere zvolený počet. Sólové Quick Revive a ochrany mapy se řídí původními pravidly. Nepodporované cesty ZTweaks nemění."
     locale["Choose random values for every setting on this tab? GAME DEFAULT may be selected."] = "Zvolit náhodné hodnoty pro všechna nastavení této karty? Může být vybráno i VÝCHOZÍ HRY."
     locale["Choose random values for this page? DEFAULT may be selected."] = "Zvolit náhodné hodnoty pro tuto stránku? Může být vybráno i VÝCHOZÍ."
     locale["Choose the map selected after every completed game. This works independently of Auto Restart: with Auto Restart off, ZTweaks changes the lobby selection without launching it. Random choices exclude the current map when another valid map exists."] = "Zvolí mapu, která se vybere po každé dokončené hře. Funguje nezávisle na automatickém restartu: když je vypnutý, ZTweaks změní výběr v lobby, ale hru nespustí. Náhodná volba vynechá aktuální mapu, pokud existuje jiná platná mapa."
     locale["Configure installed Z mod settings and gameplay tweaks."] = "Nastavení nainstalovaných Z modů a herních úprav."
     locale["DEAD WIRE"] = "MRTVÝ DRÁT"
     locale["DEFAULT"] = "VÝCHOZÍ"
+    locale["DEGRADED"] = "OMEZENO"
+    locale["DEMPSEY"] = "DEMPSEY"
+    locale["DESCRIPTION"] = "POPIS"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["cs"]
-    locale["DEGRADED"] = "OMEZENO"
-    locale["DEMPSEY"] = "DEMPSEY"
-    locale["DESCRIPTION"] = "POPIS"
     locale["DISABLE CARPENTER DROPS"] = "VYPNOUT PADÁNÍ TESAŘE"
     locale["DISABLE DOUBLE POINTS DROPS"] = "VYPNOUT PADÁNÍ DVOJNÁSOBNÝCH BODŮ"
     locale["DISABLE FIRE SALE DROPS"] = "VYPNOUT PADÁNÍ VÝPRODEJE"
@@ -138,15 +135,15 @@ local function populate()
     locale["HOST CONTROLLED"] = "ŘÍDÍ HOSTITEL"
     locale["HOST VALUE"] = "HODNOTA HOSTITELE"
     locale["HOST VALUE UNAVAILABLE"] = "HODNOTA HOSTITELE NEDOSTUPNÁ"
+    locale["Host status unknown; this host-controlled setting is locked."] = "Stav hostitele je neznámý; toto nastavení řízené hostitelem je zamčeno."
+    locale["IGNORE"] = "IGNOROVAT"
+    locale["IMPROVED"] = "VYLEPŠENÁ"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["cs"]
-    locale["Host status unknown; this host-controlled setting is locked."] = "Stav hostitele je neznámý; toto nastavení řízené hostitelem je zamčeno."
-    locale["IGNORE"] = "IGNOROVAT"
-    locale["IMPROVED"] = "VYLEPŠENÁ"
     locale["INHERIT"] = "ZDĚDĚNO"
     locale["INSTANT"] = "OKAMŽITĚ"
     locale["Increase ordinary player weapon and melee damage against standard zombies each round after round 1. The selected percentage is added per round, up to 500% of normal damage. OFF preserves the map's damage. Quest actors, friendly NPCs, and map-owned damage callbacks remain protected."] = "Od druhého kola zvyšuje v každém kole běžné poškození zbraní a útoků zblízka proti zombie. Zvolená procenta se přičítají za kolo, nejvýše do 500 % běžného poškození. VYP. zachová poškození mapy. Úkolové postavy, spojenci a pravidla mapy zůstanou chráněni."
@@ -154,7 +151,7 @@ local function populate()
     locale["JACK VINCENT"] = "JACK VINCENT"
     locale["JESSICA"] = "JESSICA"
     locale["KEEP WEAPONS AFTER BLEED-OUT"] = "PONECHAT ZBRANĚ PO VYKRVÁCENÍ"
-    locale["Keep players in the map's starting zone only when the map safely identifies its exit doors. The challenge disables itself rather than guessing at scripted progression blockers."] = "Udrží hráče v počáteční zóně mapy, jen pokud mapa bezpečně určí své výstupní dveře. Výzva se raději sama vypne, než aby odhadovala skriptované překážky postupu."
+    locale["KNIFE LUNGE"] = "VÝPAD NOŽEM"
     locale["LMG"] = "LEHKÝ KULOMET"
     locale["LOADOUT"] = "VÝBAVA"
     locale["LOCAL"] = "MÍSTNÍ"
@@ -208,17 +205,18 @@ local function populate()
     locale["NO PACK-A-PUNCH"] = "BEZ PACK-A-PUNCH"
     locale["NO PERKS"] = "BEZ PERKŮ"
     locale["NO SELF-DAMAGE"] = "BEZ VLASTNÍHO POŠKOZENÍ"
+    locale["NO SETTINGS"] = "ŽÁDNÁ NASTAVENÍ"
+    locale["NO WONDER WEAPONS"] = "BEZ ZÁZRAČNÝCH ZBRANÍ"
+    locale["NONE"] = "ŽÁDNÝ"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["cs"]
-    locale["NO SETTINGS"] = "ŽÁDNÁ NASTAVENÍ"
-    locale["NO WONDER WEAPONS"] = "BEZ ZÁZRAČNÝCH ZBRANÍ"
-    locale["NONE"] = "ŽÁDNÝ"
     locale["NORMAL"] = "NORMÁLNÍ"
     locale["NOT REPORTED"] = "NEHLÁŠENO"
+    locale["No Mystery Box or Wall Weapons Only takes precedence"] = "Bez Mystery Boxu nebo Jen zbraně ze zdí má přednost"
     locale["No gameplay compatibility report was received."] = "Nebyla přijata žádná zpráva o herní kompatibilitě."
     locale["No settings are available on this tab."] = "Na této kartě nejsou dostupná žádná nastavení."
     locale["Nuketown owns its randomized perk and Pack-a-Punch arrival cadence"] = "Mapa Nuketown si sama řídí náhodné tempo příchodu perků a Pack-a-Punch"
@@ -278,14 +276,14 @@ local function populate()
     locale["Percentage of the standard zombie count calculated for each round. GAME DEFAULT is inert. Scripted special rounds and objective spawns remain map-controlled."] = "Procento standardního počtu zombie vypočteného pro každé kolo. VÝCHOZÍ HRY nic nemění. Skriptovaná speciální kola a úkolová objevení řídí dál mapa."
     locale["Percentage of the stock delay before health regeneration begins after damage. GAME DEFAULT preserves the map's delay. This does not change the regeneration rate or map-owned healing systems."] = "Procento standardní prodlevy, než se po zranění začne obnovovat zdraví. VÝCHOZÍ HRY ponechá prodlevu mapy. Rychlost regenerace ani léčení řízené mapou se nemění."
     locale["Player stats, perks, and movement."] = "Statistiky hráče, perky a pohyb."
+    locale["Point cost of standard Mystery Boxes while Fire Sale is active. GAME DEFAULT preserves the stock or map-authored sale price. Normal box prices and map-authored nonstandard weapon lotteries remain untouched."] = "Cena standardních Mystery Boxů během výprodeje v bodech. VÝCHOZÍ HRY zachová cenu hry či mapy. Běžné ceny a vlastní loterie zbraní mapy se nemění."
+    locale["Points given to each player when a new match begins. GAME DEFAULT preserves the map's normal behavior, including BO3's stock starting-round calculation of 500 points per selected round."] = "Body, které každý hráč dostane na začátku nového zápasu. VÝCHOZÍ HRY zachová normální chování mapy, včetně standardního výpočtu BO3 500 bodů za každé zvolené počáteční kolo."
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["cs"]
-    locale["Point cost of standard Mystery Boxes while Fire Sale is active. GAME DEFAULT preserves the stock or map-authored sale price. Normal box prices and map-authored nonstandard weapon lotteries remain untouched."] = "Cena standardních Mystery Boxů během výprodeje v bodech. VÝCHOZÍ HRY zachová cenu hry či mapy. Běžné ceny a vlastní loterie zbraní mapy se nemění."
-    locale["Points given to each player when a new match begins. GAME DEFAULT preserves the map's normal behavior, including BO3's stock starting-round calculation of 500 points per selected round."] = "Body, které každý hráč dostane na začátku nového zápasu. VÝCHOZÍ HRY zachová normální chování mapy, včetně standardního výpočtu BO3 500 bodů za každé zvolené počáteční kolo."
     locale["Power, doors, power-ups, and map-owned systems."] = "Proud, dveře, bonusy a systémy řízené mapou."
     locale["Preferred Mob of the Dead character, solo or co-op. Host wins ties; tied non-hosts draw randomly. RANDOM keeps the stock choice unless displaced. No T7 stock map uses this cast."] = "Preferovaná postava na Mob of the Dead, sólo i v kooperaci. Při shodě má přednost hostitel; mezi ostatními rozhodne los. NÁHODNĚ zachová standardní volbu, pokud není vytlačena. Žádná standardní mapa T7 tuto skupinu nepoužívá."
     locale["Preferred Origins character in either game, solo or co-op; saved separately from Primis. Host wins ties; tied non-hosts draw randomly. RANDOM keeps stock unless displaced. Required co-op story roles are preserved."] = "Preferovaná postava na Origins v obou hrách, sólo i v kooperaci; ukládá se odděleně od Primis. Při shodě má přednost hostitel; mezi ostatními rozhodne los. NÁHODNĚ zachová standardní volbu, pokud není vytlačena. Povinné příběhové role v kooperaci zůstanou zachovány."
@@ -348,14 +346,14 @@ local function populate()
     locale["SHADOWS OF EVIL"] = "SHADOWS OF EVIL"
     locale["SHOTGUN"] = "BROKOVNICE"
     locale["SMG"] = "SAMOPAL"
+    locale["SNIPER RIFLE"] = "ODSTŘELOVAČSKÁ PUŠKA"
+    locale["SPAWN PROTECTION"] = "OCHRANA PO OŽIVENÍ"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["cs"]
-    locale["SNIPER RIFLE"] = "ODSTŘELOVAČSKÁ PUŠKA"
-    locale["SPAWN PROTECTION"] = "OCHRANA PO OŽIVENÍ"
     locale["START WITH ALL PERKS"] = "START SE VŠEMI PERKY"
     locale["START WITH DOORS OPEN"] = "START S OTEVŘENÝMI DVEŘMI"
     locale["START WITH POWER ON"] = "START SE ZAPNUTÝM PROUDEM"
@@ -390,7 +388,9 @@ local function populate()
     locale["Shangri-La exposes no initialized two-switch power route"] = "Shangri-La neposkytuje inicializovaný okruh napájení se dvěma vypínači"
     locale["Shangri-La's stock two-switch power route did not complete"] = "Původní okruh napájení se dvěma vypínači v Shangri-La se nedokončil"
     locale["Spawn with the selected ZTweaks starting weapon slots Pack-a-Punched when the map registers a safe upgraded variant. MAP DEFAULT leaves both slots unmodified."] = "Objevíte se se zvolenými počátečními zbraněmi ZTweaks vylepšenými v Pack-a-Punch, pokud mapa registruje bezpečnou vylepšenou variantu. VÝCHOZÍ MAPY ponechá oba sloty beze změny."
+    locale["Starting Room Only takes precedence"] = "Přednost má Pouze počáteční oblast"
     locale["Starting weapons, grenades, equipment, and carrying limits."] = "Počáteční zbraně, granáty, vybavení a limity nošení."
+    locale["Stay in the first survival area after introductory travel. Known door exits are blocked; other escapes return living players to a checked safe position. Returns wait during downs, vehicles or special forms. Overrides Start Doors Open; unsupported areas remain map-controlled."] = "Po úvodním přesunu omezuje hráče na první oblast přežití. Známé východy zablokuje; jiné úniky vrátí živé hráče na ověřené bezpečné místo. Při sražení, jízdě nebo zvláštní podobě čeká. Má přednost před otevřením dveří na začátku; nepodporované oblasti řídí mapa."
     locale["TAKEO"] = "TAKEO"
     locale["TEDDY-BEAR CHANCE"] = "ŠANCE NA MEDVÍDKA"
     locale["THUNDER WALL"] = "HROMOVÁ ZEĎ"
@@ -401,6 +401,7 @@ local function populate()
     locale["The game reported a newer compatibility reason; see the ZTweaks runtime log."] = "Hra nahlásila novější důvod kompatibility; viz běhový protokol ZTweaks."
     locale["The gameplay compatibility report gave no further detail."] = "Zpráva o kompatibilitě hry neuvedla žádné další podrobnosti."
     locale["TranZit did not publish registered global-power consumers"] = "TranZit nezveřejnil registrované spotřebiče globálního napájení"
+    locale["Turn off the stock automatic knife charge toward nearby targets. ON leaves the game's movement unchanged. This uses the engine's auto-melee setting and may not affect custom melee systems."] = "Vypne automatický výpad nožem k blízkým cílům. ZAP. nemění pohyb ve hře. Používá nastavení automatického boje zblízka v enginu a nemusí ovlivnit vlastní systémy boje."
     locale["Turn on the map's stock power consumers at match start. Global systems use the common power state; zoned systems activate published perk, random-perk, and door power zones. Activation rituals/generators and their counters remain map-controlled; downstream systems that listen to real power, including stock traversal and Pack-a-Punch, still unlock."] = "Na začátku zápasu zapne původní spotřebiče energie mapy. Globální systémy používají společný stav napájení; zónové systémy aktivují zveřejněné zóny napájení perků, náhodných perků a dveří. Aktivační rituály/generátory a jejich počítadla zůstávají pod kontrolou mapy; navazující systémy, které reagují na skutečné napájení, včetně původních průchodů a Pack-a-Punch, se přesto odemknou."
     locale["Turned/Cleansed owns its 0.05-second role-conversion sentinel"] = "Turned/Cleansed spravuje vlastní značku převodu role po 0.05 sekundy"
     locale["Turned/Cleansed owns its arena and exposes no meaningful power capability"] = "Turned/Cleansed spravuje vlastní arénu a neposkytuje žádnou smysluplnou funkci napájení"
@@ -417,13 +418,13 @@ local function populate()
     locale["WUNDERFIZZ PRICE"] = "CENA WUNDERFIZZU"
     locale["Weapon class that replaces the map's primary starting weapon. MAP DEFAULT preserves the map choice. If the selected class is unavailable, ZTweaks safely keeps the map default."] = "Třída zbraně, která nahradí primární počáteční zbraň mapy. VÝCHOZÍ MAPY zachová volbu mapy. Pokud zvolená třída není dostupná, ZTweaks bezpečně ponechá výchozí volbu mapy."
     locale["ZBUNDLE SETTINGS"] = "NASTAVENÍ ZBUNDLE"
-    locale["ZBUNDLE SETTINGS - {owner}"] = "NASTAVENÍ ZBUNDLE - {owner}"
 end
 populate()
 end
 do
 local function populate()
     local locale = catalogs["cs"]
+    locale["ZBUNDLE SETTINGS - {owner}"] = "NASTAVENÍ ZBUNDLE - {owner}"
     locale["ZOMBIE DAMAGE"] = "POŠKOZENÍ ZOMBIE"
     locale["ZOMBIE HEALTH"] = "ZDRAVÍ ZOMBIE"
     locale["ZOMBIE SPAWN RATE"] = "RYCHLOST OBJEVOVÁNÍ ZOMBIE"
@@ -439,7 +440,11 @@ local function populate()
     locale["Zombie health, speed, and round population."] = "Zdraví a rychlost zombie a jejich počet za kolo."
     locale["[{boundary}] [{scope}] {hint}"] = "[{boundary}] [{scope}] {hint}"
     locale["[{boundary}] {hint}"] = "[{boundary}] {hint}"
+    locale["a map or mod owns the power-up pickup check"] = "mapa nebo mod spravuje kontrolu sebrání bonusu"
     locale["activated the stock main-power finalizer without marking temporary-generator/web/defend objectives complete"] = "aktivován původní finalizátor hlavního napájení bez splnění úkolů dočasných generátorů/pavučin/obrany"
+    locale["active perk-loss GobbleGum takes precedence on this down"] = "aktivní GobbleGum pro perky má při tomto sražení přednost"
+    locale["another mod owns the stock revive function"] = "původní funkci oživování spravuje jiný mod"
+    locale["another starting-weapon setting owns the slot"] = "slot spravuje jiné nastavení počáteční zbraně"
     locale["classic Double Points/Insta-Kill scaling requires an exact stock team scope"] = "klasické škálování Double Points/Insta-Kill vyžaduje přesný původní týmový rozsah"
     locale["completed both stock water-wheel switches; Shangri-La's wait_for_power owns global activation"] = "dokončeny oba původní vypínače vodních kol; globální aktivaci řídí wait_for_power v Shangri-La"
     locale["composed before Revelations' per-player damage pipeline"] = "zařazeno před zpracování poškození jednotlivých hráčů v Revelations"
@@ -453,20 +458,24 @@ local function populate()
     locale["custom map exposes no authoritative base player-health variable"] = "vlastní mapa neposkytuje směrodatnou proměnnou základního zdraví hráče"
     locale["custom or changed perk purchases remain map-owned"] = "Vlastní nebo změněné nákupy perků řídí mapa"
     locale["custom or changed trap purchases remain map-owned"] = "Vlastní nebo změněné nákupy pastí řídí dál mapa"
+    locale["custom or replaced Mystery Boxes remain map-owned"] = "vlastní nebo nahrazené Mystery Boxy zůstávají pod správou mapy"
     locale["custom/counter/quest blocker owners were preserved; no ordinary blocker was safe to claim"] = "vlastní, počítadlové a questové překážky zůstaly zachovány; žádnou běžnou překážku nebylo bezpečné převzít"
     locale["first-round spawning began before the tweak could be applied"] = "objevování v prvním kole začalo dřív, než šlo úpravu uplatnit"
     locale["generic inventory restoration would duplicate map quest weapons"] = "obecné obnovení inventáře by zdvojilo questové zbraně mapy"
     locale["global stock AAT disable takes precedence"] = "globální vypnutí standardní alternativní munice má přednost"
     locale["ignored an active duplicate at the pickup boundary"] = "při sebrání ignorován aktivní duplikát"
     locale["independent safe box firearm selected for each player"] = "pro každého hráče zvolena samostatná bezpečná palná zbraň z boxu"
+    locale["map already retains every perk on down"] = "mapa již při sražení zachovává všechny perky"
     locale["map and perk revive-time callbacks are composed before scaling"] = "zpětná volání doby oživení z mapy a perků se kombinují před škálováním"
     locale["map callback returned no spawn cadence"] = "zpětné volání mapy nevrátilo žádné tempo objevování"
+    locale["map changed its ordinary weapon registry before respawn"] = "mapa před znovuzrozením změnila registr běžných zbraní"
     locale["map did not expose standard Zombies match variables"] = "mapa neposkytla standardní proměnné zápasu Zombies"
     locale["map did not expose the standard round zombie total"] = "mapa neposkytla standardní celkový počet zombie v kole"
     locale["map did not initialize round logic before the door-capability timeout"] = "mapa neinicializovala logiku kol před vypršením limitu pro detekci dveří"
     locale["map did not initialize the stock Alternate Ammo Type system"] = "mapa neinicializovala standardní systém alternativních typů munice"
     locale["map did not register any supported Alternate Ammo Types"] = "mapa nezaregistrovala žádný podporovaný alternativní typ munice"
     locale["map does not enable standard score-threshold power-up drops"] = "mapa nezapíná standardní upouštění bonusů po dosažení prahu skóre"
+    locale["map exposes fewer than two safe ordinary firearms"] = "mapa nabízí méně než dvě bezpečné běžné střelné zbraně"
     locale["map exposes no active player for stock blocker callbacks"] = "mapa neposkytuje aktivního hráče pro původní zpětná volání překážek"
     locale["map exposes no authoritative starting-weapon replacement seam"] = "mapa neposkytuje směrodatné místo pro náhradu počáteční zbraně"
     locale["map exposes no base player-health variable"] = "mapa neposkytuje proměnnou základního zdraví hráče"
@@ -477,6 +486,15 @@ local function populate()
     locale["map exposes no initialized registered global-power consumers"] = "mapa neposkytuje žádné inicializované registrované spotřebiče globálního napájení"
     locale["map exposes no initialized standard door capability"] = "mapa neposkytuje inicializovanou standardní funkci dveří"
     locale["map exposes no initialized stock global-power consumers"] = "mapa neposkytuje žádné inicializované původní spotřebiče globálního napájení"
+    locale["map exposes no readable active-perk list"] = "mapa neposkytuje čitelný seznam aktivních perků"
+    locale["map exposes no registered ordinary firearm inventory"] = "mapa neposkytuje registrovaný inventář běžných střelných zbraní"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["cs"]
+    locale["map exposes no registered ordinary weapon progression"] = "mapa neposkytuje registrovanou posloupnost běžných zbraní"
     locale["map exposes no registered perk list"] = "mapa neposkytuje seznam registrovaných perků"
     locale["map exposes no registered weapon pool"] = "mapa neposkytuje registrovaný soubor zbraní"
     locale["map exposes no safe standard purchasable doors"] = "mapa neposkytuje žádné bezpečné standardní kupovatelné dveře"
@@ -488,16 +506,11 @@ local function populate()
     locale["map exposes no standard game-start delay"] = "mapa neposkytuje standardní prodlevu před začátkem hry"
     locale["map exposes no standard health-regeneration delay"] = "Mapa neposkytuje standardní prodlevu regenerace zdraví"
     locale["map exposes no standard zombie spawn cadence"] = "mapa neposkytuje standardní tempo objevování zombie"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["cs"]
     locale["map exposes no standard zombie spawn cadence callback"] = "mapa neposkytuje standardní zpětné volání tempa objevování zombie"
     locale["map exposes no standard zombie-health curve"] = "mapa neposkytuje standardní křivku zdraví zombie"
     locale["map exposes no standard zombie-speed curve"] = "mapa neposkytuje standardní křivku rychlosti zombie"
     locale["map exposes no stock-compatible perk machines"] = "mapa neposkytuje automaty na perky kompatibilní s původní hrou"
+    locale["map has no per-player standard Mystery Box use gate"] = "mapa nemá standardní kontrolu použití boxu pro jednotlivé hráče"
     locale["map has no standard perk machines"] = "Mapa nemá standardní automaty s perky"
     locale["map has no standard purchase traps"] = "Mapa nemá koupitelné standardní pasti"
     locale["map has not published a compatible BO2 bank capability"] = "mapa nezveřejnila kompatibilní funkci banky BO2"
@@ -514,7 +527,10 @@ local function populate()
     locale["map mode did not publish its stock startup power state"] = "režim mapy nezveřejnil svůj původní počáteční stav napájení"
     locale["map mode starts with power already enabled"] = "režim mapy začíná s již zapnutým proudem"
     locale["map owns Mystery Box teddy-bear chance"] = "mapa již řídí šanci na medvídka v Mystery Boxu"
+    locale["map owns a get-up or role-conversion last-stand transaction"] = "mapa řídí vstávání nebo změnu role po sražení"
     locale["map owns a nonstandard death-point penalty"] = "Mapa řídí vlastní bodový postih za smrt"
+    locale["map owns a nonstandard outer last-stand transaction"] = "mapa řídí nestandardní vnější průběh sražení"
+    locale["map owns a role-conversion last-stand transaction"] = "mapa řídí změnu role po sražení"
     locale["map owns its perk purchase hints or prices"] = "Mapa sama řídí popisky nebo ceny nákupů perků"
     locale["map owns its trap purchase callbacks or prices"] = "Mapa sama řídí nákupy nebo ceny pastí"
     locale["map owns the primary-weapon limit"] = "Mapa řídí limit hlavních zbraní"
@@ -525,11 +541,13 @@ local function populate()
     locale["map registered no round-limited GobbleGums"] = "mapa neregistrovala žádné GobbleGumy omezené počtem kol"
     locale["map registered no time-limited GobbleGums"] = "mapa neregistrovala žádné GobbleGumy omezené časem"
     locale["map rejected its standard door-open requests"] = "mapa odmítla své standardní požadavky na otevření dveří"
+    locale["map removed the standard Mystery Box registry"] = "mapa odstranila standardní registr Mystery Boxu"
     locale["map replaced Mystery Box teddy-bear chance"] = "mapa nahradila šanci na medvídka v Mystery Boxu"
     locale["map replaced a Mystery Box price; that location remains map-owned"] = "mapa změnila cenu Mystery Boxu; toto místo zůstává pod kontrolou mapy"
     locale["map replaced the Wunderfizz price; its value remains map-owned"] = "mapa změnila cenu Wunderfizzu; její hodnota zůstává pod kontrolou mapy"
     locale["map replaced the primary-weapon limit"] = "Mapa nahradila limit hlavních zbraní"
     locale["map replaces stock power-up pickup dispatch; classic Double Points/Insta-Kill remain map-owned"] = "mapa nahrazuje původní zpracování sebraných bonusů; klasické Double Points/Insta-Kill zůstávají pod kontrolou mapy"
+    locale["map retained-perk registry is not an array"] = "seznam perků zachovaných mapou není pole"
     locale["map starts with power already enabled"] = "mapa začíná s již zapnutým proudem"
     locale["map supplies a custom Insta-Kill lifecycle and remains authoritative"] = "mapa dodává vlastní životní cyklus Insta-Kill a má přednost"
     locale["map uses fixed-price legacy Mystery Box hints"] = "mapa používá staré nápovědy Mystery Boxu s pevnou cenou"
@@ -540,15 +558,32 @@ local function populate()
     locale["map's stock always-on power path did not initialize"] = "původní trvale napájený okruh mapy se neinicializoval"
     locale["map's stock global-power consumers rejected activation"] = "původní spotřebiče globálního napájení mapy odmítly aktivaci"
     locale["map-composed candidates are preserved, while stock safety and ownership exclusions remain"] = "kandidáti sestavení mapou zůstávají zachováni a původní bezpečnostní a vlastnické výjimky platí dál"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["cs"]
     locale["map-owned Insta-Kill override preserved"] = "přepsání Insta-Kill pod kontrolou mapy zachováno"
+    locale["map-owned inventory has no ordinary starter slot to replace"] = "inventář mapy nemá běžný počáteční slot k nahrazení"
+    locale["map-owned inventory occupies every primary slot"] = "inventář mapy zabírá všechny hlavní sloty"
     locale["map-owned or multi-FX timed lifecycle preserved"] = "časovaný životní cyklus pod kontrolou mapy nebo s více efekty zachován"
+    locale["map-owned respawn inventory takes precedence"] = "vybavení při znovuzrození řízené mapou má přednost"
+    locale["map-retained perks and solo Quick Revive keep their stock rules"] = "perky zachované mapou a sólové Quick Revive se řídí původními pravidly"
+    locale["map-retained perks, solo Quick Revive and Tombstone keep their stock rules"] = "perky zachované mapou, sólové Quick Revive a Tombstone se řídí původními pravidly"
+    locale["no remaining compatible firearms; inventory preserved"] = "nezbývají kompatibilní střelné zbraně; inventář zachován"
     locale["no second registered weapon matches the selected class"] = "zvolené třídě neodpovídá žádná druhá registrovaná zbraň"
     locale["no selected Pack-a-Punched starting weapon supports Alternate Ammo Types"] = "žádná zvolená počáteční zbraň vylepšená přes Pack-a-Punch nepodporuje alternativní typy munice"
+    locale["one standard box roll per player"] = "jedno standardní zatočení boxu na hráče"
     locale["one-weapon-slot challenge takes precedence"] = "Výzva s jediným slotem pro zbraň má přednost"
+    locale["only eligible ordinary firearms fit the current map weapon limit"] = "do aktuálního limitu zbraní mapy se vejdou jen způsobilé běžné střelné zbraně"
     locale["opened common traversal blockers; custom, counter, airlock, and quest-owned blockers were preserved"] = "otevřeny běžné překážky průchodu; vlastní, počítadlové, přechodové a questové překážky zůstaly zachovány"
     locale["opened every initialized ordinary door, linked barrier, debris group and Moon buy airlock"] = "otevřeny všechny inicializované běžné dveře, propojené bariéry, skupiny trosek a kupované přechodové komory na Moon"
     locale["opened initialized ordinary traversal blockers; custom, counter, cycling-airlock and quest owners were preserved"] = "otevřeny inicializované běžné překážky průchodu; vlastní, počítadlové, cyklické přechodové a questové správy zůstaly zachovány"
     locale["ordinary enemy hits compose outside the map's actor-damage pipeline"] = "běžné zásahy nepřátel se kombinují mimo zpracování poškození postav v mapě"
+    locale["ordinary firearms restored after stock bleed-out"] = "běžné střelné zbraně obnoveny po standardním vykrvácení"
+    locale["ordinary progression slot advances on zombie kills"] = "slot běžné zbraně postupuje za zabití zombie"
+    locale["ordinary weapon sequence completed"] = "posloupnost běžných zbraní dokončena"
     locale["pickup-bound stock lifecycle owner"] = "původní správa životního cyklu vázaná na sebrání"
     locale["pickup-owned fixed effects; timer-owned remaining effects"] = "pevné efekty spravuje sebrání; ostatní efekty spravuje časovač"
     locale["player already owns every registered perk"] = "hráč už má všechny registrované perky"
@@ -558,22 +593,22 @@ local function populate()
     locale["powered all six stock traversal stairs and published perk/door transformers; quest outputs 20/21/23 remain map-owned"] = "napájena všech šest původních schodišť a zveřejněné transformátory perků/dveří; questové výstupy 20/21/23 zůstávají pod kontrolou mapy"
     locale["powered generator perk consumers; captures, Mystery Boxes, and Pack-a-Punch remain map-owned"] = "napájeny perky napojené na generátory; obsazení, Mystery Boxy a Pack-a-Punch zůstávají pod kontrolou mapy"
     locale["powered perk shock boxes; other Afterlife panels and quest state remain map-owned"] = "napájeny elektrické skříně perků; ostatní panely Afterlife a stav questů zůstávají pod kontrolou mapy"
-end
-populate()
-end
-do
-local function populate()
-    local locale = catalogs["cs"]
     locale["powered published perk/door transformers; other Beast and quest interactions remain map-owned"] = "napájeny zveřejněné transformátory perků/dveří; ostatní interakce Beast a questů zůstávají pod kontrolou mapy"
     locale["powered registered consumers; the buildable switch, reactor, Avogadro, gates, bus, morse code, and quest flags remain map-owned"] = "napájeny registrované spotřebiče; sestavitelný vypínač, reaktor, Avogadro, brány, autobus, morseovka a questové příznaky zůstávají pod kontrolou mapy"
     locale["powered registered global consumers; custom switches, local power, and quest state remain map-owned"] = "napájeny registrované globální spotřebiče; vlastní vypínače, místní napájení a stav questů zůstávají pod kontrolou mapy"
     locale["powered the map's published perk/door consumer zones"] = "napájeny zveřejněné zóny spotřebičů perků/dveří mapy"
     locale["powered the stock global consumers and Verruckt trap controls"] = "napájeny původní globální spotřebiče a ovládání pastí ve Verruckt"
     locale["powered the stock global consumers, Pack-a-Punch and Giant traversal links"] = "napájeny původní globální spotřebiče, Pack-a-Punch a průchozí spojení v Giant"
+    locale["progression gun was replaced or upgraded; preserving player inventory"] = "postupová zbraň byla nahrazena nebo vylepšena; inventář zachován"
+    locale["progression gun was upgraded; preserving player inventory"] = "postupová zbraň byla vylepšena; inventář zachován"
     locale["race-team Double Points has additional map-owned state and remains stock"] = "Double Points závodního týmu mají další stav pod kontrolou mapy a zůstávají původní"
     locale["recognized stock map required"] = "Vyžaduje rozpoznanou původní mapu"
     locale["registered upgrades only; custom upgrade systems remain map-owned"] = "Pouze registrovaná vylepšení; vlastní systémy zůstávají pod kontrolou mapy"
+    locale["repeated stock timed drops are consumed before their effects reset"] = "opakované standardní časované bonusy se spotřebují dříve, než obnoví účinek"
+    locale["revive-time change applies next match"] = "změna doby oživování platí od příští hry"
+    locale["revive-time change applies next match; current revive owner remains active"] = "změna doby oživování platí od příští hry; současné nastavení zůstává aktivní"
     locale["round logic began before the tweak could be applied"] = "logika kol začala dřív, než šlo úpravu uplatnit"
+    locale["safe return deferred while the starting area is obstructed"] = "bezpečný návrat odložen, dokud je počáteční oblast zablokovaná"
     locale["scaled from BO2's stock base and composed with perk/map health bonuses"] = "škálováno z původního základu BO2 a zkombinováno s bonusy zdraví z perků/mapy"
     locale["scaled the stock baseline before map special-round thresholds"] = "původní základ škálován před prahy speciálních kol mapy"
     locale["selected Alternate Ammo Type is not registered by this map"] = "zvolený alternativní typ munice není na této mapě registrován"
@@ -585,6 +620,7 @@ local function populate()
     locale["selected equipment is not registered by this map"] = "zvolené vybavení tato mapa neregistruje"
     locale["selected grenade is not registered by this map"] = "zvolený granát tato mapa neregistruje"
     locale["selected weapon is not registered by this map"] = "zvolenou zbraň tato mapa neregistruje"
+    locale["solo Quick Revive owns a separate auto-revive transaction"] = "Sólové Quick Revive řídí samostatný proces automatického oživení"
     locale["standard Mystery Boxes disabled"] = "standardní Mystery Boxy vypnuty"
     locale["standard Mystery Boxes disabled; scripted quest rewards remain map-owned"] = "standardní Mystery Boxy vypnuty; skriptované questové odměny zůstávají pod kontrolou mapy"
     locale["standard door capability disappeared during map initialization"] = "standardní funkce dveří zmizela během inicializace mapy"
@@ -592,12 +628,23 @@ local function populate()
     locale["stock barriers without map-authored delays only"] = "Jen standardní barikády bez prodlevy určené mapou"
     locale["stock blocker system has no unowned repair delay"] = "Standardní systém nemá volnou prodlevu opravy"
     locale["stock classic co-op already permits unlimited ordinary downs"] = "původní klasická kooperace už povoluje neomezený počet běžných sražení"
+end
+populate()
+end
+do
+local function populate()
+    local locale = catalogs["cs"]
     locale["stock earned score and box refunds are scaled; direct map score restoration remains map-owned"] = "původní získané skóre a refundace z boxu jsou škálovány; přímé obnovení skóre mapou zůstává pod kontrolou mapy"
     locale["stock earned score is scaled; direct map score restoration remains map-owned"] = "původní získané skóre je škálováno; přímé obnovení skóre mapou zůstává pod kontrolou mapy"
     locale["stock exposes completion notifications but no safe per-player pre-use veto"] = "původní hra poskytuje oznámení o dokončení, ale žádné bezpečné veto před použitím pro jednotlivé hráče"
     locale["stock ordinary blocker routes did not publish completion"] = "původní postupy běžných překážek nezveřejnily dokončení"
+    locale["stock perk-removal thinker honors selected retained perks"] = "standardní odebrání perků respektuje vybrané zachované perky"
     locale["stock purchase-triggered relocation disabled; explicit map/quest moves remain map-owned"] = "původní přesun spouštěný nákupem vypnut; výslovné přesuny mapy/questu zůstávají pod kontrolou mapy"
+    locale["stock rejected a safe ordinary weapon grant"] = "hra odmítla přidělení bezpečné běžné zbraně"
+    locale["stock rejected the next ordinary firearm"] = "hra odmítla další běžnou střelnou zbraň"
     locale["stock removes perks inside its private last-stand pipeline"] = "původní hra odebírá perky ve svém interním zpracování sražení"
+    locale["stock revive function was not loaded"] = "původní funkce oživování se nenačetla"
+    locale["stock revive transaction scaled without changing perk and map ownership"] = "původní oživování je upraveno bez změny správy perků a mapy"
     locale["stock weapon grant rejected the registered Pack-a-Punch upgrade"] = "původní udělení zbraně odmítlo registrované vylepšení Pack-a-Punch"
     locale["stock weapon grant rejected the selected firearm"] = "původní udělení zbraně odmítlo zvolenou palnou zbraň"
     locale["the map does not publish a safe starting-zone exit set"] = "mapa nezveřejňuje bezpečnou sadu východů z počáteční zóny"
@@ -606,6 +653,8 @@ local function populate()
     locale["the registered weapon pool cannot guarantee quest-safe replacement"] = "registrovaný soubor zbraní nemůže zaručit náhradu bezpečnou pro questy"
     locale["the selected starting weapon has no registered Pack-a-Punch upgrade"] = "zvolená počáteční zbraň nemá registrované vylepšení Pack-a-Punch"
     locale["unknown weapon class"] = "neznámá třída zbraně"
+    locale["waiting for a safe player inventory"] = "čeká se na bezpečný inventář hráče"
+    locale["waiting for a safe starting-area position"] = "čeká se na bezpečnou pozici v počáteční oblasti"
     locale["waiting for game over"] = "čeká se na konec hry"
     locale["weapon assets still own the absolute engine ammo ceiling"] = "absolutní strop munice enginu stále určují data zbraní"
     locale["{hint}  Current value from {owner}."] = "{hint}  Aktuální hodnota z {owner}."

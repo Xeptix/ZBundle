@@ -506,7 +506,7 @@ Z.ReportNames = {
 	"powerup_drop_rate", "powerup_max_per_round", "powerup_stacking", "box_quality", "box_lock", "box_price_multiplier", "fire_sale_box_price", "teddy_chance",
 	"gobblegum_uses", "gobblegum_time", "gobblegum_rounds",
 	"challenge_no_perks", "challenge_no_pap", "challenge_no_box", "challenge_wall_only",
-	"challenge_starting_room", "challenge_one_box", "challenge_gun_game", "challenge_random_loadout", "challenge_random_rules", "box_no_repeat", "health_regen_delay", "round_bonus", "max_ammo_reload", "death_points_retained", "challenge_one_weapon_slot", "powerup_drop_filters", "disable_stock_aat", "wunderfizz_price_multiplier", "challenge_rising_damage", "pap_damage_multiplier", "fast_barrier_rebuild"
+	"challenge_starting_room", "challenge_one_box", "challenge_gun_game", "challenge_random_loadout", "challenge_random_rules", "box_no_repeat", "health_regen_delay", "round_bonus", "max_ammo_reload", "death_points_retained", "challenge_one_weapon_slot", "powerup_drop_filters", "disable_stock_aat", "wunderfizz_price_multiplier", "challenge_rising_damage", "pap_damage_multiplier", "fast_barrier_rebuild", "knife_lunge"
 }
 
 -- The gameplay HUD listener owns the clientuimodel report cache. Lobby pages

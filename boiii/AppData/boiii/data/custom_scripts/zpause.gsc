@@ -1,6 +1,6 @@
 /*
 ======================================================================
-    ZPAUSE T7 v1.8  --  Synced co-op pause for Black Ops III Zombies
+    ZPAUSE T7 v1.9  --  Synced co-op pause for Black Ops III Zombies
 
     by Xep
 
@@ -2156,14 +2156,21 @@ zp_auto_unpause()
     Black Ops III tells a script nothing about a player opening a menu, so
     the mod's own Lua sends it: zpausepausemenu.lua wraps
     LUI.createMenu.StartMenu_Main -- the in-game menu itself -- and calls
-    Engine.SendMenuResponse() with the menu name "zpause", which arrives
-    here as a "menuresponse" notify on that player. The game's own menus
-    talk to a running match the same way: the leave-game popup sends
-    ( "popup_leavegame", "endround" ) and the restart one sends
-    ( "restartgamepopup", "restart_level_zm" ). Nothing in the stock
-    scripts reads the menu name "zpause" or either response below --
+    Engine.SendMenuResponse(), which arrives here as a "menuresponse"
+    notify on that player. The game's own menus talk to a running match
+    the same way: the leave-game popup sends ( "popup_leavegame",
+    "endround" ) and the restart one sends ( "restartgamepopup",
+    "restart_level_zm" ).
+
+    The menu name is the stock pause menu's own, StartMenu_Main, and each
+    response is tagged "zpause|". Until 1.9 the name was "zpause": Black
+    Ops III's Lua reports success for a menu name the game has never heard
+    of and the server receives nothing, so zp_pause_menu and a client's
+    PAUSE GAME did nothing on any client (Xep, 21 October 2026). ZStats
+    and ZTweaks send on StartMenu_Main for the same reason.
     _zm_gametype.gsc's handler branches on the response, and none of the
-    words it tests is one of these.
+    words it tests carries the tag. The old name is still read, for a
+    client running an older menu.
 
     Every route but the t7-compiler's. The Workshop build carries the Lua
     in core_mod, which loads in every mode; BOIII, Ezz BOIII and T7x load
@@ -2185,7 +2192,9 @@ zp_pause_menu_watcher()
     {
         self waittill( "menuresponse", menu, response );
 
-        if ( !isdefined( menu ) || menu != "zpause" || !isdefined( response ) )
+        response = zp_menu_response_word( menu, response );
+
+        if ( !isdefined( response ) )
             continue;
 
         if ( response == "pause_menu_open" )
@@ -2197,6 +2206,29 @@ zp_pause_menu_watcher()
         else
             self zp_api_menu_request( response );
     }
+}
+
+/*
+    ZPause's word out of a menu response, or undefined when it is somebody
+    else's: "zpause|<word>", or the bare word under the menu name "zpause"
+    that a client older than 1.9 sends. The tag is matched whatever menu
+    name arrives with it, as ZStats matches its own: the clients do not
+    agree on what they forward as that name.
+*/
+zp_menu_response_word( menu, response )
+{
+    if ( !isdefined( response ) || !isstring( response ) )
+        return undefined;
+
+    if ( isdefined( menu ) && menu == "zpause" )
+        return response;
+
+    tag = "zpause|";
+
+    if ( response.size <= tag.size || getsubstr( response, 0, tag.size ) != tag )
+        return undefined;
+
+    return getsubstr( response, tag.size );
 }
 
 /*
@@ -5983,7 +6015,7 @@ zp_api_request( player, what )
 
 /*
     The menu's own press, arriving the way the pause menu reports itself:
-    Engine.SendMenuResponse() under the menu name "zpause". Anybody's
+    Engine.SendMenuResponse(), tagged "zpause|" (zp_menu_response_word()). Anybody's
     press is taken: the row is every player's, and a press goes through
     the same gates a combo does.
 */
@@ -6279,7 +6311,7 @@ zp_ui_tell( active, paused, menu, allowed, again )
 zp_version()
 {
     // ZP_VERSION_BEGIN
-    return "1.8";
+    return "1.9";
     // ZP_VERSION_END
 }
 

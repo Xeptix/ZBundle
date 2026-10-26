@@ -31,8 +31,15 @@ CoD.ZPausePauseMenu = {}
 
 local Z = CoD.ZPausePauseMenu
 
--- The menu name the responses arrive under, and what they say.
-Z.MENU = "zpause"
+-- The menu name the responses arrive under, and what they say. The name is the
+-- stock pause menu's own, with each response tagged "zpause|": Black Ops III
+-- hands Lua a success for a menu name it has never heard of and delivers
+-- nothing to the server, which is what left zp_pause_menu doing nothing on
+-- every client (Xep, 21 October 2026). ZStats and ZTweaks found the same and
+-- send on StartMenu_Main too. Stock zombies only acts on its own response
+-- words, none of which carries the tag.
+Z.MENU = "StartMenu_Main"
+Z.TAG = "zpause|"
 Z.OPENED = "pause_menu_open"
 Z.CLOSED = "pause_menu_closed"
 Z.ALIVE = "pause_menu_alive"
@@ -51,7 +58,7 @@ Z.Send = function ( controller, what )
 	if controller == nil or controller < 0 then
 		return
 	end
-	Engine.SendMenuResponse( controller, Z.MENU, what )
+	Engine.SendMenuResponse( controller, Z.MENU, Z.TAG .. what )
 end
 
 -- A game the engine pauses by itself -- a solo one -- is left alone. Pausing
